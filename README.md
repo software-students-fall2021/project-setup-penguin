@@ -1,17 +1,15 @@
 # Project Repository
 
-This repository will be used for team projects.
+## Project Description
 
-Several sets of instructions are included in this repository. They should each be treated as separate assignments with their own due dates and sets of requirements.
+Our product allows users to create fun Pokemon-inspired trading cards highlighting various salient traits about themselves such as thier superpowers, weaknessses, communication preferences and more. Each team will start with a "dek" of cards and team members will create profile cards to add to the deck. We envision that teammembers would be able to learn more about each other by looking at profiles in the "dek", and in turn build a strong foundation for future teamwork to grow on.
 
-1. Delete the contents of this file and replace with the contents of a proper README.md, as described in the [project setup instructions](./instructions-1a-project-setup.md)
+## Project History
 
-1. See the [Sprint Planning instructions](instructions-1b-sprint-planning.md) for the requirements of Sprint Planning for each Sprint.
+This project was inspired by the intern project our team member Janet Huang did during her internship at Asana.
 
-1. See the [Front-End Development instructions](./instructions-2-front-end.md) for the requirements of the initial Front-End Development.
+Instructions on how to contribute can be found in the CONTRIBUTING.md document. Here is a link to said document: https://github.com/software-students-fall2021/project-setup-penguin/blob/master/CONTRIBUTING.md
 
-1. See the [Back-End Development instructions](./instructions-3-back-end.md) for the requirements of the initial Back-End Development.
+## Building and Testing
 
-1. See the [Database Integration instructions](./instructions-4-database.md) for the requirements of integrating a database into the back-end.
-
-1. See the [Deployment instructions](./instructions-5-deployment.md) for the requirements of deploying an app.
+This is to be determined at a later date.
