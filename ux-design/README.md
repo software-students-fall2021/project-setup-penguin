@@ -1,5 +1,8 @@
 # UX Design
 
+## Prototype
+An interactive version of the Invision prototype can be found [here](https://projects.invisionapp.com/share/5J11VJM29DYF#/screens). 
+
 ## App Map
 
 <img src="app-map/map.png" alt="app map"/>
