@@ -23,7 +23,7 @@ To date, the Pokedek team has completed a wireframe and clickable prototype for 
 Instructions on how to contribute can be found in the CONTRIBUTING.md document. Here is a link to said document: https://github.com/software-students-fall2021/project-setup-penguin/blob/master/CONTRIBUTING.md
 
 ## Relevant Links
-- [Link to prototype](https://www.figma.com/file/cbgk4UxRgy6Ale7D3uBbiX/Wireframes?node-id=0%3A1)
+- [Link to Invision prototype](https://projects.invisionapp.com/share/5J11VJM29DYF#/screens)
 - [Link to wireframe](https://drive.google.com/file/d/1OBUmIUSFCET3nAxs20n6P_lX2rcZiksS/view)
 - [Link to Figma](https://www.figma.com/file/cbgk4UxRgy6Ale7D3uBbiX/Wireframes?node-id=0%3A1)
 ## Building and Testing
