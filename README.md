@@ -15,6 +15,8 @@ Our MVP Features:
 - Cindy Kim (csk426) - cindykimxp
 - Janet Huang (jh6248) - janethuangg
 - Kevin Duan (skd359) - kdduan
+- Matthew Zhang (mrz262) - zhangrmatthew
+- Jacob Harsch (jh6792) - jharsch2401
 ## Project History
 This project was inspired by the intern project our team member Janet Huang did during her internship at Asana. Pokedek was proposed in early October of 2021, and aims to help individuals connect with groups and teams in a fun, and streamlined manner.
 
