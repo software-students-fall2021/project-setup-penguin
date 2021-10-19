@@ -1,8 +1,9 @@
 # Pokedek
 ## Project Description
 Our product allows users to create fun Pokemon-inspired trading cards highlighting various salient traits about themselves such as thier superpowers, weaknessses, communication preferences and more. Each team will start with a "dek" of cards and team members will create profile cards to add to the deck. We envision that team members would be able to learn more about each other by looking at profiles in the "dek", and in turn build a strong foundation for future teamwork to grow on.
+
 ## Product Vision Statement
-For the everyday student or worker, who needs help connecting with their team members and coworkers, Pokedek is a mobile/web application that simplifies and streamlines relationship building.
+For the everyday student or worker, who needs help connecting with their team members and coworkers, Pokedek is a mobile/web application that simplifies and streamlines relationship building through personalized cards that showcase interests and individuality.
 
 ## Minimum Viable Product
 Our Minimum Viable Product (MVP) will allow users to create and share a card template with other team participants.
