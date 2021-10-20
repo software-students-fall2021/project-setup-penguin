@@ -1,9 +1,12 @@
+
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import "./App.css";
 
 import { Home, Login, Signup } from "./views";
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [page, setPage] = useState("Login");
   return (
     <Router>
       {/* abstract this out later when setting up common page nav */}
@@ -35,6 +38,7 @@ function App() {
         </Route>
       </Switch>
     </Router>
+
   );
 }
 
