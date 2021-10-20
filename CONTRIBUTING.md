@@ -16,6 +16,6 @@
 * Do not leave dead code in product that is pushed
 ## Git Workflow
 * Pull the latest code from the main branch first!
-* Make a new branch locally with a good name to work on new features or edit existing features
+* Make a new branch locally with a good name to work on new features or edit existing features. Name branches name/feature (ex. janet/create-card-editor).
 * Once changes are made, push the branch back to the remote repository and make a pull request for your code to be reviewed. If you have made any visual changes, be sure to include a screenshot.
 * If the code is approved, merge with the trunk.
