@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
 
-import { Home, Login, Signup } from "./views";
+import { Home, Login, Signup, CreateDeck, FinishDeckSetup } from "./views";
 
 function App() {
   return (
@@ -32,6 +32,12 @@ function App() {
         </Route>
         <Route path="/signup">
           <Signup />
+        </Route>
+        <Route path="/createdeck">
+          <CreateDeck />
+        </Route>
+        <Route path="/finishdeck">
+          <FinishDeckSetup />
         </Route>
       </Switch>
     </Router>
