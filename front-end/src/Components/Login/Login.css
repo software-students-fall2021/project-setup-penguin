@@ -39,3 +39,7 @@
 
 .Login__text {
 }
+
+.Login__link {
+  text-decoration: underline;
+}

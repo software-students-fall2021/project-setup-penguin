@@ -1,23 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
 import { Login, Signup } from "./Components";
 
 function App() {
-  const [page, setPage] = useState("Login");
+  const [page, setPage] = useState("Signup");
+
   return (
     <div className="App">
-      You are on : {page} page
-      {page === "Login" ? (
-        <div>
-          <Login goToSignup={() => setPage("Signup")} />
-        </div>
-      ) : (
-        <div>
-          <Signup />
-        </div>
-      )}
+      {page ===
+        "Login" && (
+          <div>
+            <Login goToSignup={() => setPage("Signup")} />
+          </div>
+        )}
+
+      {page ===
+        "Signup" && (
+          <div>
+            <Signup goToLogin={() => setPage("Login")} />
+          </div>
+        )}
     </div>
   );
 }

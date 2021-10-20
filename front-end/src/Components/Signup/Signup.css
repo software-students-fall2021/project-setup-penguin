@@ -1,0 +1,60 @@
+.Signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(375px - 52px);
+  padding: 26px;
+}
+.Signup__header {
+  font-size: 30px;
+  text-align: left;
+  width: 320px;
+  margin-bottom: 43px;
+}
+.Signup__input {
+  height: 42px;
+  width: 320px;
+  margin-bottom: 34px;
+  font-size: 20px;
+  color: black;
+  padding-left: 10px;
+}
+
+.Signup__input::placeholder {
+  font-style: italic;
+  color: black;
+}
+
+.Signup__button {
+  width: 320px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c4c4c4;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.Signup__text {
+    margin-bottom: 54px;
+}
+
+.Signup__link {
+  text-decoration: underline;
+}
+
+.Signup__faqHeader{
+    font-size: 30px;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 25px;
+  }
+
+  .Signup__faqText {
+    font-size: 18px;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 24px;
+  } 
