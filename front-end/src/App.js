@@ -7,21 +7,18 @@ import { Login, Signup } from "./Components";
 function App() {
   const [page, setPage] = useState("Signup");
 
+  const basePage = () => {
+    switch (page) {
+      case "Login":
+        return <Login goToSignup={() => setPage("Signup")} />;
+      case "Signup":
+        return <Signup goToLogin={() => setPage("Login")} />;
+    }
+  };
   return (
     <div className="App">
-      {page ===
-        "Login" && (
-          <div>
-            <Login goToSignup={() => setPage("Signup")} />
-          </div>
-        )}
-
-      {page ===
-        "Signup" && (
-          <div>
-            <Signup goToLogin={() => setPage("Login")} />
-          </div>
-        )}
+      <div>Pokemon Header</div>
+      {basePage()}
     </div>
   );
 }
