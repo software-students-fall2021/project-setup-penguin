@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-import { Login, Signup } from "./Components";
+import { Login, Signup } from "./views";
 
 function App() {
   const [page, setPage] = useState("Signup");
