@@ -1,28 +1,14 @@
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import { Home, Login, Signup } from "./views";
+import { Home, Login, Signup, Howto } from "./views";
 import { useState } from "react";
 import "./App.css";
 
 function App() {
   const [page, setPage] = useState("Howto");
 
-  const basePage = () => {
-    switch (page) {
-      case "Login":
-        return <Login goToSignup={() => setPage("Signup")} />;
-      case "Signup":
-        return <Signup goToLogin={() => setPage("Login")} />;
-      case "Howto":
-        return (
-          <Howto
-            goToInviteLink={() => setPage("Invite")}
-            goToGetStarted={() => setPage("GetStarted")}
-          />
-        );
-    }
-  };
+  
   return (
     <Router>
       {/* abstract this out later when setting up common page nav */}
@@ -38,6 +24,9 @@ function App() {
             <li>
               <Link to="/signup">Sign up</Link>
             </li>
+            <li>
+              <Link to="/howto">How to</Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -52,6 +41,10 @@ function App() {
         <Route path="/signup">
           <Signup />
         </Route>
+        <Route path="/howto">
+          <Howto />
+        </Route>
+        
       </Switch>
     </Router>
 
