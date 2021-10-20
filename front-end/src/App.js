@@ -8,6 +8,14 @@ import "./App.css";
 function App() {
   const [page, setPage] = useState("Signup");
 
+  const basePage = () => {
+    switch (page) {
+      case "Login":
+        return <Login goToSignup={() => setPage("Signup")} />;
+      case "Signup":
+        return <Signup goToLogin={() => setPage("Login")} />;
+    }
+  };
   return (
     <Router>
       {/* abstract this out later when setting up common page nav */}
