@@ -6,7 +6,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [page, setPage] = useState("Signup");
+  const [page, setPage] = useState("Howto");
 
   const basePage = () => {
     switch (page) {
@@ -14,6 +14,13 @@ function App() {
         return <Login goToSignup={() => setPage("Signup")} />;
       case "Signup":
         return <Signup goToLogin={() => setPage("Login")} />;
+      case "Howto":
+        return (
+          <Howto
+            goToInviteLink={() => setPage("Invite")}
+            goToGetStarted={() => setPage("GetStarted")}
+          />
+        );
     }
   };
   return (

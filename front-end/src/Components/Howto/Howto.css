@@ -1,0 +1,45 @@
+.Howto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+  padding: 26px;
+}
+
+.Howto__header {
+  font-size: 30px;
+  text-align: left;
+  width: 320px;
+  margin-bottom: 32px;
+}
+
+.Howto__body {
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 66px;
+}
+
+.Howto__list{
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 21px;
+  width: 100%;
+}
+
+.Howto_imgs {
+  width: 100%;
+  max-width: 217.71px;
+  margin-bottom: 27px;
+}
+
+.Invite__button {
+    width: 320px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #c4c4c4;
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
