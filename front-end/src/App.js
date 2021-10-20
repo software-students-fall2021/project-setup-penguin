@@ -6,7 +6,8 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [page, setPage] = useState("Login");
+  const [page, setPage] = useState("Signup");
+
   return (
     <Router>
       {/* abstract this out later when setting up common page nav */}
