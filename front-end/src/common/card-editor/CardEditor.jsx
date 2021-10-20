@@ -46,7 +46,7 @@ function CardEditor({ onSave }) {
 
   return (
     <div className="CardEditor">
-      <form className="CardEditor-form" onSubmit={handleSubmit}>
+      <form className="CardEditor__form" onSubmit={handleSubmit}>
         <input
           type="text"
           name="tagline-placeholder"
@@ -56,7 +56,7 @@ function CardEditor({ onSave }) {
             setTaglinePlaceholder(event.target.value);
           }}
         />
-        <div className="CardEditor-header">
+        <div className="CardEditor__header">
           <input
             type="text"
             name="name-placeholder"
@@ -69,14 +69,14 @@ function CardEditor({ onSave }) {
           <input type="text" name="city-placeholder" placeholder="NYC" />
         </div>
         {/* TODO: implement file upload & photo repositioning */}
-        <div className="CardEditor-image">
+        <div className="CardEditor__image">
           <label htmlFor="file-input">
             <img src={kev} width="100%" />
           </label>
           <input id="file-input" type="file" />
         </div>
         <input
-          className="CardEditor-summary"
+          className="CardEditor__summary"
           type="text"
           name="summary"
           placeholder={defaultTemplate.summaryPlaceholder}
@@ -86,7 +86,7 @@ function CardEditor({ onSave }) {
           }}
         />
         {/* can maybe use a loop here */}
-        <div className="CardEditor-section">
+        <div className="CardEditor__section">
           <input
             type="text"
             name="sectionA-label"
@@ -106,7 +106,7 @@ function CardEditor({ onSave }) {
             }}
           />
         </div>
-        <div className="CardEditor-section">
+        <div className="CardEditor__section">
           <input
             type="text"
             name="sectionB-label"
@@ -126,7 +126,7 @@ function CardEditor({ onSave }) {
             }}
           />
         </div>
-        <div className="CardEditor-section">
+        <div className="CardEditor__section">
           <input
             type="text"
             name="sectionC-label"

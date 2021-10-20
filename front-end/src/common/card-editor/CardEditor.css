@@ -1,4 +1,4 @@
-.CardEditor-form {
+.CardEditor__form {
   display: flex;
   flex-direction: column;
   background-color: peachpuff;
@@ -7,22 +7,22 @@
   padding: 1em;
 }
 
-.CardEditor-header {
+.CardEditor__header {
   display: flex;
   justify-content: space-between;
 }
 
-.CardEditor-image > input {
+.CardEditor__image > input {
   display: none;
 }
 
-.CardEditor-image {
+.CardEditor__image {
   text-align: center;
   margin: 1em;
   border: 1em solid pink;
 }
 
-.CardEditor-summary {
+.CardEditor__summary {
   text-align: center;
 }
 
@@ -31,13 +31,9 @@ textarea {
   width: 100%;
 }
 
-.CardEditor-section > input[type="text"] {
+.CardEditor__section > input[type="text"] {
   background: transparent;
   border: none;
   width: 100%;
   font-weight: bold;
-}
-
-.CardEditor-section > input[type="text"]::placeholder {
-  /* color: black; */
 }
