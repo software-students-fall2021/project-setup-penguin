@@ -1,9 +1,10 @@
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import { Home, Login, Signup, Howto } from "./views";
+
 import { useState } from "react";
 import "./App.css";
+import { Home, Login, Signup, CreateDeck, FinishDeckSetup, Howto } from "./views";
 
 function App() {
   const [page, setPage] = useState("Howto");
@@ -44,7 +45,12 @@ function App() {
         <Route path="/howto">
           <Howto />
         </Route>
-        
+        <Route path="/createdeck">
+          <CreateDeck />
+        </Route>
+        <Route path="/finishdeck">
+          <FinishDeckSetup />
+        </Route>
       </Switch>
     </Router>
 
