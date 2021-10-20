@@ -1,23 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+import { Login, Signup } from "./Components";
 
 function App() {
+  const [page, setPage] = useState("Login");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      You are on : {page} page
+      {page === "Login" ? (
+        <div>
+          <Login goToSignup={() => setPage("Signup")} />
+        </div>
+      ) : (
+        <div>
+          <Signup />
+        </div>
+      )}
     </div>
   );
 }
