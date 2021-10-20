@@ -10,7 +10,7 @@ function DeckEditor() {
     <div>
       <form>
         <input
-          className="deck_input"
+          className="DeckEditor__input"
           onChange={(e) => setDeckName(e.target.value)}
           value={deckName}
           name="Deck Name"
@@ -18,7 +18,7 @@ function DeckEditor() {
           type="text"
         />
         <input
-          className="deck_input"
+          className="DeckEditor__input"
           onChange={(e) => setDeckDescription(e.target.value)}
           value={deckDescription}
           name="Deck Description"
