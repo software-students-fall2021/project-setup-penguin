@@ -1,25 +1,40 @@
-import { useState, useEffect } from "react";
-import logo from "./logo.svg";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
 
-import { Login, Signup } from "./Components";
+import { Home, Login, Signup } from "./views";
 
 function App() {
-  const [page, setPage] = useState("Signup");
-
-  const basePage = () => {
-    switch (page) {
-      case "Login":
-        return <Login goToSignup={() => setPage("Signup")} />;
-      case "Signup":
-        return <Signup goToLogin={() => setPage("Login")} />;
-    }
-  };
   return (
-    <div className="App">
-      <div>Pokemon Header</div>
-      {basePage()}
-    </div>
+    <Router>
+      {/* abstract this out later when setting up common page nav */}
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Log in</Link>
+            </li>
+            <li>
+              <Link to="/signup">Sign up</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

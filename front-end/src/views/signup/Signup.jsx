@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-
 import "./Signup.css";
 
-function Signup({ goToLogin, userName, setUsername }) {
+function Signup() {
   return (
     <div className="Signup">
       <div className="Signup__header">Sign up</div>
@@ -12,9 +10,9 @@ function Signup({ goToLogin, userName, setUsername }) {
       <div className="Signup__button"> sign up</div>
       <div className="Signup__text">
         or log in{" "}
-        <span className="Signup__link " onClick={goToLogin}>
+        <a className="Login__link " href="/login">
           here
-        </span>
+        </a>
       </div>
       <div className="Signup__faqHeader">Why sign up?</div>
 
