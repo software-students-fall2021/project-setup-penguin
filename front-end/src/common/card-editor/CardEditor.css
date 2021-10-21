@@ -1,10 +1,34 @@
+input {
+  min-width: 0;
+  background: transparent;
+  border: none;
+}
+
+textarea {
+  background: transparent;
+  border: none;
+}
+
 .CardEditor__form {
   display: flex;
   flex-direction: column;
-  background-color: peachpuff;
+  align-items: center;
+
+  background-image: url("../../assets/card-background.png");
+  border: 2em solid #ffb4b4;
+  border-radius: 2em;
+
   width: 25em;
-  height: 40em;
+  height: 36em;
   padding: 1em;
+}
+
+.CardEditor__upperContent {
+  width: 90%;
+}
+.CardEditor__tagline {
+  align-self: flex-start;
+  width: 80%;
 }
 
 .CardEditor__header {
@@ -12,28 +36,75 @@
   justify-content: space-between;
 }
 
-.CardEditor__image > input {
-  display: none;
+.CardEditor__name {
+  font-size: 1.5em;
+  font-weight: bolder;
+}
+
+.CardEditor__city {
+  font-size: 1.5em;
+  font-weight: bolder;
+  color: pink;
+  text-align: right;
 }
 
 .CardEditor__image {
-  text-align: center;
-  margin: 1em;
-  border: 1em solid pink;
+  width: 100%;
+  outline: 1em solid #ffc8c8;
+  outline-offset: -1em;
 }
 
 .CardEditor__summary {
   text-align: center;
+  align-self: center;
+  width: 85%;
+  border: none;
+  background-color: #ffc8c8;
+  margin: 1em 0em;
+  font-weight: bold;
 }
 
 textarea {
   resize: none;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.CardEditor__section > input[type="text"] {
-  background: transparent;
-  border: none;
+.CardEditor__section {
+  display: flex;
+  align-items: center;
   width: 100%;
+}
+
+.CardEditor__section + .CardEditor__section {
+  margin-top: 0.25em;
+}
+
+.CardEditor__sectionContent {
+  margin-left: 1em;
+  width: 100%;
+}
+
+.CardEditor__label {
   font-weight: bold;
+  width: 80%;
+  font-size: 0.9em;
+}
+
+.CardEditor__sliderLabelContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CardEditor__sliderContainer {
+  width: 90%;
+  margin: 0.5em 0;
+}
+
+.CardEditor__submit {
+  color: white;
+  background-color: black;
+  padding: 1em 3em;
+  margin: 2em;
+  border-radius: 1em;
 }
