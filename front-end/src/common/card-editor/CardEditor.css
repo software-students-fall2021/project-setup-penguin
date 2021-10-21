@@ -1,0 +1,39 @@
+.CardEditor__form {
+  display: flex;
+  flex-direction: column;
+  background-color: peachpuff;
+  width: 25em;
+  height: 40em;
+  padding: 1em;
+}
+
+.CardEditor__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CardEditor__image > input {
+  display: none;
+}
+
+.CardEditor__image {
+  text-align: center;
+  margin: 1em;
+  border: 1em solid pink;
+}
+
+.CardEditor__summary {
+  text-align: center;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+}
+
+.CardEditor__section > input[type="text"] {
+  background: transparent;
+  border: none;
+  width: 100%;
+  font-weight: bold;
+}
