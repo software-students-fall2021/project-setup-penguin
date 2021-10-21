@@ -1,7 +1,16 @@
 import Login from "./login/Login";
 import Signup from "./signup/Signup";
 import Home from "./home/Home";
+import CreateCard from "./card-creation/CreateCard";
 import CreateDeck from "./create_deck/CreateDeck";
 import FinishDeckSetup from "./finish_deck/FinishDeckSetup";
-
-export { Home, Login, Signup, CreateDeck, FinishDeckSetup };
+import DeckView from "./DeckView";
+export {
+  Home,
+  Login,
+  Signup,
+  CreateCard,
+  CreateDeck,
+  FinishDeckSetup,
+  DeckView,
+};

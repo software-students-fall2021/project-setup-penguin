@@ -1,7 +1,15 @@
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
 
-import { Home, Login, Signup, CreateDeck, FinishDeckSetup } from "./views";
+import {
+  Home,
+  Login,
+  Signup,
+  CreateDeck,
+  FinishDeckSetup,
+  DeckView,
+  CreateCard,
+} from "./views";
 
 function App() {
   return (
@@ -38,6 +46,12 @@ function App() {
         </Route>
         <Route path="/finishdeck">
           <FinishDeckSetup />
+        </Route>
+        <Route exact path="/deck/:id">
+          <DeckView />
+        </Route>
+        <Route path="/deck/:id/add">
+          <CreateCard />
         </Route>
       </Switch>
     </Router>
