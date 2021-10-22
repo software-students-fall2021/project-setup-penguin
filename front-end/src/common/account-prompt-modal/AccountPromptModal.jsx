@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import "./AccountPromptModal.css";
 
-function AccountPromptModal({ parentType, onSave }) {
+function AccountPromptModal({ parentType, onCloseModal }) {
   return (
     <div className="AccountPromptModal">
       <div className="AccountPromptModal__content">
@@ -17,12 +17,15 @@ function AccountPromptModal({ parentType, onSave }) {
             sign up for an account. Otherwise, just go ahead and create your{" "}
             {parentType}!
           </p>
+          {/* TODO: replace navigation with actual components for sign up or login. This prevents the page or url from changing */}
           <Link to="signup">Sign Up</Link>
           <p>
             Already have an account? Log in <Link to="login">here</Link>
           </p>
           <div className="AccountPromptModal__footer">
-            <Link>Continue as Guest</Link>
+            <Link to="/finishdeck" onClick={() => onCloseModal()}>
+              Continue as Guest
+            </Link>
           </div>
         </div>
       </div>
