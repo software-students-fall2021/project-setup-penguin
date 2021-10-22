@@ -2,11 +2,17 @@ input {
   min-width: 0;
   background: transparent;
   border: none;
+  padding: 0;
 }
 
 textarea {
   background: transparent;
   border: none;
+  resize: none !important;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.85em !important;
+  line-height: 1em !important;
 }
 
 .CardEditor__form {
@@ -18,9 +24,10 @@ textarea {
   border: 2em solid #ffb4b4;
   border-radius: 2em;
 
-  width: 25em;
-  height: 36em;
-  padding: 1em;
+  /* TODO: maybe we don't want this as a fixed size */
+  width: 30em;
+  height: 41em;
+  padding: 0.25em 1em;
 }
 
 .CardEditor__upperContent {
@@ -46,6 +53,7 @@ textarea {
   font-weight: bolder;
   color: pink;
   text-align: right;
+  margin-right: 0.2em;
 }
 
 .CardEditor__image {
@@ -60,24 +68,15 @@ textarea {
   width: 85%;
   border: none;
   background-color: #ffc8c8;
-  margin: 1em 0em;
+  margin: 0.75em 0em;
   font-weight: bold;
-}
-
-textarea {
-  resize: none;
-  width: 100%;
-  box-sizing: border-box;
+  font-size: 0.9em;
 }
 
 .CardEditor__section {
   display: flex;
   align-items: center;
   width: 100%;
-}
-
-.CardEditor__section + .CardEditor__section {
-  margin-top: 0.25em;
 }
 
 .CardEditor__sectionContent {
@@ -98,7 +97,7 @@ textarea {
 
 .CardEditor__sliderContainer {
   width: 90%;
-  margin: 0.5em 0;
+  /* margin: 0.5em 0; */
 }
 
 .CardEditor__submit {

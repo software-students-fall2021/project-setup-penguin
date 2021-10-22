@@ -87,7 +87,7 @@ function CardEditor({ onSave, templateData }) {
                 }));
               }}
             />
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <input
                 className="CardEditor__city"
                 type="text"
