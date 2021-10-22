@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { CardEditor } from "../../common";
+import { CardEditor, AccountPromptModal } from "../../common";
 
 const testTemplateData = {
   name: "Janet Huang",
@@ -15,17 +16,32 @@ const testTemplateData = {
   sliderLabelMin: "me",
   sliderLabelMax: "we",
 };
+
 function CreateCard() {
+  const [showModal, setShowModal] = useState(false);
+
+  const onSaveCard = (cardData) => {
+    setShowModal(true);
+    console.log({ cardData });
+  };
+
+  const onCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div>
       <h1>Create Your Card</h1>
       <p>Fill it in!</p>
       <h3>Populating a Template</h3>
-      <CardEditor templateData={testTemplateData} />
+      <CardEditor templateData={testTemplateData} onSave={onSaveCard} />
       <h3>Creating a Template</h3>
-      <CardEditor />
+      <CardEditor onSave={onSaveCard} />
       {/* TODO: style the NavLink to look like a button */}
       <NavLink to="/finishdeck">Continue</NavLink>
+      {showModal && (
+        <AccountPromptModal parentType="deck" onCloseModal={onCloseModal} />
+      )}
     </div>
   );
 }
