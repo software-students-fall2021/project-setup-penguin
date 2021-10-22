@@ -1,155 +1,234 @@
 import { useState } from "react";
 import "./CardEditor.css";
 import kev from "../../assets/kev.jpeg";
+import heart from "../../assets/heart.png";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
-const defaultTemplate = {
-  namePlaceholder: "name",
-  taglinePlaceholder: "~5 word tagline about yourself",
-  summaryPlaceholder: "ROLE (# YOE), working hours & time zone",
-  sectionLabelA: "Strengths",
-  sectionLabelB: "Weaknesses",
-  sectionLabelC: "Communication Preferences",
-  sectionPlaceholderA: "What do you excel at?",
-  sectionPlaceholderB: "What do you struggle with?",
-  sectionPlaceholderC: "How do you want people to contact you?",
+const sectionIds = [0, 1, 2];
+
+const formDefaultPlaceholders = {
+  name: "Name Here",
+  city: "NYC",
+  tagline: "~5 word tagline about yourself",
+  summary: "ROLE (# YOE), working hours & time zone",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "What do you excel at?",
+  sectionContent1: "What do you struggle with?",
+  sectionContent2: "How do you want people to contact you?",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 50,
 };
 
-function CardEditor({ onSave }) {
-  const [namePlaceholder, setNamePlaceholder] = useState();
-  const [taglinePlaceholder, setTaglinePlaceholder] = useState();
-  const [summaryPlaceholder, setSummaryPlaceholder] = useState();
+const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-  const [sectionLabelA, setSectionLabelA] = useState();
-  const [sectionLabelB, setSectionLabelB] = useState();
-  const [sectionLabelC, setSectionLabelC] = useState();
+function CardEditor({ onSave, templateData }) {
+  const isPopulatingTemplate = templateData !== undefined;
+  const emptyForm = Object.keys(formDefaultPlaceholders).reduce(
+    (prev, curr) => {
+      prev[curr] = "";
+      return prev;
+    },
+    {}
+  );
 
-  const [sectionPlaceholderA, setSectionPlaceholderA] = useState();
-  const [sectionPlaceholderB, setSectionPlaceholderB] = useState();
-  const [sectionPlaceholderC, setSectionPlaceholderC] = useState();
+  const [form, setForm] = useState(emptyForm);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = {
-      namePlaceholder,
-      taglinePlaceholder,
-      summaryPlaceholder,
-      sectionLabelA,
-      sectionLabelB,
-      sectionLabelC,
-      sectionPlaceholderA,
-      sectionPlaceholderB,
-      sectionPlaceholderC,
-    };
-    console.log(data);
-    onSave?.(data);
+
+    // if creating template, fill in blanks with default vals
+    if (!isPopulatingTemplate) {
+      Object.keys(form).forEach((key) => {
+        if (form[key] === "") {
+          form[key] = formDefaultPlaceholders[key];
+        }
+      });
+    }
+
+    console.log({ form });
+    onSave?.(form);
   };
+
+  const getPlaceholderText = (field) =>
+    isPopulatingTemplate ? templateData[field] : formDefaultPlaceholders[field];
 
   return (
     <div className="CardEditor">
-      <form className="CardEditor__form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="tagline-placeholder"
-          placeholder={defaultTemplate.taglinePlaceholder}
-          value={taglinePlaceholder}
-          onChange={(event) => {
-            setTaglinePlaceholder(event.target.value);
-          }}
-        />
-        <div className="CardEditor__header">
+      <form className="CardEditor__form" onSubmit={handleSubmit} id="myCard">
+        <div className="CardEditor__upperContent">
           <input
+            className="CardEditor__tagline"
             type="text"
-            name="name-placeholder"
-            placeholder={defaultTemplate.namePlaceholder}
-            value={namePlaceholder}
+            name="tagline"
+            placeholder={getPlaceholderText("tagline")}
+            value={form.tagline}
             onChange={(event) => {
-              setNamePlaceholder(event.target.value);
+              setForm((prevState) => ({
+                ...prevState,
+                tagline: event.target.value,
+              }));
             }}
           />
-          <input type="text" name="city-placeholder" placeholder="NYC" />
-        </div>
-        {/* TODO: implement file upload & photo repositioning */}
-        <div className="CardEditor__image">
-          <label htmlFor="file-input">
-            <img src={kev} width="100%" />
-          </label>
-          <input id="file-input" type="file" />
+          <div className="CardEditor__header">
+            <input
+              type="text"
+              className="CardEditor__name"
+              name="name"
+              placeholder={getPlaceholderText("name")}
+              value={form.name}
+              onChange={(event) => {
+                setForm((prevState) => ({
+                  ...prevState,
+                  name: event.target.value,
+                }));
+              }}
+            />
+            <div style={{ display: "flex" }}>
+              <input
+                className="CardEditor__city"
+                type="text"
+                name="city"
+                placeholder={getPlaceholderText("city")}
+                value={form.city}
+                onChange={(event) => {
+                  setForm((prevState) => ({
+                    ...prevState,
+                    city: event.target.value,
+                  }));
+                }}
+                size="5"
+              />
+              <HeartIcon />
+            </div>
+          </div>
+          {/* TODO: implement file upload & photo repositioning */}
+          {/* <label htmlFor="file-input"> */}
+          <img className="CardEditor__image" src={kev} />
+          {/* </label>
+        <input id="file-input" type="file" /> */}
         </div>
         <input
           className="CardEditor__summary"
           type="text"
           name="summary"
-          placeholder={defaultTemplate.summaryPlaceholder}
-          value={summaryPlaceholder}
+          placeholder={getPlaceholderText("summary")}
+          value={form.summary}
           onChange={(event) => {
-            setSummaryPlaceholder(event.target.value);
+            setForm((prevState) => ({
+              ...prevState,
+              summary: event.target.value,
+            }));
           }}
         />
-        {/* can maybe use a loop here */}
-        <div className="CardEditor__section">
-          <input
-            type="text"
-            name="sectionA-label"
-            placeholder={defaultTemplate.sectionLabelA}
-            value={sectionLabelA}
-            onChange={(event) => {
-              setSectionLabelA(event.target.value);
+        {sectionIds.map((id) => (
+          <div className="CardEditor__section">
+            <HeartIcon />
+            <div className="CardEditor__sectionContent">
+              {isPopulatingTemplate ? (
+                <div className="CardEditor__label">
+                  {templateData[`sectionLabel${id}`]}
+                </div>
+              ) : (
+                <input
+                  type="text"
+                  className="CardEditor__label"
+                  name={`sectionLabel${id}`}
+                  placeholder={getPlaceholderText(`sectionLabel${id}`)}
+                  value={form[`sectionLabel${id}`]}
+                  onChange={(event) => {
+                    setForm((prevState) => ({
+                      ...prevState,
+                      [`sectionLabel${id}`]: event.target.value,
+                    }));
+                  }}
+                />
+              )}
+              <textarea
+                rows="2"
+                name={`sectionContent${id}`}
+                placeholder={getPlaceholderText(`sectionContent${id}`)}
+                value={form[`sectionContent${id}`]}
+                onChange={(event) => {
+                  setForm((prevState) => ({
+                    ...prevState,
+                    [`sectionContent${id}`]: event.target.value,
+                  }));
+                }}
+              />
+            </div>
+          </div>
+        ))}
+        <div className="CardEditor__sliderContainer">
+          <div className="CardEditor__sliderLabelContainer">
+            {isPopulatingTemplate ? (
+              <>
+                <div className="CardEditor__label">
+                  {templateData.sliderLabelMin}
+                </div>
+                <div
+                  className="CardEditor__label"
+                  style={{ textAlign: "right" }}
+                >
+                  {templateData.sliderLabelMax}
+                </div>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  className="CardEditor__label"
+                  name="min-slider"
+                  placeholder={getPlaceholderText("sliderLabelMin")}
+                  value={form.sliderLabelMin}
+                  onChange={(event) => {
+                    setForm((prevState) => ({
+                      ...prevState,
+                      sliderLabelMin: event.target.value,
+                    }));
+                  }}
+                />
+                <input
+                  type="text"
+                  className="CardEditor__label"
+                  name="max-slider"
+                  placeholder={getPlaceholderText("sliderLabelMax")}
+                  value={form.sliderLabelMax}
+                  onChange={(event) => {
+                    setForm((prevState) => ({
+                      ...prevState,
+                      sliderLabelMax: event.target.value,
+                    }));
+                  }}
+                  style={{ textAlign: "right" }}
+                />
+              </>
+            )}
+          </div>
+          <Slider
+            defaultValue={formDefaultPlaceholders.sliderValue}
+            handleStyle={{ borderColor: "pink" }}
+            railStyle={{ backgroundColor: "pink" }}
+            trackStyle={{ backgroundColor: "pink" }}
+            onChange={(value) => {
+              setForm((prevState) => ({
+                ...prevState,
+                sliderValue: value,
+              }));
             }}
           />
-          <textarea
-            rows="3"
-            name="sectionA-placeholder"
-            placeholder={defaultTemplate.sectionPlaceholderA}
-            value={sectionPlaceholderA}
-            onChange={(event) => {
-              setSectionPlaceholderA(event.target.value);
-            }}
-          />
-        </div>
-        <div className="CardEditor__section">
-          <input
-            type="text"
-            name="sectionB-label"
-            placeholder={defaultTemplate.sectionLabelB}
-            value={sectionLabelB}
-            onChange={(event) => {
-              setSectionLabelB(event.target.value);
-            }}
-          />
-          <textarea
-            rows="3"
-            name="sectionB-placeholder"
-            placeholder={defaultTemplate.sectionPlaceholderB}
-            value={sectionPlaceholderB}
-            onChange={(event) => {
-              setSectionPlaceholderB(event.target.value);
-            }}
-          />
-        </div>
-        <div className="CardEditor__section">
-          <input
-            type="text"
-            name="sectionC-label"
-            placeholder={defaultTemplate.sectionLabelC}
-            value={sectionLabelC}
-            onChange={(event) => {
-              setSectionLabelC(event.target.value);
-            }}
-          />
-          <textarea
-            rows="3"
-            name="sectionC-placeholder"
-            placeholder={defaultTemplate.sectionPlaceholderC}
-            value={sectionPlaceholderC}
-            onChange={(event) => {
-              setSectionPlaceholderC(event.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <input type="submit" value="Submit" />
         </div>
       </form>
+      <input
+        className="CardEditor__submit"
+        type="submit"
+        value="Submit"
+        form="myCard"
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
