@@ -1,11 +1,11 @@
 import "./DeckEditor.css";
 
-import { useState } from "react";
-
-function DeckEditor() {
-  const [deckName, setDeckName] = useState("");
-  const [deckDescription, setDeckDescription] = useState("");
-
+function DeckEditor({
+  deckName,
+  setDeckName,
+  deckDescription,
+  setDeckDescription,
+}) {
   return (
     <div>
       <form>
