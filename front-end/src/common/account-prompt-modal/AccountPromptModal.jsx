@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
-
+import SignupOrLogin from "./SignupOrLogin";
 import "./AccountPromptModal.css";
-
+import { useState } from "react";
 function AccountPromptModal({ parentType, onCloseModal }) {
+  const [pageType, setPageType] = useState("Sign up");
+
   return (
     <div className="AccountPromptModal">
       <div className="AccountPromptModal__content">
@@ -17,16 +18,31 @@ function AccountPromptModal({ parentType, onCloseModal }) {
             sign up for an account. Otherwise, just go ahead and create your{" "}
             {parentType}!
           </p>
-          {/* TODO: replace navigation with actual components for sign up or login. This prevents the page or url from changing */}
-          <Link to="signup">Sign Up</Link>
-          <p>
-            Already have an account? Log in <Link to="login">here</Link>
-          </p>
-          <div className="AccountPromptModal__footer">
-            <Link to="/finishdeck" onClick={() => onCloseModal()}>
-              Continue as Guest
-            </Link>
-          </div>
+          <SignupOrLogin
+            onCloseModal={onCloseModal}
+            pageType={pageType}
+            setPageType={setPageType}
+          />
+        </div>
+        <div className="AccountPromptModal__footer">
+          <a
+            className="AccountPromptModal__link nakedLink"
+            onClick={() => {
+              console.log("continue as guest");
+              onCloseModal();
+            }}
+          >
+            Continue as guest
+          </a>
+          <span
+            className="AccountPromptModal__cta"
+            onClick={() => {
+              console.log("submit");
+              onCloseModal();
+            }}
+          >
+            {pageType}
+          </span>
         </div>
       </div>
     </div>
