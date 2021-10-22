@@ -1,0 +1,10 @@
+.Navigation__link {
+  color: black;
+  text-decoration: none;
+}
+
+.Navigation__link:hover,
+.Navigation__active {
+  color: #396bba;
+  text-decoration: none;
+}

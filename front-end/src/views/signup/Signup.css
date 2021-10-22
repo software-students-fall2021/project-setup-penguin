@@ -1,4 +1,4 @@
-.Signup {
+.Signup__body {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,23 +38,23 @@
 }
 
 .Signup__text {
-    margin-bottom: 54px;
+  margin-bottom: 54px;
 }
 
 .Signup__link {
   text-decoration: underline;
 }
 
-.Signup__faqHeader{
-    font-size: 30px;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 25px;
-  }
+.Signup__faqHeader {
+  font-size: 30px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 25px;
+}
 
-  .Signup__faqText {
-    font-size: 18px;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 24px;
-  } 
+.Signup__faqText {
+  font-size: 18px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 24px;
+}
