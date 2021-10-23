@@ -1,4 +1,4 @@
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function DeckView() {
   let { id } = useParams();
@@ -7,8 +7,15 @@ function DeckView() {
   return (
     <div>
       {" "}
-      <h1>this is a deck with id={id}</h1>{" "}
-      <NavLink to={`${id}/add`}>Add Card</NavLink>
+      <h1>this is a deck with id={id}</h1>
+      <Link
+        to={{
+          pathname: `${id}/add`,
+          state: { deckId: id }, // passing template data over to the next page
+        }}
+      >
+        Add a card
+      </Link>
     </div>
   );
 }

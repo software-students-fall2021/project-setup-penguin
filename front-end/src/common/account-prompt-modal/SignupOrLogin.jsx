@@ -1,9 +1,15 @@
 import { useState } from "react";
+import { MODAL_PAGE_TYPE } from "../constants";
 import TextInput from "../TextInput";
 
 import "./SignupOrLogin.css";
 
-const SignupOrLogin = ({ pageType, setPageType }) => {
+const SignupOrLogin = ({
+  pageType,
+  setPageType,
+  onContinueAsGuest,
+  onSignupOrLogin,
+}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +17,7 @@ const SignupOrLogin = ({ pageType, setPageType }) => {
   return (
     <div className="SignupOrLogin">
       <h3>{pageType}</h3>
-      {pageType === "Sign up" && (
+      {pageType === MODAL_PAGE_TYPE.SIGNUP && (
         <TextInput
           placeholder="Name"
           value={name}
@@ -28,13 +34,13 @@ const SignupOrLogin = ({ pageType, setPageType }) => {
         value={password}
         onChange={(event) => setPassword(event.target.value)}
       />
-      {pageType === "Sign up" ? (
+      {pageType === MODAL_PAGE_TYPE.SIGNUP ? (
         <i className="SignupOrLogin__altLink">
           Already have an account? Log in{" "}
           <a
-            className="AccountPromptModal__link"
+            className="SignupOrLogin__link"
             onClick={() => {
-              setPageType("Log in");
+              setPageType(MODAL_PAGE_TYPE.LOGIN);
             }}
           >
             here
@@ -44,15 +50,29 @@ const SignupOrLogin = ({ pageType, setPageType }) => {
         <i className="SignupOrLogin__altLink">
           Need to make an account? Sign up{" "}
           <a
-            className="AccountPromptModal__link"
+            className="SignupOrLogin__link"
             onClick={() => {
-              setPageType("Sign up");
+              setPageType(MODAL_PAGE_TYPE.SIGNUP);
             }}
           >
             here
           </a>
         </i>
       )}
+      <div className="SignupOrLogin__footer">
+        <a
+          className="SignupOrLogin__link nakedLink"
+          onClick={onContinueAsGuest}
+        >
+          Continue as guest
+        </a>
+        <span
+          className="SignupOrLogin__cta"
+          onClick={() => onSignupOrLogin(pageType, name, email, password)}
+        >
+          {pageType}
+        </span>
+      </div>
     </div>
   );
 };

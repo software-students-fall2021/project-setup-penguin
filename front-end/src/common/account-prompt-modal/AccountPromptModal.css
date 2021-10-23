@@ -1,7 +1,3 @@
-.TextInput + .TextInput {
-  margin-top: 1em;
-}
-
 .AccountPromptModal {
   position: fixed;
   left: 0;
@@ -24,39 +20,4 @@
 
 .AccountPromptModal__title {
   margin: 0;
-}
-
-.AccountPromptModal__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 4em;
-}
-
-.nakedLink {
-  text-decoration: none;
-}
-
-.AccountPromptModal__link {
-  color: black;
-}
-.AccountPromptModal__link:hover {
-  cursor: pointer;
-  color: #396bba;
-}
-
-.AccountPromptModal__cta {
-  background-color: #396bba;
-  padding: 0.25em 1em;
-  border-radius: 0.5em;
-  color: white;
-  cursor: pointer;
-}
-
-.AccountPromptModal__cta:hover {
-  background-color: #2e5695;
-  padding: 0.25em 1em;
-  border-radius: 0.5em;
-  color: white;
-  cursor: pointer;
 }
