@@ -1,5 +1,11 @@
 .DeckEditor__input {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
+}
+
+.DeckEditor__descriptionHeader {
+  padding-top: 2.5em;
+  font-size: 1.75em;
+  padding-bottom: 1.5em;
 }

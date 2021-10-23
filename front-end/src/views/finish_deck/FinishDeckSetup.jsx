@@ -16,7 +16,6 @@ function FinishDeckSetup() {
 
   return (
     <div>
-      <h1>Finish Deck Setup</h1>
       <DeckEditor
         deckName={deckName}
         setDeckName={setDeckName}
