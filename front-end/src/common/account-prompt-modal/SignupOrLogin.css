@@ -1,0 +1,9 @@
+.SignupOrLogin {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1em;
+}
+
+.SignupOrLogin__altLink {
+  padding-top: 1em;
+}
