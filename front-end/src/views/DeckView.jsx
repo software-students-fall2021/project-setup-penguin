@@ -1,7 +1,6 @@
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, NavLink, Link } from "react-router-dom";
 import DisplayCard from "../common/DisplayCard";
 import "./DeckView.css";
-import { useParams, Link } from "react-router-dom";
 
 function DeckView() {
   let { id } = useParams();
