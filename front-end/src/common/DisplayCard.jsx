@@ -2,6 +2,7 @@ import "./card-editor/CardEditor.css";
 import "./DisplayCard.css";
 import heart from "../assets/heart.png";
 import kev from "../assets/kev.jpeg";
+import Slider from "rc-slider";
 
 //DisplayCard accepts an array of values as input and displays the card accordingly
 function DisplayCard(props) {
@@ -63,6 +64,27 @@ function DisplayCard(props) {
             </div>
           </div>
         ))}
+        <div class="slider-labels">
+        <input
+          type="text"
+          className="CardEditor__label"
+          name="min-slider"
+          value={displayArray.sliderLabelMin}
+        />
+        <input
+          type="text"
+          className="CardEditor__label"
+          name="max-slider"
+          value={displayArray.sliderLabelMax}
+          style={{ textAlign: "right" }}
+        />
+        </div>
+        <Slider
+          value = {displayArray.sliderValue}
+          handleStyle={{ borderColor: "pink" }}
+          railStyle={{ backgroundColor: "pink" }}
+          trackStyle={{ backgroundColor: "pink" }}
+        />
       </div>
     </div>
   );
