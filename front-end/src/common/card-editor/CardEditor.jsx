@@ -109,6 +109,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
                 />
               )}
               <textarea
+                className="CardEditor__textarea"
                 rows="2"
                 name={`sectionContent${id}`}
                 placeholder={getPlaceholderText(`sectionContent${id}`)}

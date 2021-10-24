@@ -5,7 +5,7 @@ function TextInput({ isLarge = false, placeholder, value, onChange }) {
     <input
       type="text"
       placeholder={placeholder}
-      className={isLarge ? "TextInput__Large" : "TextInput"}
+      className={"TextInput " + (isLarge && "TextInput__Large")}
       value={value}
       onChange={onChange}
     />

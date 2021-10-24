@@ -22,7 +22,6 @@ function DeckEditor({
           What's your deck for?
         </div>
         <TextArea
-          isLarge={true}
           placeholder="Engineering team for Pokédek"
           value={deckDescription}
           onChange={(e) => setDeckDescription(e.target.value)}

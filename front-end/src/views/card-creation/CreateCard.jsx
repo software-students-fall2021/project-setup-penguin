@@ -10,6 +10,8 @@ import {
 
 function CreateCard() {
   let data = useLocation();
+  // TODO: maybe want to get deck id from url rather than location
+
   const deckId = data.state.deckId;
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);

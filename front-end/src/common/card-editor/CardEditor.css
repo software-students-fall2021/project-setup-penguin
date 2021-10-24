@@ -5,7 +5,7 @@ input {
   padding: 0;
 }
 
-textarea {
+.CardEditor__textarea {
   background: transparent;
   border: none;
   resize: none !important;

@@ -1,10 +1,11 @@
 import "./TextArea.css";
 
-function TextArea({ isLarge = false, placeholder, value, onChange }) {
+function TextArea({ placeholder, value, onChange }) {
   return (
     <textarea
+      rows={2}
       placeholder={placeholder}
-      className={isLarge ? "TextArea__Large" : "TextArea"}
+      className="TextArea"
       value={value}
       onChange={onChange}
     />
