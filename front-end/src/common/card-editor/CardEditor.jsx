@@ -1,64 +1,25 @@
-import { useState } from "react";
 import "./CardEditor.css";
 import kev from "../../assets/kev.jpeg";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { FORM_DEFAULT_PLACEHOLDERS } from "../constants";
 
 const sectionIds = [0, 1, 2];
 
-const formDefaultPlaceholders = {
-  name: "Name Here",
-  city: "NYC",
-  tagline: "~5 word tagline about yourself",
-  summary: "ROLE (# YOE), working hours & time zone",
-  sectionLabel0: "Strengths",
-  sectionLabel1: "Weaknesses",
-  sectionLabel2: "Communication Preferences",
-  sectionContent0: "What do you excel at?",
-  sectionContent1: "What do you struggle with?",
-  sectionContent2: "How do you want people to contact you?",
-  sliderLabelMin: "Introvert",
-  sliderLabelMax: "Extrovert",
-  sliderValue: 50,
-};
-
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-function CardEditor({ onSave, templateData }) {
+function CardEditor({ form = {}, setForm, templateData }) {
   const isPopulatingTemplate = templateData !== undefined;
-  const emptyForm = Object.keys(formDefaultPlaceholders).reduce(
-    (prev, curr) => {
-      prev[curr] = "";
-      return prev;
-    },
-    {}
-  );
-
-  const [form, setForm] = useState(emptyForm);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // if creating template, fill in blanks with default vals
-    if (!isPopulatingTemplate) {
-      Object.keys(form).forEach((key) => {
-        if (form[key] === "") {
-          form[key] = formDefaultPlaceholders[key];
-        }
-      });
-    }
-
-    console.log({ form });
-    onSave?.(form);
-  };
 
   const getPlaceholderText = (field) =>
-    isPopulatingTemplate ? templateData[field] : formDefaultPlaceholders[field];
+    isPopulatingTemplate
+      ? templateData[field]
+      : FORM_DEFAULT_PLACEHOLDERS[field];
 
   return (
     <div className="CardEditor">
-      <form className="CardEditor__form" onSubmit={handleSubmit} id="myCard">
+      <form className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
           <input
             className="CardEditor__tagline"
@@ -209,7 +170,7 @@ function CardEditor({ onSave, templateData }) {
             )}
           </div>
           <Slider
-            defaultValue={formDefaultPlaceholders.sliderValue}
+            defaultValue={FORM_DEFAULT_PLACEHOLDERS.sliderValue}
             handleStyle={{ borderColor: "pink" }}
             railStyle={{ backgroundColor: "pink" }}
             trackStyle={{ backgroundColor: "pink" }}
@@ -222,13 +183,6 @@ function CardEditor({ onSave, templateData }) {
           />
         </div>
       </form>
-      <input
-        className="CardEditor__submit"
-        type="submit"
-        value="Submit"
-        form="myCard"
-        onSubmit={handleSubmit}
-      />
     </div>
   );
 }
