@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <Navigation />
-      <Container className="mt-5">
+      <Container className="mt-4">
         <Switch>
           <Route exact path="/">
             <Home />
@@ -37,7 +37,7 @@ function App() {
           <Route exact path="/deck/:id">
             <DeckView />
           </Route>
-          <Route path="/deck/:id/add">
+          <Route path="/deck/:deckId/add">
             <CreateCard />
           </Route>
         </Switch>

@@ -13,7 +13,7 @@ function Navigation() {
   };
 
   return (
-    <Navbar bg="transparent" expand="lg" className="mt-4">
+    <Navbar bg="transparent" expand="lg" className="mt-3">
       <Container>
         <Navbar.Brand>
           <NavLink to="/">

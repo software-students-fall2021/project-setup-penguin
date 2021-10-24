@@ -1,6 +1,4 @@
-import TextInput from "../TextInput";
-import TextArea from "../TextArea";
-
+import { TextInput, TextArea } from "../../common";
 import "./DeckEditor.css";
 
 function DeckEditor({
@@ -10,7 +8,7 @@ function DeckEditor({
   setDeckDescription,
 }) {
   return (
-    <div>
+    <div className="DeckEditor">
       <form className="DeckEditor__form">
         <TextInput
           isLarge={true}

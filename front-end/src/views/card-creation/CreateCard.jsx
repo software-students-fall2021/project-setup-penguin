@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { CardEditor, AccountPromptModal } from "../../common";
-import { Redirect, useLocation } from "react-router-dom";
+import { CardEditor, AccountPromptModal, Button } from "../../common";
+import { Redirect, useParams } from "react-router-dom";
 import {
   EMPTY_CARD,
   TEST_TEMPLATE_DATA,
@@ -9,10 +9,7 @@ import {
 } from "../../common/constants";
 
 function CreateCard() {
-  let data = useLocation();
-  // TODO: maybe want to get deck id from url rather than location
-
-  const deckId = data.state.deckId;
+  const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
   const [redirect, setRedirect] = useState(false);
@@ -56,13 +53,27 @@ function CreateCard() {
   return (
     <div>
       <h1>Create Your Card</h1>
-      <p>adding to deck with id {deckId}</p>
-      <p>Fill it in!</p>
-      <CardEditor
-        templateData={TEST_TEMPLATE_DATA}
-        form={form}
-        setForm={setForm}
-      />
+      <div className="d-flex row align-items-center">
+        <div className="col">
+          <p>
+            Help your {deckId} teammates get to know you by populating the
+            template card with information about yourself!
+          </p>
+          <Button
+            btnText="Save card to deck"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          />
+        </div>
+        <div className="col">
+          <CardEditor
+            templateData={TEST_TEMPLATE_DATA}
+            form={form}
+            setForm={setForm}
+          />
+        </div>
+      </div>
       {showModal && (
         <AccountPromptModal
           parentType={PARENT_TYPE.CARD}
@@ -71,13 +82,6 @@ function CreateCard() {
           onSignupOrLogin={onSignupOrLogin}
         />
       )}
-      <div
-        onClick={(event) => {
-          setShowModal(true);
-        }}
-      >
-        Continue
-      </div>
     </div>
   );
 }

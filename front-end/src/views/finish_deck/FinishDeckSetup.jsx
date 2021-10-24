@@ -1,5 +1,3 @@
-import DeckEditor from "../../common/deck-editor/DeckEditor";
-import AccountPromptModal from "../../common/account-prompt-modal/AccountPromptModal";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import {
@@ -7,6 +5,7 @@ import {
   MODAL_PAGE_TYPE,
   PARENT_TYPE,
 } from "../../common/constants";
+import { DeckEditor, AccountPromptModal, Button } from "../../common";
 
 function FinishDeckSetup() {
   let data = useLocation();
@@ -58,12 +57,15 @@ function FinishDeckSetup() {
 
   return (
     <div>
-      <DeckEditor
-        deckName={deckName}
-        setDeckName={setDeckName}
-        deckDescription={deckDescription}
-        setDeckDescription={setDeckDescription}
-      />
+      <h1>Finalize deck details</h1>
+      <div className="mb-5">
+        <DeckEditor
+          deckName={deckName}
+          setDeckName={setDeckName}
+          deckDescription={deckDescription}
+          setDeckDescription={setDeckDescription}
+        />
+      </div>
       {showModal ? (
         <AccountPromptModal
           parentType={PARENT_TYPE.DECK}
@@ -71,13 +73,12 @@ function FinishDeckSetup() {
           onSignupOrLogin={onSignupOrLogin}
         />
       ) : null}
-      <button
-        onClick={(event) => {
+      <Button
+        btnText="Create deck"
+        onClick={() => {
           setShowModal(true);
         }}
-      >
-        Continue
-      </button>
+      />
     </div>
   );
 }
