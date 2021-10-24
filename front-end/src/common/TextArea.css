@@ -1,15 +1,15 @@
-.TextInput {
+.TextArea {
   padding: 0.5em 0;
   border-bottom: 1px solid darkgray;
 }
 
-.TextInput__Large {
-  padding: 0.5em 0;
+.TextArea__Large {
+  padding: 0em 0em 1.5em 0;
   border-bottom: 1px solid darkgray;
-  font-size: 1.75em;
   width: 100%;
+  font-size: 1em !important;
 }
 
-.TextInput:focus {
+.TextArea:focus {
   border-bottom: 1px solid #396bba;
 }
