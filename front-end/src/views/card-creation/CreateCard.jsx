@@ -1,47 +1,81 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import { CardEditor, AccountPromptModal } from "../../common";
-
-const testTemplateData = {
-  name: "Janet Huang",
-  city: "NYC",
-  tagline: "K-drama and dessert enthusiast",
-  summary: "Software Engineer (2 YOE), 9AM-5PM ",
-  sectionLabel0: "Superpowers",
-  sectionLabel1: "Things you suck at",
-  sectionLabel2: "Communication Preferences",
-  sectionContent0: "eating & sleeping",
-  sectionContent1: "speaking",
-  sectionContent2: "never ideally",
-  sliderLabelMin: "me",
-  sliderLabelMax: "we",
-};
+import { Redirect, useLocation } from "react-router-dom";
+import {
+  EMPTY_CARD,
+  TEST_TEMPLATE_DATA,
+  PARENT_TYPE,
+  MODAL_PAGE_TYPE,
+} from "../../common/constants";
 
 function CreateCard() {
+  let data = useLocation();
+  const deckId = data.state.deckId;
   const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState(EMPTY_CARD);
+  const [redirect, setRedirect] = useState(false);
 
-  const onSaveCard = (cardData) => {
-    setShowModal(true);
-    console.log({ cardData });
+  // TODO: get actual template data given deck id
+
+  if (redirect) {
+    return <Redirect to={`/deck/${deckId}`} />;
+  }
+
+  const saveCard = (userId) => {
+    console.log({ form, userId });
+    // save card data to db under deck with deckId
+    // link card to userId if exists (and vice versa)
+    // return cardId
   };
 
-  const onCloseModal = () => {
+  const closeModalWithRedirect = () => {
     setShowModal(false);
+    setRedirect(true);
+  };
+
+  const onContinueAsGuest = () => {
+    const cardId = saveCard();
+    closeModalWithRedirect(cardId);
+  };
+
+  const onSignupOrLogin = (pageType, name, email, password) => {
+    let userId;
+
+    if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
+      // create & save account – get id of newly created account
+    } else {
+      // log user in – get id of existing account
+    }
+
+    const cardId = saveCard(userId);
+    closeModalWithRedirect(cardId);
   };
 
   return (
     <div>
       <h1>Create Your Card</h1>
+      <p>adding to deck with id {deckId}</p>
       <p>Fill it in!</p>
-      <h3>Populating a Template</h3>
-      <CardEditor templateData={testTemplateData} onSave={onSaveCard} />
-      <h3>Creating a Template</h3>
-      <CardEditor onSave={onSaveCard} />
-      {/* TODO: style the NavLink to look like a button */}
-      <NavLink to="/finishdeck">Continue</NavLink>
+      <CardEditor
+        templateData={TEST_TEMPLATE_DATA}
+        form={form}
+        setForm={setForm}
+      />
       {showModal && (
-        <AccountPromptModal parentType="deck" onCloseModal={onCloseModal} />
+        <AccountPromptModal
+          parentType={PARENT_TYPE.CARD}
+          onCloseModal={() => setShowModal(false)}
+          onContinueAsGuest={onContinueAsGuest}
+          onSignupOrLogin={onSignupOrLogin}
+        />
       )}
+      <div
+        onClick={(event) => {
+          setShowModal(true);
+        }}
+      >
+        Continue
+      </div>
     </div>
   );
 }

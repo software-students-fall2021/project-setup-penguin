@@ -1,8 +1,15 @@
 import SignupOrLogin from "./SignupOrLogin";
 import "./AccountPromptModal.css";
 import { useState } from "react";
-function AccountPromptModal({ parentType, onCloseModal }) {
-  const [pageType, setPageType] = useState("Sign up");
+import { MODAL_PAGE_TYPE } from "../../common/constants";
+
+function AccountPromptModal({
+  parentType,
+  onContinueAsGuest,
+  onSignupOrLogin,
+}) {
+  // TODO: close Modal on click outside / click on x
+  const [pageType, setPageType] = useState(MODAL_PAGE_TYPE.SIGNUP);
 
   return (
     <div className="AccountPromptModal">
@@ -19,30 +26,11 @@ function AccountPromptModal({ parentType, onCloseModal }) {
             {parentType}!
           </p>
           <SignupOrLogin
-            onCloseModal={onCloseModal}
+            onContinueAsGuest={onContinueAsGuest}
+            onSignupOrLogin={onSignupOrLogin}
             pageType={pageType}
             setPageType={setPageType}
           />
-        </div>
-        <div className="AccountPromptModal__footer">
-          <a
-            className="AccountPromptModal__link nakedLink"
-            onClick={() => {
-              console.log("continue as guest");
-              onCloseModal();
-            }}
-          >
-            Continue as guest
-          </a>
-          <span
-            className="AccountPromptModal__cta"
-            onClick={() => {
-              console.log("submit");
-              onCloseModal();
-            }}
-          >
-            {pageType}
-          </span>
         </div>
       </div>
     </div>
