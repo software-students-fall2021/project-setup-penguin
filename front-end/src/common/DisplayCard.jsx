@@ -9,8 +9,6 @@ function DisplayCard(props) {
   const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
   const displayArray = props.tempArray;
 
-  // console.log("hello", props.tempArray.name);
-  // let temp = props.tempArray.name;
   return (
     <div className="CardEditor">
       <div className="CardEditor__form" id="myCard">
