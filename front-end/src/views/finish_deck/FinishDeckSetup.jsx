@@ -6,6 +6,7 @@ import {
   PARENT_TYPE,
 } from "../../common/constants";
 import { DeckEditor, AccountPromptModal, Button } from "../../common";
+import * as Icon from "react-bootstrap-icons";
 
 function FinishDeckSetup() {
   let data = useLocation();
@@ -17,7 +18,7 @@ function FinishDeckSetup() {
   const saveDeck = (userId) => {
     // user-entered template data would be contained in data.state.templateData
     // we want to fill in blanks with default vals
-    const templateData = data.state.templateData;
+    const templateData = data?.state?.templateData;
     Object.keys(templateData).forEach((key) => {
       if (templateData[key] === "") {
         templateData[key] = FORM_DEFAULT_PLACEHOLDERS[key];
@@ -78,6 +79,7 @@ function FinishDeckSetup() {
         onClick={() => {
           setShowModal(true);
         }}
+        icon={<Icon.ArrowRight />}
       />
     </div>
   );

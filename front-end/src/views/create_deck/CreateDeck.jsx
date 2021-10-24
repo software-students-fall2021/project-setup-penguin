@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CardEditor, Button } from "../../common";
 import { EMPTY_TEMPLATE } from "../../common/constants";
+import * as Icon from "react-bootstrap-icons";
 
 function CreateDeck() {
   const [form, setForm] = useState(EMPTY_TEMPLATE);
@@ -26,6 +27,7 @@ function CreateDeck() {
               pathname: "/finishdeck",
               state: { templateData: form }, // passing template data over to the next page
             }}
+            icon={<Icon.ArrowRight />}
           />
         </div>
         <div className="col">

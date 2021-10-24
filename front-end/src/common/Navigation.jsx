@@ -5,6 +5,7 @@ import "./Navigation.css";
 
 import pokedek from "../assets/pokedek.png";
 
+// TODO: explore hamburger menu that slides from side
 function Navigation() {
   const [activeKey, setActiveKey] = useState("");
   const handleSelect = (eventKey) => {

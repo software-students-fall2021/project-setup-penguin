@@ -7,6 +7,7 @@ import {
   PARENT_TYPE,
   MODAL_PAGE_TYPE,
 } from "../../common/constants";
+import * as Icon from "react-bootstrap-icons";
 
 function CreateCard() {
   const { deckId } = useParams();
@@ -22,7 +23,7 @@ function CreateCard() {
 
   const saveCard = (userId) => {
     console.log({ form, userId });
-    // save card data to db under deck with deckId
+    // TODO: save card data to db under deck with deckId
     // link card to userId if exists (and vice versa)
     // return cardId
   };
@@ -41,7 +42,7 @@ function CreateCard() {
     let userId;
 
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
-      // create & save account – get id of newly created account
+      // TODO: create & save account – get id of newly created account
     } else {
       // log user in – get id of existing account
     }
@@ -59,11 +60,13 @@ function CreateCard() {
             Help your {deckId} teammates get to know you by populating the
             template card with information about yourself!
           </p>
+          {/* TODO: explore moving button to bottom on condensed screen */}
           <Button
             btnText="Save card to deck"
             onClick={() => {
               setShowModal(true);
             }}
+            icon={<Icon.ArrowRight />}
           />
         </div>
         <div className="col">

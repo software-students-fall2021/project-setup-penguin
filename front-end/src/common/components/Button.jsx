@@ -1,14 +1,11 @@
 import "./Button.css";
-import * as Icon from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 
-function Button({ btnText, onClick, linkTo }) {
+function Button({ btnText, onClick, linkTo, icon }) {
   const btn = (
     <button className="Button" onClick={onClick}>
       {btnText}
-      <span className="Button__iconContainer">
-        <Icon.ArrowRight />
-      </span>
+      {icon && <span className="Button__iconContainer">{icon}</span>}
     </button>
   );
   return linkTo ? <Link to={linkTo}>{btn}</Link> : btn;
