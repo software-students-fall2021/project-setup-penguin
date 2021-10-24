@@ -3,3 +3,32 @@
     flex-direction: row;
     flex-wrap: wrap;
 }
+
+.add-card{
+    display: flex;
+    justify-content: center;
+    background-color: lightgrey;
+    border-radius: 5px;
+    width: 200px;
+    padding: 5px;
+    margin: 20px 0px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+}
+
+.title{
+    font-size: 70px;
+    font-weight: bold;
+}
+
+.subtitle{
+    font-size: 30px;
+    font-weight: normal;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 20px;
+}
