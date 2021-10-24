@@ -1,11 +1,11 @@
 import "./TextInput.css";
 
-function TextInput({ placeholder, value, onChange }) {
+function TextInput({ isLarge = false, placeholder, value, onChange }) {
   return (
     <input
       type="text"
       placeholder={placeholder}
-      className="TextInput"
+      className={isLarge ? "TextInput__Large" : "TextInput"}
       value={value}
       onChange={onChange}
     />
