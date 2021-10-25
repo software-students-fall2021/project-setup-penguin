@@ -1,5 +1,5 @@
 import "./CardEditor.css";
-import kev from "../../assets/kev.jpeg";
+import piplup from "../../assets/piplup.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -68,7 +68,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
           </div>
           {/* TODO: implement file upload & photo repositioning */}
           {/* <label htmlFor="file-input"> */}
-          <img className="CardEditor__image" src={kev} />
+          <img className="CardEditor__image" src={piplup} />
           {/* </label>
         <input id="file-input" type="file" /> */}
         </div>
@@ -109,6 +109,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
                 />
               )}
               <textarea
+                className="CardEditor__textarea"
                 rows="2"
                 name={`sectionContent${id}`}
                 placeholder={getPlaceholderText(`sectionContent${id}`)}

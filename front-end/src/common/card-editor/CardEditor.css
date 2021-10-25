@@ -5,7 +5,12 @@ input {
   padding: 0;
 }
 
-textarea {
+.CardEditor {
+  display: flex;
+  justify-content: center;
+}
+
+.CardEditor__textarea {
   background: transparent;
   border: none;
   resize: none !important;

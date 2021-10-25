@@ -16,14 +16,13 @@ function AccountPromptModal({
       <div className="AccountPromptModal__content">
         <div className="AccountPromptModal__header">
           <h1 className="AccountPromptModal__title">
-            Want to save your {parentType} to an account?
+            Want to link your {parentType} to an account?
           </h1>
         </div>
         <div className="AccountPromptModal__body">
           <p>
             If you want to be able to update and manage your {parentType} later,
-            sign up for an account. Otherwise, just go ahead and create your{" "}
-            {parentType}!
+            sign up for an account. Otherwise, go ahead and continue as a guest.
           </p>
           <SignupOrLogin
             onContinueAsGuest={onContinueAsGuest}

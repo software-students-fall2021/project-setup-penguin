@@ -92,7 +92,6 @@ function DeckView() {
   const allCards = [TempOne, TempTwo, TempThree, TempFour, TempFive];
   return (
     <div>
-      {" "}
       <p>(this is a deck with id={id})</p>{" "}
       <div class="header">
         <div class="title">{title}</div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import CardEditor from "../../common/card-editor/CardEditor";
+import { CardEditor, Button } from "../../common";
 import { EMPTY_TEMPLATE } from "../../common/constants";
+import * as Icon from "react-bootstrap-icons";
 
 function CreateDeck() {
   const [form, setForm] = useState(EMPTY_TEMPLATE);
@@ -9,20 +9,31 @@ function CreateDeck() {
   return (
     <div>
       <h1>Create a New Deck</h1>
-      <p>
-        Edit the card below to capture information that’s important to your
-        team. This template card will be shared with your teammates.
-      </p>
-      <CardEditor form={form} setForm={setForm} />
-      {/* TODO: style the Link to look like a button */}
-      <Link
-        to={{
-          pathname: "/finishdeck",
-          state: { templateData: form }, // passing template data over to the next page
-        }}
-      >
-        Finalize deck details
-      </Link>
+      <div className="d-flex row align-items-center">
+        <div className="col">
+          <p>
+            Start off the deck with your own card! Information entered here will
+            be used as placeholder text in a template card for your teammates.
+            Only you can edit fields such as "Strengths" and "Introvert" –
+            everybody else will see these as plain labels.
+          </p>
+          <p>
+            Don't worry if you don't feel like changing much! We'll fill any
+            empty fields with the placeholders presented.
+          </p>
+          <Button
+            btnText="Finalize deck details"
+            linkTo={{
+              pathname: "/finishdeck",
+              state: { templateData: form }, // passing template data over to the next page
+            }}
+            icon={<Icon.ArrowRight />}
+          />
+        </div>
+        <div className="col">
+          <CardEditor form={form} setForm={setForm} />
+        </div>
+      </div>
     </div>
   );
 }
