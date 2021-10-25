@@ -1,0 +1,14 @@
+.CardEditor__form{
+    width: 25em;
+    height: 38em;
+}
+.CardEditor{
+    margin: 16px;
+    margin-top: 30px;
+}
+
+.slider-labels{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
