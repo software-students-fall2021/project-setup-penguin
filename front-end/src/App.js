@@ -11,6 +11,7 @@ import {
   FinishDeckSetup,
   DeckView,
   CreateCard,
+  UpdateCard,
   AccountPage,
 } from "./views";
 
@@ -43,6 +44,9 @@ function App() {
           </Route>
           <Route path="/accountpage">
             <AccountPage />
+          </Route>
+          <Route path="/updatecard">
+            <UpdateCard />
           </Route>
         </Switch>
       </Container>
