@@ -1,4 +1,4 @@
-import { useParams, NavLink, Link } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import DisplayCard from "../common/DisplayCard";
 import "./DeckView.css";
 
@@ -7,7 +7,7 @@ function DeckView() {
   console.log({ id });
 
   const title = "SWE";
-  const subtitle = "Team for SWE Project, Fall 2021"
+  const subtitle = "Team for SWE Project, Fall 2021";
 
   const TempOne = {
     name: "Bob Ross",
@@ -57,7 +57,7 @@ function DeckView() {
     sliderValue: 95,
   };
 
-  const TempFour= {
+  const TempFour = {
     name: "Andrew Hamilton",
     city: "NYC",
     tagline: "Billionaire, President of NYU",
@@ -98,9 +98,9 @@ function DeckView() {
         <div class="subtitle">{subtitle}</div>
       </div>
       <div class="deck-list">
-      {allCards.map((tempType) => (
-        <DisplayCard tempArray={tempType}></DisplayCard>
-      ))}
+        {allCards.map((tempType) => (
+          <DisplayCard tempArray={tempType}></DisplayCard>
+        ))}
       </div>
       <div class="add-card">
         <NavLink to={`${id}/add`}>Add Card</NavLink>
