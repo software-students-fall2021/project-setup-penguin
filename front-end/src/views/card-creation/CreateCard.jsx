@@ -6,6 +6,7 @@ import {
   EMPTY_CARD,
   PARENT_TYPE,
   MODAL_PAGE_TYPE,
+  TEST_TEMPLATE_DATA,
 } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
@@ -22,8 +23,12 @@ function CreateCard() {
       .then((response) => {
         console.log("data", response.data);
         setTemplateData(response.data.template);
+      })
+      .catch((err) => {
+        console.log("!!", err);
+        setTemplateData(TEST_TEMPLATE_DATA);
       });
-  }, []);
+  }, [deckId]);
 
   if (redirect) {
     return <Redirect to={`/deck/${deckId}`} />;
