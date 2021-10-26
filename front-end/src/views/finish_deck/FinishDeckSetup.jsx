@@ -54,6 +54,10 @@ function FinishDeckSetup() {
       })
       .catch((err) => {
         console.log(err);
+
+        // while mockaroo is down...
+        setRedirectLink(`deck/${123}`);
+        setShowModal(false);
       });
   };
 
