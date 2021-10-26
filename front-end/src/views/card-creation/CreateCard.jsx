@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CardEditor, AccountPromptModal, Button } from "../../common";
+import { CreateBody, AccountPromptModal, Button } from "../../common";
 import { Redirect, useParams } from "react-router-dom";
 import {
   EMPTY_CARD,
@@ -51,32 +51,31 @@ function CreateCard() {
     closeModalWithRedirect(cardId);
   };
 
+  const prompt = (
+    <p>
+      Help your {deckId} teammates get to know you by populating the template
+      card with information about yourself!
+    </p>
+  );
+
+  const btn = (
+    <Button
+      btnText="Save card to deck"
+      onClick={() => {
+        setShowModal(true);
+      }}
+      icon={<Icon.ArrowRight />}
+    />
+  );
+
   return (
-    <div>
+    <>
       <h1>Create Your Card</h1>
-      <div className="d-flex row align-items-center">
-        <div className="col">
-          <p>
-            Help your {deckId} teammates get to know you by populating the
-            template card with information about yourself!
-          </p>
-          {/* TODO: explore moving button to bottom on condensed screen */}
-          <Button
-            btnText="Save card to deck"
-            onClick={() => {
-              setShowModal(true);
-            }}
-            icon={<Icon.ArrowRight />}
-          />
-        </div>
-        <div className="col">
-          <CardEditor
-            templateData={TEST_TEMPLATE_DATA}
-            form={form}
-            setForm={setForm}
-          />
-        </div>
-      </div>
+      <CreateBody
+        prompt={prompt}
+        btn={btn}
+        cardEditorProps={{ templateData: TEST_TEMPLATE_DATA, form, setForm }}
+      />
       {showModal && (
         <AccountPromptModal
           parentType={PARENT_TYPE.CARD}
@@ -85,7 +84,7 @@ function CreateCard() {
           onSignupOrLogin={onSignupOrLogin}
         />
       )}
-    </div>
+    </>
   );
 }
 

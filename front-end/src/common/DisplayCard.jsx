@@ -11,7 +11,7 @@ function DisplayCard(props) {
   const displayArray = props.tempArray;
 
   return (
-    <div className="CardEditor">
+    <div className="CardEditor DisplayCard">
       <div className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
           <input
@@ -65,22 +65,22 @@ function DisplayCard(props) {
           </div>
         ))}
         <div class="slider-labels">
-        <input
-          type="text"
-          className="CardEditor__label"
-          name="min-slider"
-          value={displayArray.sliderLabelMin}
-        />
-        <input
-          type="text"
-          className="CardEditor__label"
-          name="max-slider"
-          value={displayArray.sliderLabelMax}
-          style={{ textAlign: "right" }}
-        />
+          <input
+            type="text"
+            className="CardEditor__label"
+            name="min-slider"
+            value={displayArray.sliderLabelMin}
+          />
+          <input
+            type="text"
+            className="CardEditor__label"
+            name="max-slider"
+            value={displayArray.sliderLabelMax}
+            style={{ textAlign: "right" }}
+          />
         </div>
         <Slider
-          value = {displayArray.sliderValue}
+          value={displayArray.sliderValue}
           handleStyle={{ borderColor: "pink" }}
           railStyle={{ backgroundColor: "pink" }}
           trackStyle={{ backgroundColor: "pink" }}

@@ -1,14 +1,15 @@
-.CardEditor__form{
-    width: 25em;
-    height: 38em;
-}
-.CardEditor{
-    margin: 16px;
-    margin-top: 30px;
+.CardEditor__form {
+  width: 25em;
+  height: 38em;
 }
 
-.slider-labels{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.DisplayCard {
+  margin: 16px;
+  margin-top: 30px;
+}
+
+.slider-labels {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
