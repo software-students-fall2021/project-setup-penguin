@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { CardEditor, AccountPromptModal, Button } from "../../common";
+import { CreateBody, AccountPromptModal, Button } from "../../common";
 import { Redirect, useParams } from "react-router-dom";
 import {
   EMPTY_CARD,
