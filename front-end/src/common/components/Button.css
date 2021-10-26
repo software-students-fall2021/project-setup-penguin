@@ -1,0 +1,21 @@
+.Button {
+  background-color: white;
+  padding: 0.25em 1em;
+  border: 1px solid #396bba;
+  border-radius: 0.5em;
+  color: #396bba;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.Button:hover {
+  background-color: #396bba;
+  padding: 0.25em 1em;
+  border-radius: 0.5em;
+  color: white;
+  cursor: pointer;
+}
+
+.Button__iconContainer {
+  padding-left: 0.75em;
+}

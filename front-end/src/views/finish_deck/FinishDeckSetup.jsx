@@ -8,6 +8,8 @@ import {
   PARENT_TYPE,
 } from "../../common/constants";
 import axios from "axios";
+import { DeckEditor, AccountPromptModal, Button } from "../../common";
+import * as Icon from "react-bootstrap-icons";
 
 function FinishDeckSetup() {
   let data = useLocation();
@@ -26,7 +28,7 @@ function FinishDeckSetup() {
 
     // user-entered template data would be contained in data.state.templateData
     // we want to fill in blanks with default vals
-    const templateData = data.state.templateData;
+    const templateData = data?.state?.templateData;
     Object.keys(templateData).forEach((key) => {
       if (templateData[key] === "") {
         templateData[key] = FORM_DEFAULT_PLACEHOLDERS[key];
@@ -75,12 +77,15 @@ function FinishDeckSetup() {
 
   return (
     <div>
-      <DeckEditor
-        deckName={deckName}
-        setDeckName={setDeckName}
-        deckDescription={deckDescription}
-        setDeckDescription={setDeckDescription}
-      />
+      <h1>Finalize deck details</h1>
+      <div className="mb-5">
+        <DeckEditor
+          deckName={deckName}
+          setDeckName={setDeckName}
+          deckDescription={deckDescription}
+          setDeckDescription={setDeckDescription}
+        />
+      </div>
       {showModal ? (
         <AccountPromptModal
           parentType={PARENT_TYPE.DECK}
@@ -88,13 +93,13 @@ function FinishDeckSetup() {
           onSignupOrLogin={onSignupOrLogin}
         />
       ) : null}
-      <button
-        onClick={(event) => {
+      <Button
+        btnText="Create deck"
+        onClick={() => {
           setShowModal(true);
         }}
-      >
-        Continue
-      </button>
+        icon={<Icon.ArrowRight />}
+      />
     </div>
   );
 }

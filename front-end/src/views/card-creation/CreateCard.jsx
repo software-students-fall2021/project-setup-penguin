@@ -1,31 +1,51 @@
-import { useState } from "react";
-import { CardEditor, AccountPromptModal } from "../../common";
-import { Redirect, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { CardEditor, AccountPromptModal, Button } from "../../common";
+import { Redirect, useParams } from "react-router-dom";
 import {
   EMPTY_CARD,
-  TEST_TEMPLATE_DATA,
   PARENT_TYPE,
   MODAL_PAGE_TYPE,
+  TEST_TEMPLATE_DATA,
 } from "../../common/constants";
+import * as Icon from "react-bootstrap-icons";
 
 function CreateCard() {
-  let data = useLocation();
-  const deckId = data.state.deckId;
+  const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
+  const [templateData, setTemplateData] = useState({});
   const [redirect, setRedirect] = useState(false);
 
-  // TODO: get actual template data given deck id
+  useEffect(() => {
+    axios
+      .get(`https://my.api.mockaroo.com/deck/${deckId}?key=d5aa71f0`)
+      .then((response) => {
+        console.log("data", response.data);
+        setTemplateData(response.data.template);
+      })
+      .catch((err) => {
+        console.log("!!", err);
+        setTemplateData(TEST_TEMPLATE_DATA);
+      });
+  }, [deckId]);
 
   if (redirect) {
     return <Redirect to={`/deck/${deckId}`} />;
   }
 
   const saveCard = (userId) => {
-    console.log({ form, userId });
-    // save card data to db under deck with deckId
-    // link card to userId if exists (and vice versa)
-    // return cardId
+    axios
+      .post(`https://my.api.mockaroo.com/deck?key=$d5aa71f0&__method=POST`, {
+        newCard: form,
+        userId,
+      })
+      .then((res) => {
+        return res["data"];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const closeModalWithRedirect = () => {
@@ -42,7 +62,7 @@ function CreateCard() {
     let userId;
 
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
-      // create & save account – get id of newly created account
+      // TODO: create & save account – get id of newly created account
     } else {
       // log user in – get id of existing account
     }
@@ -51,15 +71,30 @@ function CreateCard() {
     closeModalWithRedirect(cardId);
   };
 
+  const prompt = (
+    <p>
+      Help your {deckId} teammates get to know you by populating the template
+      card with information about yourself!
+    </p>
+  );
+
+  const btn = (
+    <Button
+      btnText="Save card to deck"
+      onClick={() => {
+        setShowModal(true);
+      }}
+      icon={<Icon.ArrowRight />}
+    />
+  );
+
   return (
-    <div>
+    <>
       <h1>Create Your Card</h1>
-      <p>adding to deck with id {deckId}</p>
-      <p>Fill it in!</p>
-      <CardEditor
-        templateData={TEST_TEMPLATE_DATA}
-        form={form}
-        setForm={setForm}
+      <CreateBody
+        prompt={prompt}
+        btn={btn}
+        cardEditorProps={{ templateData, form, setForm }}
       />
       {showModal && (
         <AccountPromptModal
@@ -69,14 +104,7 @@ function CreateCard() {
           onSignupOrLogin={onSignupOrLogin}
         />
       )}
-      <div
-        onClick={(event) => {
-          setShowModal(true);
-        }}
-      >
-        Continue
-      </div>
-    </div>
+    </>
   );
 }
 

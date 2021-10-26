@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import Navigation from "./common/Navigation";
+import { Navigation, ViewportProvider } from "./common";
 
 import {
   Home,
@@ -11,38 +11,48 @@ import {
   FinishDeckSetup,
   DeckView,
   CreateCard,
+  AccountPage,
+  UpdateDeck,
 } from "./views";
 
 function App() {
   return (
-    <Router>
-      <Navigation />
-      <Container className="mt-5">
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route path="/createdeck">
-            <CreateDeck />
-          </Route>
-          <Route path="/finishdeck">
-            <FinishDeckSetup />
-          </Route>
-          <Route exact path="/deck/:id">
-            <DeckView />
-          </Route>
-          <Route path="/deck/:id/add">
-            <CreateCard />
-          </Route>
-        </Switch>
-      </Container>
-    </Router>
+    <ViewportProvider>
+      <Router>
+        <Navigation />
+        <Container className="mt-4">
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/createdeck">
+              <CreateDeck />
+            </Route>
+            <Route path="/finishdeck">
+              <FinishDeckSetup />
+            </Route>
+            <Route path="/deck/:deckId/edit">
+              <UpdateDeck />
+            </Route>
+            <Route exact path="/deck/:id">
+              <DeckView />
+            </Route>
+            <Route path="/deck/:deckId/add">
+              <CreateCard />
+            </Route>
+            <Route path="/accountpage">
+              <AccountPage />
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
+    </ViewportProvider>
   );
 }
 
