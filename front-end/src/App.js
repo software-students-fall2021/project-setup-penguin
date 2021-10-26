@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Navigation from "./common/Navigation";
 
@@ -12,6 +12,7 @@ import {
   DeckView,
   CreateCard,
   AccountPage,
+  UpdateDeck,
 } from "./views";
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/deck/:deckId/add">
             <CreateCard />
+          </Route>
+          <Route path="/deck/:deckId/edit">
+            <UpdateDeck />
           </Route>
           <Route path="/accountpage">
             <AccountPage />
