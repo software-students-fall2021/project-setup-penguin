@@ -1,5 +1,5 @@
 import "./CardEditor.css";
-import kev from "../../assets/kev.jpeg";
+import piplup from "../../assets/piplup.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -9,7 +9,7 @@ const sectionIds = [0, 1, 2];
 
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-function CardEditor({ form = {}, setForm, templateData }) {
+function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
   const isPopulatingTemplate = templateData !== undefined;
 
   const getPlaceholderText = (field) =>
@@ -18,7 +18,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
       : FORM_DEFAULT_PLACEHOLDERS[field];
 
   return (
-    <div className="CardEditor">
+    <span className={`CardEditor ${isCentered && "CardEditor--centered"}`}>
       <form className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
           <input
@@ -68,7 +68,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
           </div>
           {/* TODO: implement file upload & photo repositioning */}
           {/* <label htmlFor="file-input"> */}
-          <img className="CardEditor__image" src={kev} />
+          <img className="CardEditor__image" src={piplup} />
           {/* </label>
         <input id="file-input" type="file" /> */}
         </div>
@@ -109,6 +109,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
                 />
               )}
               <textarea
+                className="CardEditor__textarea"
                 rows="2"
                 name={`sectionContent${id}`}
                 placeholder={getPlaceholderText(`sectionContent${id}`)}
@@ -183,7 +184,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
           />
         </div>
       </form>
-    </div>
+    </span>
   );
 }
 

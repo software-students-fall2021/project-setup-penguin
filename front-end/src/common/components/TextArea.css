@@ -1,0 +1,11 @@
+.TextArea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid darkgray;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.TextArea:focus {
+  border-bottom: 1px solid #396bba;
+}

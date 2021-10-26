@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MODAL_PAGE_TYPE } from "../constants";
-import TextInput from "../TextInput";
+import { TextInput } from "../../common";
 
 import "./SignupOrLogin.css";
 

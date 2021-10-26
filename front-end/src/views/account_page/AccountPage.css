@@ -1,0 +1,21 @@
+.toggles{
+    width: 100px;
+    border: none;
+}
+
+#deckView, #cardView{
+    height: 50px;
+    width: 150px;
+    border: none;
+    font-size: 30px;
+}
+
+.Active{
+    background-color: grey;
+    color: white;
+}
+
+.inactive{
+    background-color: lightgrey;
+    color: black;
+}
