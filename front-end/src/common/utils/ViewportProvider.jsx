@@ -3,20 +3,20 @@ import { createContext, useContext, useState, useEffect } from "react";
 const ViewportContext = createContext({});
 
 export const useViewport = () => {
-  const { width, height } = useContext(ViewportContext);
-  return { width, height };
+  const { width } = useContext(ViewportContext);
+  return { width };
 };
 
 export const ViewportProvider = ({ children }) => {
   const [width, setWidth] = useState(window.innerWidth);
 
-  const handleWindowResize = () => {
+  const handleResize = () => {
     setWidth(window.innerWidth);
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
