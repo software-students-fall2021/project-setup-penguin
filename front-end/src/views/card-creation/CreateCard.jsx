@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { CreateBody, AccountPromptModal, Button } from "../../common";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { CardEditor, AccountPromptModal, Button } from "../../common";
 import { Redirect, useParams } from "react-router-dom";
 import {
   EMPTY_CARD,
-  TEST_TEMPLATE_DATA,
   PARENT_TYPE,
   MODAL_PAGE_TYPE,
+  TEST_TEMPLATE_DATA,
 } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
@@ -13,19 +14,38 @@ function CreateCard() {
   const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
+  const [templateData, setTemplateData] = useState({});
   const [redirect, setRedirect] = useState(false);
 
-  // TODO: get actual template data given deck id
+  useEffect(() => {
+    axios
+      .get(`https://my.api.mockaroo.com/deck/${deckId}?key=d5aa71f0`)
+      .then((response) => {
+        console.log("data", response.data);
+        setTemplateData(response.data.template);
+      })
+      .catch((err) => {
+        console.log("!!", err);
+        setTemplateData(TEST_TEMPLATE_DATA);
+      });
+  }, [deckId]);
 
   if (redirect) {
     return <Redirect to={`/deck/${deckId}`} />;
   }
 
   const saveCard = (userId) => {
-    console.log({ form, userId });
-    // TODO: save card data to db under deck with deckId
-    // link card to userId if exists (and vice versa)
-    // return cardId
+    axios
+      .post(`https://my.api.mockaroo.com/deck?key=$d5aa71f0&__method=POST`, {
+        newCard: form,
+        userId,
+      })
+      .then((res) => {
+        return res["data"];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const closeModalWithRedirect = () => {
@@ -74,7 +94,7 @@ function CreateCard() {
       <CreateBody
         prompt={prompt}
         btn={btn}
-        cardEditorProps={{ templateData: TEST_TEMPLATE_DATA, form, setForm }}
+        cardEditorProps={{ templateData, form, setForm }}
       />
       {showModal && (
         <AccountPromptModal
