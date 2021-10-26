@@ -1,5 +1,5 @@
 import { useParams, NavLink } from "react-router-dom";
-import DisplayCard from "../common/DisplayCard";
+import { Button, DisplayCard } from "../common";
 import "./DeckView.css";
 
 function DeckView() {
@@ -92,17 +92,20 @@ function DeckView() {
   const allCards = [TempOne, TempTwo, TempThree, TempFour, TempFive];
   return (
     <div>
-      <p>(this is a deck with id={id})</p>{" "}
-      <div class="header">
-        <div class="title">{title}</div>
-        <div class="subtitle">{subtitle}</div>
+      <div className="header">
+        <div className="title-container">
+          <div className="title">{title}</div>
+          {/* TODO: only show button for admin */}
+          <Button btnText="Edit" linkTo={`${id}/edit`} />
+        </div>
+        <div className="subtitle">{subtitle}</div>
       </div>
       <div class="deck-list">
         {allCards.map((tempType) => (
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
-      <div class="add-card">
+      <div className="add-card">
         <NavLink to={`${id}/add`}>Add Card</NavLink>
       </div>
     </div>

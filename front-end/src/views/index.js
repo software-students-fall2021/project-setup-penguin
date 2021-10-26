@@ -6,6 +6,8 @@ import CreateDeck from "./create_deck/CreateDeck";
 import FinishDeckSetup from "./finish_deck/FinishDeckSetup";
 import DeckView from "./DeckView";
 import AccountPage from "./account_page/AccountPage";
+import UpdateDeck from "./UpdateDeck";
+
 export {
   Home,
   Login,
@@ -15,4 +17,5 @@ export {
   FinishDeckSetup,
   DeckView,
   AccountPage,
+  UpdateDeck,
 };

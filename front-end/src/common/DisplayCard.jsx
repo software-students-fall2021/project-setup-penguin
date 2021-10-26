@@ -1,7 +1,7 @@
 import "./card-editor/CardEditor.css";
 import "./DisplayCard.css";
 import heart from "../assets/heart.png";
-import kev from "../assets/kev.jpeg";
+import piplup from "../assets/piplup.png";
 import Slider from "rc-slider";
 
 //DisplayCard accepts an array of values as input and displays the card accordingly
@@ -38,7 +38,7 @@ function DisplayCard(props) {
               <HeartIcon />
             </div>
           </div>
-          <img className="CardEditor__image" src={kev} />
+          <img className="CardEditor__image" src={piplup} />
         </div>
         <input
           className="CardEditor__summary"
