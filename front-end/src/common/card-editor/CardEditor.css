@@ -5,7 +5,7 @@ input {
   padding: 0;
 }
 
-.CardEditor {
+.CardEditor--centered {
   display: flex;
   justify-content: center;
 }
