@@ -1,5 +1,3 @@
-import DeckEditor from "../../common/deck-editor/DeckEditor";
-import AccountPromptModal from "../../common/account-prompt-modal/AccountPromptModal";
 import { Redirect, useLocation } from "react-router-dom";
 import { useState } from "react";
 import {
