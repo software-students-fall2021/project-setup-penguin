@@ -19,3 +19,15 @@
     background-color: lightgrey;
     color: black;
 }
+
+.title {
+    font-size: 70px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+  }
+
+  .subtitle {
+    font-size: 40px;
+    font-weight: bold;
+  }

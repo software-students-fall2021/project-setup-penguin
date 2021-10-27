@@ -3,12 +3,15 @@ import CardEditor from "../../common/card-editor/CardEditor";
 import React, { useState } from 'react';
 import { useParams, NavLink } from "react-router-dom";
 
+const title = "SWE";
 
 function AccountPage() { 
     const states = ["Active", "inactive"]; //array for defining classes of button states
     let { id } = useParams();
+    console.log({ id });
     let pageContent;
-    const [deckActive, setDeckActive] = useState(0);
+    const [deckActive, setDeckActive] = useState(0); 
+    //0 = deck view, 1 = card view (for easy class switching for styling and content display using states array)
 
 //onClick functions for changing state for display
     const activateDeckView = () =>{
@@ -23,16 +26,17 @@ function AccountPage() {
   TO DO: update with actual card and deck display once DeckView and DisplayCard are updated,
     will use arrays to display multiple cards/decks when user functionality is further along */
     if(deckActive === 0){
-        pageContent = <><h3>Deck 1</h3><h1>this is a deck with id={id}</h1>{" "}</>;
+        pageContent = <><NavLink to={`deck/${id}`} className="title">{title}</NavLink></>;
+        
     }
     else{
-        pageContent = <><h3>Card 1</h3><CardEditor /></>;
+        pageContent = <><h3 className="subtitle">Card 1</h3><CardEditor /></>;
     }
     return(
         <div className="container">
         <div className="toggle-switch">
           <button className={states[deckActive]} id="deckView" onClick={activateDeckView} type="button">My Decks</button>
-          <button className={states[1-deckActive]} id="cardView" onClick={activateCardView} type="button">My Cards</button>
+          <button className={states[deckActive-1]} id="cardView" onClick={activateCardView} type="button">My Cards</button>
         </div>
             {pageContent}
         </div>
