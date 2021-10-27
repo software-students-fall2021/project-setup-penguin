@@ -42,7 +42,7 @@
 }
 
 .Home_link {
-  width: 320px;
+  width: 300px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -50,6 +50,7 @@
   background-color: #adadad;
   font-size: 24px;
   margin-bottom: 24px;
+
 }
 
 .Home_link:hover{
