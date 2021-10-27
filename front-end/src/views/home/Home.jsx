@@ -1,7 +1,6 @@
 import card1 from "../../media/howto_card.png";
 import card2 from "../../media/howto_card2.png";
-import { Link } from "react-router-dom";
-import "./Home.css";
+Zimport "./Home.css";
 
 function Home() {
   return (
@@ -27,17 +26,13 @@ function Home() {
 
       <div className="Home__list"> 3. Invite your teammates to join</div>
 
-      <button className="Home_link" >
-        Invite Link
-      </button>
+      <Button btnText={"Invite Link"}/>
 
       <div className="Home__list"> 4. Get to know 'em all'</div>
 
       <img className="Home_imgs" src={card2} alt="HomeCard2" />
 
-      <button className="Home_link" >
-        Get Started
-      </button>
+      <Button btnText={"Get Started"}/>
     </div>
   );
 }
