@@ -1,5 +1,4 @@
-import Login from "./login/Login";
-import Signup from "./signup/Signup";
+import LoginSignup from "./loginSignup/loginSignup";
 import Home from "./home/Home";
 import CreateCard from "./card-creation/CreateCard";
 import CreateDeck from "./create_deck/CreateDeck";
@@ -10,8 +9,7 @@ import UpdateDeck from "./UpdateDeck";
 
 export {
   Home,
-  Login,
-  Signup,
+  LoginSignup,
   CreateCard,
   CreateDeck,
   FinishDeckSetup,

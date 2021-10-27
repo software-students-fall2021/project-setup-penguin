@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { MODAL_PAGE_TYPE } from "./common/constants";
 import "./App.css";
 import { Navigation, ViewportProvider } from "./common";
 
 import {
   Home,
-  Login,
-  Signup,
+  LoginSignup,
   CreateDeck,
   FinishDeckSetup,
   DeckView,
@@ -26,10 +26,10 @@ function App() {
               <Home />
             </Route>
             <Route path="/login">
-              <Login />
+              <LoginSignup pageType={MODAL_PAGE_TYPE.LOGIN} />
             </Route>
             <Route path="/signup">
-              <Signup />
+              <LoginSignup pageType={MODAL_PAGE_TYPE.SIGNUP} />
             </Route>
             <Route path="/createdeck">
               <CreateDeck />
