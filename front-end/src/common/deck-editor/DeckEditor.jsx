@@ -1,29 +1,28 @@
+import { TextInput, TextArea } from "../../common";
 import "./DeckEditor.css";
 
-import { useState } from "react";
-
-function DeckEditor() {
-  const [deckName, setDeckName] = useState("");
-  const [deckDescription, setDeckDescription] = useState("");
-
+function DeckEditor({
+  deckName,
+  setDeckName,
+  deckDescription,
+  setDeckDescription,
+}) {
   return (
-    <div>
-      <form>
-        <input
-          className="DeckEditor__input"
-          onChange={(e) => setDeckName(e.target.value)}
+    <div className="DeckEditor">
+      <form className="DeckEditor__form">
+        <TextInput
+          isLarge={true}
+          placeholder="Name your deck"
           value={deckName}
-          name="Deck Name"
-          placeholder="Deck Name"
-          type="text"
+          onChange={(e) => setDeckName(e.target.value)}
         />
-        <input
-          className="DeckEditor__input"
-          onChange={(e) => setDeckDescription(e.target.value)}
+        <div className="DeckEditor__descriptionHeader">
+          What's your deck for?
+        </div>
+        <TextArea
+          placeholder="Engineering team for Pokédek"
           value={deckDescription}
-          name="Deck Description"
-          placeholder="Deck Description"
-          type="text"
+          onChange={(e) => setDeckDescription(e.target.value)}
         />
       </form>
     </div>

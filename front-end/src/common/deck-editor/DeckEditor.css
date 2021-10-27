@@ -1,5 +1,16 @@
-.DeckEditor__input {
+.DeckEditor {
+  display: flex;
+  justify-content: center;
+}
+
+.DeckEditor__form {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  width: 50%;
+}
+
+.DeckEditor__descriptionHeader {
+  padding-top: 2.5em;
+  font-size: 1.75em;
+  padding-bottom: 1.5em;
 }

@@ -1,5 +1,5 @@
 function Home() {
-  return <div>Welcome to Pokédek</div>;
+  return <h1>Get to know 'em all!</h1>;
 }
 
 export default Home;
