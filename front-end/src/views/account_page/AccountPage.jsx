@@ -1,7 +1,8 @@
 import "./AccountPage.css";
-import CardEditor from "../../common/card-editor/CardEditor";
+import DisplayCard from "../../common/DisplayCard";
 import React, { useState } from 'react';
 import { useParams, NavLink } from "react-router-dom";
+import {FORM_DEFAULT_PLACEHOLDERS} from "../../common/constants";
 
 const title = "SWE";
 
@@ -30,7 +31,7 @@ function AccountPage() {
         
     }
     else{
-        pageContent = <><h3 className="subtitle">Card 1</h3><CardEditor /></>;
+        pageContent = <><h3 className="subtitle">Card 1</h3><DisplayCard tempArray={FORM_DEFAULT_PLACEHOLDERS}/></>;
     }
     return(
         <div className="container">
