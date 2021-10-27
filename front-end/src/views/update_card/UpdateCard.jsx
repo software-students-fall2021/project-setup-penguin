@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
-import { Redirect, useParams, NavLink} from "react-router-dom";
+import { useParams, NavLink} from "react-router-dom";
 import {
   EMPTY_CARD,
   TEST_TEMPLATE_DATA,
@@ -11,7 +11,6 @@ import * as Icon from "react-bootstrap-icons";
 function UpdateCard() {
   const { deckId } = useParams();
   const [form, setForm] = useState(EMPTY_CARD);
-  const [redirect, setRedirect] = useState(false);
   const [templateData, setTemplateData] = useState({});
   
 
@@ -27,10 +26,6 @@ function UpdateCard() {
         setTemplateData(TEST_TEMPLATE_DATA);
       });
   }, [deckId]);
-
-  if (redirect) {
-    return <Redirect to={`/deck/${deckId}`} />;
-  }
 
   const saveCard = (userId) => {
     axios
@@ -48,12 +43,12 @@ function UpdateCard() {
 
       const prompt = (
         <p>
-          Edit your card infofrmation so your {deckId} teammates can get the best information about you!
+          Edit your card so your {deckId} teammates can get the best information about you!
         </p>
       );
     
       const btn = (
-        <NavLink to={`../..deck/${deckId}`}>
+        <NavLink to={`/deck/${deckId}`}>
         <Button
           btnText="Save card changes to deck"
           onClick={() => {
