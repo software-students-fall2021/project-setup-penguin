@@ -1,95 +1,42 @@
 import { useParams, NavLink } from "react-router-dom";
 import { Button, DisplayCard } from "../common";
 import "./DeckView.css";
+import axios from "axios";
+import { useState } from "react";
+import {
+  EMPTY_CARD,
+  PARENT_TYPE,
+  MODAL_PAGE_TYPE,
+  TEST_TEMPLATE_DATA,
+  TEST_CARDS_ARRAY,
+} from "../common/constants";
+import { useEffect } from "react";
 
 function DeckView() {
   let { id } = useParams();
   console.log({ id });
+  const [templateArray, setTemplateData] = useState({});
 
+  useEffect(() => {
+    axios
+      .get(`https://my.api.mockaroo.com/deck/${id}?key=d5aa71f0`)
+      .then((response) => {
+        console.log("data", response.data);
+        setTemplateData(response.data);
+      })
+      .catch((err) => {
+        console.log("!!", err);
+        setTemplateData(TEST_CARDS_ARRAY);
+      })
+  }, [id]);
+
+  //Convert object type of templateArray to array type so we can use the map function later
+  const resultArray = Object.values(templateArray);
+
+  //Temporary title and subtitle values
   const title = "SWE";
   const subtitle = "Team for SWE Project, Fall 2021";
 
-  const TempOne = {
-    name: "Bob Ross",
-    city: "NYC",
-    tagline: "I love to paint, and laugh.",
-    summary: "Designer (# YOE), 9AM-5PM EST",
-    sectionLabel0: "Strengths",
-    sectionLabel1: "Weaknesses",
-    sectionLabel2: "Communication Preferences",
-    sectionContent0: "Making happy mistakes",
-    sectionContent1: "Nothing",
-    sectionContent2: "bobross@happymistakes.com",
-    sliderLabelMin: "Introvert",
-    sliderLabelMax: "Extrovert",
-    sliderValue: 80,
-  };
-
-  const TempTwo = {
-    name: "Pikachu",
-    city: "NYC",
-    tagline: "Pika!!!!",
-    summary: "Pokemon(# YOE), 10AM-11PM EST",
-    sectionLabel0: "Strengths",
-    sectionLabel1: "Weaknesses",
-    sectionLabel2: "Communication Preferences",
-    sectionContent0: "Pika Pika",
-    sectionContent1: "Chu",
-    sectionContent2: "pika@chu.com",
-    sliderLabelMin: "Introvert",
-    sliderLabelMax: "Extrovert",
-    sliderValue: 20,
-  };
-
-  const TempThree = {
-    name: "Ariana Grande",
-    city: "NYC",
-    tagline: "*whistle singing*",
-    summary: "Singer and Artist (# YOE), 6AM-11PM EST",
-    sectionLabel0: "Strengths",
-    sectionLabel1: "Weaknesses",
-    sectionLabel2: "Communication Preferences",
-    sectionContent0: "Singing",
-    sectionContent1: "Walking in sneakers",
-    sectionContent2: "arianatalent@gmail.com",
-    sliderLabelMin: "Introvert",
-    sliderLabelMax: "Extrovert",
-    sliderValue: 95,
-  };
-
-  const TempFour = {
-    name: "Andrew Hamilton",
-    city: "NYC",
-    tagline: "Billionaire, President of NYU",
-    summary: "Money-maker (# YOE), 24/7",
-    sectionLabel0: "Strengths",
-    sectionLabel1: "Weaknesses",
-    sectionLabel2: "Communication Preferences",
-    sectionContent0: "I make money",
-    sectionContent1: "I can't not make money",
-    sectionContent2: "andyfanmail@gmail.com",
-    sliderLabelMin: "Introvert",
-    sliderLabelMax: "Extrovert",
-    sliderValue: 50,
-  };
-
-  const TempFive = {
-    name: "Jane Doe",
-    city: "Unknown",
-    tagline: "You don't know me",
-    summary: "Missing (# YOE), 9AM-5PM EST",
-    sectionLabel0: "Strengths",
-    sectionLabel1: "Weaknesses",
-    sectionLabel2: "Communication Preferences",
-    sectionContent0: "I can disappear",
-    sectionContent1: "You'll never get to know me",
-    sectionContent2: "?",
-    sliderLabelMin: "Introvert",
-    sliderLabelMax: "Extrovert",
-    sliderValue: 10,
-  };
-
-  const allCards = [TempOne, TempTwo, TempThree, TempFour, TempFive];
   return (
     <div>
       <div className="header">
@@ -101,13 +48,15 @@ function DeckView() {
         <div className="subtitle">{subtitle}</div>
       </div>
       <div class="deck-list">
-        {allCards.map((tempType) => (
+        {resultArray.map((tempType) => (
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
-      <div className="add-card">
-        <NavLink to={`${id}/add`}>Add Card</NavLink>
-      </div>
+      <a href="${id}/add">
+        <button class="Button">
+          Add Card
+        </button>
+      </a>
     </div>
   );
 }
