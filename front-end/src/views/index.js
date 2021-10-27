@@ -6,6 +6,7 @@ import FinishDeckSetup from "./finish_deck/FinishDeckSetup";
 import DeckView from "./DeckView";
 import AccountPage from "./account_page/AccountPage";
 import UpdateDeck from "./UpdateDeck";
+import UpdateCard from "./update_card/UpdateCard";
 
 export {
   Home,
@@ -16,4 +17,5 @@ export {
   DeckView,
   AccountPage,
   UpdateDeck,
+  UpdateCard,
 };
