@@ -7,7 +7,7 @@
   max-width: 900px;
   margin: auto;
   padding: 26px;
-  width:100%;
+  width: 100%;
 }
 
 .Home__header {
@@ -18,7 +18,7 @@
 
 @media only screen and (max-width: 320px) {
   .Home__header {
-    width:100%;
+    width: 100%;
   }
 }
 
@@ -41,13 +41,26 @@
   margin-bottom: 27px;
 }
 
-.Invite__button {
+.Home_link {
   width: 320px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #c4c4c4;
+  background-color: #adadad;
   font-size: 24px;
   margin-bottom: 24px;
+}
+
+.Home_link:hover{
+  background-color: #c4c4c4;
+  cursor: pointer;
+}
+.Home_link>a {
+  color: black;
+  text-decoration: none;
+}
+
+.Home_link>a:hover {
+  color: black;
 }
