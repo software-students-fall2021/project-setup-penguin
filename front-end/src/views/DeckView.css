@@ -26,3 +26,9 @@
   border-bottom: 1px solid lightgrey;
   padding-bottom: 20px;
 }
+
+.add-card{
+  padding: 20px 0px;
+  display: flex;
+  justify-content: flex-end;
+}
