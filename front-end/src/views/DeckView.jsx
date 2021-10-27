@@ -19,7 +19,7 @@ function DeckView() {
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/deck/123?key=d5aa71f0`)
+      .get(`https://my.api.mockaroo.com/deck/${id}?key=d5aa71f0`)
       .then((response) => {
         console.log("data", response.data);
         setTemplateData(response.data);
@@ -28,7 +28,7 @@ function DeckView() {
         console.log("!!", err);
         setTemplateData(TEST_CARDS_ARRAY);
       })
-  }, []);
+  }, [id]);
 
   //Convert object type of templateArray to array type so we can use the map function later
   const resultArray = Object.values(templateArray);
