@@ -15,48 +15,45 @@ import { useEffect } from "react";
 function DeckView() {
   let { id } = useParams();
   console.log({ id });
-  const [templateArray, setTemplateData] = useState({});
+  const [templateArray, setTemplateData] = useState([]);
+  const [deckTitle, setDeckName] = useState();
+  const [deckSubtitle, setDeckDescription] = useState();
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/deck/${id}?key=d5aa71f0`)
+      .get(`https://my.api.mockaroo.com/deck/123?key=d5aa71f0`)
       .then((response) => {
-        console.log("data", response.data);
-        setTemplateData(response.data);
+        console.log("data", response.data.cards);
+        setTemplateData(response.data.cards);
+        setDeckName(response.data.deckName);
+        setDeckDescription(response.data.deckDescription);
       })
       .catch((err) => {
         console.log("!!", err);
         setTemplateData(TEST_CARDS_ARRAY);
+        setDeckName("SWE");
+        setDeckDescription("Team for SWE Project, Fall 2021");
       })
-  }, [id]);
-
-  //Convert object type of templateArray to array type so we can use the map function later
-  const resultArray = Object.values(templateArray);
-
-  //Temporary title and subtitle values
-  const title = "SWE";
-  const subtitle = "Team for SWE Project, Fall 2021";
+  }, []);
 
   return (
     <div>
       <div className="header">
         <div className="title-container">
-          <div className="title">{title}</div>
+          <div className="title">{deckTitle}</div>
           {/* TODO: only show button for admin */}
           <Button btnText="Edit" linkTo={`${id}/edit`} />
         </div>
-        <div className="subtitle">{subtitle}</div>
+        <div className="subtitle">{deckSubtitle}</div>
       </div>
       <div class="deck-list">
-        {resultArray.map((tempType) => (
+        {templateArray.map((tempType) => (
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
-      <a href="${id}/add">
-        <button class="Button">
-          Add Card
-        </button>
-      </a>
+      <div className="add-card">
+        <Button btnText="Add Card" linkTo={"${id}/add"} />
+      </div>
     </div>
   );
 }
