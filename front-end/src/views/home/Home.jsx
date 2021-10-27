@@ -1,6 +1,7 @@
 import card1 from "../../media/howto_card.png";
 import card2 from "../../media/howto_card2.png";
-Zimport "./Home.css";
+import Button from "../../common/components/Button";
+import "./Home.css";
 
 function Home() {
   return (
