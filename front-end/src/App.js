@@ -15,7 +15,7 @@ import {
   UpdateDeck,
 } from "./views";
 
-function App() {
+function App() { 
   return (
     <ViewportProvider>
       <Router>
