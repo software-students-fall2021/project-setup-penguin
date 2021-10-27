@@ -52,9 +52,11 @@ function DeckView() {
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
-      <button class="Button">
-        <NavLink to={`${id}/add`}>Add Card</NavLink>
-      </button>
+      <a href="${id}/add">
+        <button class="Button">
+          Add Card
+        </button>
+      </a>
     </div>
   );
 }
