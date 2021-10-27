@@ -51,17 +51,9 @@
   font-size: 24px;
   margin-bottom: 24px;
 
+  border: 0px;
 }
 
-.Home_link:hover{
+.Home_link:hover {
   background-color: #c4c4c4;
-  cursor: pointer;
-}
-.Home_link>a {
-  color: black;
-  text-decoration: none;
-}
-
-.Home_link>a:hover {
-  color: black;
 }

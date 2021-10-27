@@ -27,17 +27,17 @@ function Home() {
 
       <div className="Home__list"> 3. Invite your teammates to join</div>
 
-      <div className="Home_link" >
-        <Link to="/"> Invite Link</Link>
-      </div>
+      <button className="Home_link" >
+        Invite Link
+      </button>
 
       <div className="Home__list"> 4. Get to know 'em all'</div>
 
       <img className="Home_imgs" src={card2} alt="HomeCard2" />
 
-      <div className="Home_link" >
-        <Link to="/createdeck">Get Started</Link>
-      </div>
+      <button className="Home_link" >
+        Get Started
+      </button>
     </div>
   );
 }
