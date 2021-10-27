@@ -13,6 +13,7 @@ import {
   CreateCard,
   AccountPage,
   UpdateDeck,
+  UpdateCard,
 } from "./views";
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
             </Route>
             <Route path="/deck/:deckId/add">
               <CreateCard />
+            </Route>
+            <Route path="/deck/:deckId/editcard">
+              <UpdateCard />
             </Route>
             <Route path="/accountpage">
               <AccountPage />
