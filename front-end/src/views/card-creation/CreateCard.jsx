@@ -90,8 +90,8 @@ function CreateCard() {
 
   return (
     <>
-      <h1>Create Your Card</h1>
       <CreateBody
+        header="Create Your Card"
         prompt={prompt}
         btn={btn}
         cardEditorProps={{ templateData, form, setForm }}

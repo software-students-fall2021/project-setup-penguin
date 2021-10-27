@@ -16,12 +16,12 @@ import {
   UpdateCard,
 } from "./views";
 
-function App() { 
+function App() {
   return (
     <ViewportProvider>
       <Router>
         <Navigation />
-        <Container className="mt-4">
+        <Container className="customContainer">
           <Switch>
             <Route exact path="/">
               <Home />

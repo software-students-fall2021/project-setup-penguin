@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { DeckEditor, AccountPromptModal, Button } from "../../common";
 import * as Icon from "react-bootstrap-icons";
+import "./FinishDeckSetup.css";
 
 function FinishDeckSetup() {
   let data = useLocation();
@@ -78,7 +79,7 @@ function FinishDeckSetup() {
   };
 
   return (
-    <div>
+    <div className="FinishDeckSetup">
       <h1>Finalize deck details</h1>
       <div className="mb-5">
         <DeckEditor

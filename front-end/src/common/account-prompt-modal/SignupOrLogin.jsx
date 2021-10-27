@@ -9,6 +9,7 @@ const SignupOrLogin = ({
   setPageType,
   onContinueAsGuest,
   onSignupOrLogin,
+  useAsPage = false,
 }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ const SignupOrLogin = ({
 
   return (
     <div className="SignupOrLogin">
-      <h3>{pageType}</h3>
+      {useAsPage ? <h1>{pageType}</h1> : <h3>{pageType}</h3>}
       {pageType === MODAL_PAGE_TYPE.SIGNUP && (
         <TextInput
           placeholder="Name"
@@ -60,14 +61,16 @@ const SignupOrLogin = ({
         </i>
       )}
       <div className="SignupOrLogin__footer">
-        {onContinueAsGuest ?
+        {onContinueAsGuest ? (
           <a
             className="SignupOrLogin__link nakedLink"
             onClick={onContinueAsGuest}
           >
             Continue as guest
           </a>
-          : <div />}
+        ) : (
+          <div />
+        )}
         <span
           className="SignupOrLogin__cta"
           onClick={() => onSignupOrLogin(pageType, name, email, password)}
