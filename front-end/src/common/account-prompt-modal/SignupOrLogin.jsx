@@ -60,12 +60,14 @@ const SignupOrLogin = ({
         </i>
       )}
       <div className="SignupOrLogin__footer">
-        <a
-          className="SignupOrLogin__link nakedLink"
-          onClick={onContinueAsGuest}
-        >
-          Continue as guest
-        </a>
+        {onContinueAsGuest ?
+          <a
+            className="SignupOrLogin__link nakedLink"
+            onClick={onContinueAsGuest}
+          >
+            Continue as guest
+          </a>
+          : <div />}
         <span
           className="SignupOrLogin__cta"
           onClick={() => onSignupOrLogin(pageType, name, email, password)}
