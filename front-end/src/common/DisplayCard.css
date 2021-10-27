@@ -1,6 +1,6 @@
 .CardEditor__form {
   width: 25em;
-  height: 38em;
+  height: 40em;
 }
 
 .DisplayCard {
@@ -12,4 +12,17 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.slider-group{
+    padding: 5px 0px;
+}
+
+.CardEditor__textarea, .CardEditor__name, .CardEditor__tagline,
+.CardEditor__city, .CardEditor__summary, .CardEditor__label{
+    cursor: default;
+}
+
+.rc-slider-handle{
+    cursor: default;
 }

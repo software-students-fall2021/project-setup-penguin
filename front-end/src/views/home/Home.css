@@ -1,0 +1,59 @@
+.Home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  max-width: 900px;
+  margin: auto;
+  padding: 26px;
+  width: 100%;
+}
+
+.Home__header {
+  font-size: 30px;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+@media only screen and (max-width: 320px) {
+  .Home__header {
+    width: 100%;
+  }
+}
+
+.Home__body {
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 66px;
+}
+
+.Home__list {
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 21px;
+  width: 100%;
+}
+
+.Home_imgs {
+  width: 100%;
+  max-width: 217.71px;
+  margin-bottom: 27px;
+}
+
+.Home_link {
+  width: 300px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #adadad;
+  font-size: 24px;
+  margin-bottom: 24px;
+
+  border: 0px;
+}
+
+.Home_link:hover {
+  background-color: #c4c4c4;
+}

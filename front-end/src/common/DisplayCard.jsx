@@ -14,48 +14,24 @@ function DisplayCard(props) {
     <div className="CardEditor DisplayCard">
       <div className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
-          <input
-            className="CardEditor__tagline"
-            type="text"
-            name="tagline"
-            value={displayArray.tagline}
-          />
+          <div className="CardEditor__tagline">{displayArray.tagline}</div>
           <div className="CardEditor__header">
-            <input
-              type="text"
-              className="CardEditor__name"
-              name="name"
-              value={displayArray.name}
-            />
+            <div className="CardEditor__name">{displayArray.name}</div>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <input
-                className="CardEditor__city"
-                type="text"
-                name="city"
-                value={displayArray.city}
-                size="5"
-              />
+              <div className="CardEditor__city">{displayArray.city}</div>
               <HeartIcon />
             </div>
           </div>
           <img className="CardEditor__image" src={piplup} />
         </div>
-        <input
-          className="CardEditor__summary"
-          type="text"
-          name="summary"
-          value={displayArray.summary}
-        />
+        <div className="CardEditor__summary">{displayArray.summary}</div>
         {sectionIds.map((id) => (
           <div className="CardEditor__section">
             <HeartIcon />
             <div className="CardEditor__sectionContent">
-              <input
-                type="text"
-                className="CardEditor__label"
-                name={`sectionLabel${id}`}
-                value={displayArray[`sectionLabel${id}`]}
-              />
+              <div className="CardEditor__label">
+                {displayArray[`sectionLabel${id}`]}
+              </div>
               <textarea
                 className="CardEditor__textarea"
                 rows="2"
@@ -65,27 +41,29 @@ function DisplayCard(props) {
             </div>
           </div>
         ))}
-        <div class="slider-labels">
-          <input
-            type="text"
-            className="CardEditor__label"
-            name="min-slider"
-            value={displayArray.sliderLabelMin}
-          />
-          <input
-            type="text"
-            className="CardEditor__label"
-            name="max-slider"
-            value={displayArray.sliderLabelMax}
-            style={{ textAlign: "right" }}
+        <div class="slider-group">
+          <div class="slider-labels">
+            <input
+              type="text"
+              className="CardEditor__label"
+              name="min-slider"
+              value={displayArray.sliderLabelMin}
+            />
+            <input
+              type="text"
+              className="CardEditor__label"
+              name="max-slider"
+              value={displayArray.sliderLabelMax}
+              style={{ textAlign: "right" }}
+            />
+          </div>
+          <Slider
+            value={displayArray.sliderValue}
+            handleStyle={{ borderColor: "pink" }}
+            railStyle={{ backgroundColor: "pink" }}
+            trackStyle={{ backgroundColor: "pink" }}
           />
         </div>
-        <Slider
-          value={displayArray.sliderValue}
-          handleStyle={{ borderColor: "pink" }}
-          railStyle={{ backgroundColor: "pink" }}
-          trackStyle={{ backgroundColor: "pink" }}
-        />
       </div>
     </div>
   );
