@@ -30,6 +30,8 @@ function UpdateDeck() {
       })
       .catch((err) => {
         console.log(err);
+        // while Mockaroo is down...
+        setRedirect(true);
       });
   };
 
