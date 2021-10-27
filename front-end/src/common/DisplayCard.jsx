@@ -57,6 +57,7 @@ function DisplayCard(props) {
                 value={displayArray[`sectionLabel${id}`]}
               />
               <textarea
+                className="CardEditor__textarea"
                 rows="2"
                 name={`sectionContent${id}`}
                 value={displayArray[`sectionContent${id}`]}

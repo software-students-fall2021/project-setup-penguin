@@ -4,18 +4,6 @@
   flex-wrap: wrap;
 }
 
-.add-card {
-  display: flex;
-  justify-content: center;
-  background-color: lightgrey;
-  border-radius: 5px;
-  width: 200px;
-  padding: 5px;
-  margin: 20px 0px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
 .header {
   display: flex;
   flex-direction: column;

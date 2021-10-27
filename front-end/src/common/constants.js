@@ -59,3 +59,85 @@ export const TEST_TEMPLATE_DATA = {
   sliderLabelMin: "me",
   sliderLabelMax: "we",
 };
+
+const TempOne = {
+  name: "Bob Ross",
+  city: "NYC",
+  tagline: "I love to paint, and laugh.",
+  summary: "Designer (0 YOE), 9AM-5PM EST",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "Making happy mistakes",
+  sectionContent1: "Nothing",
+  sectionContent2: "bobross@happymistakes.com",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 80,
+};
+
+const TempTwo = {
+  name: "Pikachu",
+  city: "NYC",
+  tagline: "Pika!!!!",
+  summary: "Pokemon(6 YOE), 10AM-11PM EST",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "Pika Pika",
+  sectionContent1: "Chu",
+  sectionContent2: "pika@chu.com",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 20,
+};
+
+const TempThree = {
+  name: "Ariana Grande",
+  city: "NYC",
+  tagline: "*whistle singing*",
+  summary: "Singer and Artist (5 YOE), 6AM-11PM EST",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "Singing",
+  sectionContent1: "Walking in sneakers",
+  sectionContent2: "arianatalent@gmail.com",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 95,
+};
+
+const TempFour = {
+  name: "Andrew Hamilton",
+  city: "NYC",
+  tagline: "Billionaire, President of NYU",
+  summary: "Money-maker (1 YOE), 24/7",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "I make money",
+  sectionContent1: "I can't not make money",
+  sectionContent2: "andyfanmail@gmail.com",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 50,
+};
+
+const TempFive = {
+  name: "Jane Doe",
+  city: "Unknown",
+  tagline: "You don't know me",
+  summary: "Missing (2 YOE), 9AM-5PM EST",
+  sectionLabel0: "Strengths",
+  sectionLabel1: "Weaknesses",
+  sectionLabel2: "Communication Preferences",
+  sectionContent0: "I can disappear",
+  sectionContent1: "You'll never get to know me",
+  sectionContent2: "?",
+  sliderLabelMin: "Introvert",
+  sliderLabelMax: "Extrovert",
+  sliderValue: 10,
+};
+
+export const TEST_CARDS_ARRAY = [TempOne, TempTwo, TempThree, TempFour, TempFive];
