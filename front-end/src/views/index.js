@@ -1,7 +1,6 @@
 import Login from "./login/Login";
 import Signup from "./signup/Signup";
 import Home from "./home/Home";
-import Howto from "./Howto/Howto";
 import CreateCard from "./card-creation/CreateCard";
 import CreateDeck from "./create_deck/CreateDeck";
 import FinishDeckSetup from "./finish_deck/FinishDeckSetup";
@@ -19,5 +18,4 @@ export {
   DeckView,
   AccountPage,
   UpdateDeck,
-  Howto,
 };
