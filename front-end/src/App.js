@@ -47,7 +47,7 @@ function App() {
             <Route path="/deck/:deckId/add">
               <CreateCard />
             </Route>
-            <Route path="/deck/:deckId/editcard">
+            <Route path="/deck/:deckId/card/:cardId/edit">
               <UpdateCard />
             </Route>
             <Route path="/accountpage">
