@@ -1,16 +1,28 @@
 import "./CardEditor.css";
-import piplup from "../../assets/piplup.png";
+import piplup from "../../assets/piplup-upload.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { FORM_DEFAULT_PLACEHOLDERS } from "../constants";
+import { useState, useRef, useEffect } from "react";
+import { maybeRenderImage, ImageUploaderModal } from "./ImageUploaderModal";
 
 const sectionIds = [0, 1, 2];
 
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
 function CardEditor({ form = {}, setForm, templateData }) {
+  const [showModal, setShowModal] = useState(false);
+  const [finalCrop, setFinalCrop] = useState();
+
+  const imgRef = useRef(null);
+  const previewCanvasRef = useRef(null);
+
   const isPopulatingTemplate = templateData !== undefined;
+
+  useEffect(() => {
+    maybeRenderImage(finalCrop, imgRef, previewCanvasRef, setForm);
+  }, [finalCrop]);
 
   const getPlaceholderText = (field) =>
     isPopulatingTemplate
@@ -66,11 +78,19 @@ function CardEditor({ form = {}, setForm, templateData }) {
               <HeartIcon />
             </div>
           </div>
-          {/* TODO: implement file upload & photo repositioning */}
-          {/* <label htmlFor="file-input"> */}
-          <img className="CardEditor__image" src={piplup} />
-          {/* </label>
-        <input id="file-input" type="file" /> */}
+          {finalCrop && imgRef.current ? (
+            <canvas
+              ref={previewCanvasRef}
+              onClick={() => setShowModal(true)}
+              className="CardEditor__image"
+            />
+          ) : (
+            <img
+              className="CardEditor__image"
+              src={piplup}
+              onClick={() => setShowModal(true)}
+            />
+          )}
         </div>
         <input
           className="CardEditor__summary"
@@ -184,6 +204,12 @@ function CardEditor({ form = {}, setForm, templateData }) {
           />
         </div>
       </form>
+      <ImageUploaderModal
+        imgRef={imgRef}
+        showModal={showModal}
+        onCloseModal={() => setShowModal(false)}
+        setFinalCrop={setFinalCrop}
+      />
     </span>
   );
 }
