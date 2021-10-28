@@ -4,6 +4,9 @@ import ReactCrop from "react-image-crop";
 import "./ImageUploaderModal.css";
 import "react-image-crop/dist/ReactCrop.css";
 
+// see demo for further context
+// https://codesandbox.io/s/react-image-crop-demo-with-react-hooks-y831o
+
 export const maybeRenderImage = (
   finalCrop,
   imgRef,
