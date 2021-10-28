@@ -13,11 +13,7 @@ function AccountPromptModal({
   const [pageType, setPageType] = useState(MODAL_PAGE_TYPE.SIGNUP);
 
   return (
-    <CustomModal
-      showModal={showModal}
-      onCloseModal={onCloseModal}
-      header={`Want to link your ${parentType} to an account?`}
-    >
+    <CustomModal showModal={showModal} onCloseModal={onCloseModal}>
       <h1>Want to link your {parentType} to an account?</h1>
       <p>
         If you want to be able to update and manage your {parentType} later,
