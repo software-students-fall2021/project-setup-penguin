@@ -96,14 +96,14 @@ function CreateCard() {
         btn={btn}
         cardEditorProps={{ templateData, form, setForm }}
       />
-      {showModal && (
-        <AccountPromptModal
-          parentType={PARENT_TYPE.CARD}
-          onCloseModal={() => setShowModal(false)}
-          onContinueAsGuest={onContinueAsGuest}
-          onSignupOrLogin={onSignupOrLogin}
-        />
-      )}
+      <AccountPromptModal
+        onCloseModal={() => setShowModal(false)}
+        showModal={showModal}
+        parentType={PARENT_TYPE.CARD}
+        onCloseModal={() => setShowModal(false)}
+        onContinueAsGuest={onContinueAsGuest}
+        onSignupOrLogin={onSignupOrLogin}
+      />
     </>
   );
 }
