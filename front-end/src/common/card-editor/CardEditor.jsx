@@ -1,5 +1,6 @@
 import "./CardEditor.css";
-import piplup from "../../assets/piplup-upload.png";
+import piplupUpload from "../../assets/piplup-upload.png";
+import piplup from "../../assets/piplup.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -19,6 +20,14 @@ function CardEditor({ form = {}, setForm, templateData }) {
   const previewCanvasRef = useRef(null);
 
   const isPopulatingTemplate = templateData !== undefined;
+  const initialImg = (
+    // should use form.image but mockaroo images don't have correct aspect ratio
+    <img
+      className="CardEditor__image"
+      src={templateData ? piplupUpload : piplup}
+      onClick={() => setShowModal(true)}
+    />
+  );
 
   useEffect(() => {
     maybeRenderImage(finalCrop, imgRef, previewCanvasRef, setForm);
@@ -85,11 +94,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
               className="CardEditor__image"
             />
           ) : (
-            <img
-              className="CardEditor__image"
-              src={piplup}
-              onClick={() => setShowModal(true)}
-            />
+            initialImg
           )}
         </div>
         <input
