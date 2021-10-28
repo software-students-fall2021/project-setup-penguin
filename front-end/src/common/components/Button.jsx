@@ -7,9 +7,13 @@ import { Link } from "react-router-dom";
  * @param onClick function called on button click – use to trigger same-page behavior (modal)
  * @returns
  */
-function Button({ btnText, onClick, linkTo, icon }) {
+function Button({ btnText, onClick, linkTo, icon, disabled }) {
   const btn = (
-    <button className="Button" onClick={onClick}>
+    <button
+      className={`Button ${disabled && "Button--disabled"}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {btnText}
       {icon && <span className="Button__iconContainer">{icon}</span>}
     </button>

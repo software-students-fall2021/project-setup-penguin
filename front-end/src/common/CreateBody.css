@@ -7,8 +7,9 @@
   flex-direction: column;
 }
 
-.CreateBody__mobile > .CardEditor {
-  align-self: center;
+.CreateBody__cardContainer {
+  display: flex;
+  justify-content: center;
 }
 
 .CreateBody__desktop {

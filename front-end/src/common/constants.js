@@ -32,6 +32,7 @@ export const EMPTY_TEMPLATE = {
   sliderLabelMin: "",
   sliderLabelMax: "",
   sliderValue: 50,
+  image: "",
 };
 
 export const EMPTY_CARD = {
@@ -140,4 +141,10 @@ const TempFive = {
   sliderValue: 10,
 };
 
-export const TEST_CARDS_ARRAY = [TempOne, TempTwo, TempThree, TempFour, TempFive];
+export const TEST_CARDS_ARRAY = [
+  TempOne,
+  TempTwo,
+  TempThree,
+  TempFour,
+  TempFive,
+];
