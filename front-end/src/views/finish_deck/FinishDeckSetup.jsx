@@ -89,13 +89,13 @@ function FinishDeckSetup() {
           setDeckDescription={setDeckDescription}
         />
       </div>
-      {showModal ? (
-        <AccountPromptModal
-          parentType={PARENT_TYPE.DECK}
-          onContinueAsGuest={onContinueAsGuest}
-          onSignupOrLogin={onSignupOrLogin}
-        />
-      ) : null}
+      <AccountPromptModal
+        onCloseModal={() => setShowModal(false)}
+        showModal={showModal}
+        parentType={PARENT_TYPE.DECK}
+        onContinueAsGuest={onContinueAsGuest}
+        onSignupOrLogin={onSignupOrLogin}
+      />
       <Button
         btnText="Create deck"
         onClick={() => {
