@@ -33,7 +33,7 @@ function DeckView() {
         setTemplateData(TEST_CARDS_ARRAY);
         setDeckName("SWE");
         setDeckDescription("Team for SWE Project, Fall 2021");
-      })
+      });
   }, []);
 
   return (
@@ -52,7 +52,7 @@ function DeckView() {
         ))}
       </div>
       <div className="add-card">
-        <Button btnText="Add Card" linkTo={"${id}/add"} />
+        <Button btnText="Add Card" linkTo={`${id}/add`} />
       </div>
     </div>
   );

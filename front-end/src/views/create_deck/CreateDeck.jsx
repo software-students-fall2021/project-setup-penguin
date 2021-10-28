@@ -32,14 +32,12 @@ function CreateDeck() {
     />
   );
   return (
-    <>
-      <h1>Create a New Deck</h1>
-      <CreateBody
-        prompt={prompt}
-        btn={btn}
-        cardEditorProps={{ form, setForm }}
-      />
-    </>
+    <CreateBody
+      header="Create a New Deck"
+      prompt={prompt}
+      btn={btn}
+      cardEditorProps={{ form, setForm }}
+    />
   );
 }
 

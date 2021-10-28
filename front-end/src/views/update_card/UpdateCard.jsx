@@ -1,18 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
-import { useParams, NavLink} from "react-router-dom";
-import {
-  EMPTY_CARD,
-  TEST_TEMPLATE_DATA,
-} from "../../common/constants";
+import { useParams, NavLink } from "react-router-dom";
+import { EMPTY_CARD, TEST_TEMPLATE_DATA } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
 function UpdateCard() {
   const { deckId } = useParams();
   const [form, setForm] = useState(EMPTY_CARD);
   const [templateData, setTemplateData] = useState({});
-  
 
   useEffect(() => {
     axios
@@ -41,35 +37,33 @@ function UpdateCard() {
       });
   };
 
-      const prompt = (
-        <p>
-          Edit your card so your {deckId} teammates can get the best information about you!
-        </p>
-      );
-    
-      const btn = (
-        <NavLink to={`/deck/${deckId}`}>
-        <Button
-          btnText="Save card changes to deck"
-          onClick={() => {
-            const cardId = saveCard(); //eventually will use user ID
-          }}
-          icon={<Icon.ArrowRight />}
-        /></NavLink>
-      );
-    
-      return (
-        <>
-          <h1>Update Your Card</h1>
-          <CreateBody
-            prompt={prompt}
-            btn={btn}
-            cardEditorProps={{ templateData, form, setForm }}
-          />
-        </>
-      );
+  const prompt = (
+    <p>
+      Edit your card so your {deckId} teammates can get the best information
+      about you!
+    </p>
+  );
+
+  const btn = (
+    <NavLink to={`/deck/${deckId}`}>
+      <Button
+        btnText="Save card changes to deck"
+        onClick={() => {
+          const cardId = saveCard(); //eventually will use user ID
+        }}
+        icon={<Icon.ArrowRight />}
+      />
+    </NavLink>
+  );
+
+  return (
+    <CreateBody
+      header="Update Your Card"
+      prompt={prompt}
+      btn={btn}
+      cardEditorProps={{ templateData, form, setForm }}
+    />
+  );
 }
-
-
 
 export default UpdateCard;

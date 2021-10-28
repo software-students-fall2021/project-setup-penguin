@@ -40,7 +40,7 @@ function UpdateDeck() {
   }
 
   return (
-    <div>
+    <div className="FinishDeckSetup">
       <h1>Update deck details</h1>
       <div className="mb-5">
         <DeckEditor

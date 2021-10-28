@@ -9,7 +9,7 @@ const sectionIds = [0, 1, 2];
 
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
+function CardEditor({ form = {}, setForm, templateData }) {
   const isPopulatingTemplate = templateData !== undefined;
 
   const getPlaceholderText = (field) =>
@@ -18,7 +18,7 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
       : FORM_DEFAULT_PLACEHOLDERS[field];
 
   return (
-    <span className={`CardEditor ${isCentered && "CardEditor--centered"}`}>
+    <span className="CardEditor">
       <form className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
           <input
