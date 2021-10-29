@@ -31,3 +31,9 @@
     font-size: 40px;
     font-weight: bold;
   }
+
+  .deck-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
