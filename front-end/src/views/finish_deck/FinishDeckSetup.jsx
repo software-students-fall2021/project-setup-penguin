@@ -41,15 +41,14 @@ function FinishDeckSetup() {
     console.log(apiKey);
 
     axios
-      .post(`https://my.api.mockaroo.com/deck?key=${apiKey}&__method=POST`, {
+      .post(`http://localhost:8000/deck`, {
         creatorId: userId,
         deckName: deckName,
         deckDescription: deckDescription,
-        cardTempate: templateData,
+        cardTemplate: templateData,
       })
       .then((res) => {
-        deckId = res["data"];
-        console.log(deckId);
+        deckId = res["data"]["deckId"];
         setRedirectLink(`deck/${deckId}`);
         setShowModal(false);
       })
