@@ -58,9 +58,11 @@ app.post("/card", (req, res) => {
   });
 });
 
+//  axios.delete('baseUrl/card', { data: {userId, deckId} })
 // POST endpoint used to create a new card
-app.delete("/card", (req, res) => {
-  const { cardId, deckId, userId } = req.body;
+app.delete("/card/:cardId", (req, res) => {
+  const { cardId } = req.params;
+  const { deckId, userId } = req.body;
 
   // remove cardId from cards array of deck with deckId
   console.log("deckId:", deckId);
@@ -72,7 +74,7 @@ app.delete("/card", (req, res) => {
   console.log("cardId:", cardId);
 
   res.json({
-    cardId, // dummy cardId of deleted card ??
+    cardId, // dummy cardId of deleted card
   });
 });
 
