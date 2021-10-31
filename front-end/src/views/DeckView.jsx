@@ -11,7 +11,7 @@ import {
   TEST_CARDS_ARRAY,
 } from "../common/constants";
 import { useEffect } from "react";
-import { Spinner } from "react-bootstrap";
+import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
 function DeckView() {
   let { id } = useParams();
@@ -41,7 +41,7 @@ function DeckView() {
   }, []);
 
   return !isDeckLoaded ? (
-    <Spinner animation="border" variant="primary" />
+    <LoadingSpinner />
   ) : (
     <div>
       <div className="header">
