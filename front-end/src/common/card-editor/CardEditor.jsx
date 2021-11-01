@@ -1,12 +1,16 @@
 import "./CardEditor.css";
 import piplupUpload from "../../assets/piplup-upload.png";
-import piplup from "../../assets/piplup.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { FORM_DEFAULT_PLACEHOLDERS } from "../constants";
+import {
+  FORM_DEFAULT_PLACEHOLDERS,
+  TEMPLATE_STEPS,
+  REGULAR_STEPS,
+} from "../constants";
 import { useState, useRef, useEffect } from "react";
 import { maybeRenderImage, ImageUploaderModal } from "./ImageUploaderModal";
+import Joyride from "react-joyride";
 
 const sectionIds = [0, 1, 2];
 
@@ -21,10 +25,9 @@ function CardEditor({ form = {}, setForm, templateData }) {
 
   const isPopulatingTemplate = templateData !== undefined;
   const initialImg = (
-    // should use form.image but mockaroo images don't have correct aspect ratio
     <img
       className="CardEditor__image"
-      src={templateData ? piplupUpload : piplup}
+      src={form.image ?? piplupUpload}
       onClick={() => setShowModal(true)}
     />
   );
@@ -122,6 +125,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
                 <input
                   type="text"
                   className="CardEditor__label"
+                  id={`sectionLabel${id}`}
                   name={`sectionLabel${id}`}
                   placeholder={getPlaceholderText(`sectionLabel${id}`)}
                   value={form[`sectionLabel${id}`]}
@@ -136,6 +140,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
               <textarea
                 className="CardEditor__textarea"
                 rows="2"
+                id={`sectionContent${id}`}
                 name={`sectionContent${id}`}
                 placeholder={getPlaceholderText(`sectionContent${id}`)}
                 value={form[`sectionContent${id}`]}
@@ -168,6 +173,7 @@ function CardEditor({ form = {}, setForm, templateData }) {
                 <input
                   type="text"
                   className="CardEditor__label"
+                  id="min-slider"
                   name="min-slider"
                   placeholder={getPlaceholderText("sliderLabelMin")}
                   value={form.sliderLabelMin}
@@ -214,6 +220,23 @@ function CardEditor({ form = {}, setForm, templateData }) {
         showModal={showModal}
         onCloseModal={() => setShowModal(false)}
         setFinalCrop={setFinalCrop}
+      />
+      <Joyride
+        // run={false} don't run if user has created template card / regular card before
+        steps={isPopulatingTemplate ? REGULAR_STEPS : TEMPLATE_STEPS}
+        showProgress={true}
+        continuous={true}
+        showSkipButton={true}
+        spotlightClicks={true}
+        styles={{
+          options: {
+            primaryColor: "#396bba",
+          },
+          buttonClose: {
+            display: "none",
+          },
+          // if we want a close button that ends tour: https://github.com/gilbarbara/react-joyride/issues/357
+        }}
       />
     </span>
   );
