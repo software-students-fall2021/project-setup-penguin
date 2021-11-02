@@ -5,11 +5,6 @@ input {
   padding: 0;
 }
 
-.CardEditor--centered {
-  display: flex;
-  justify-content: center;
-}
-
 .CardEditor__textarea {
   background: transparent;
   border: none;
@@ -30,8 +25,8 @@ input {
   border-radius: 2em;
 
   /* TODO: maybe we don't want this as a fixed size */
-  width: 30em;
-  height: 41em;
+  width: 28em;
+  height: 40em;
   padding: 0.25em 1em;
 }
 
@@ -63,6 +58,7 @@ input {
 
 .CardEditor__image {
   width: 100%;
+  height: auto;
   outline: 1em solid #ffc8c8;
   outline-offset: -1em;
 }

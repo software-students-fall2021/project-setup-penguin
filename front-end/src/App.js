@@ -16,12 +16,12 @@ import {
   UpdateCard,
 } from "./views";
 
-function App() { 
+function App() {
   return (
     <ViewportProvider>
       <Router>
         <Navigation />
-        <Container className="mt-4">
+        <Container className="customContainer">
           <Switch>
             <Route exact path="/">
               <Home />
@@ -47,7 +47,7 @@ function App() {
             <Route path="/deck/:deckId/add">
               <CreateCard />
             </Route>
-            <Route path="/deck/:deckId/editcard">
+            <Route path="/deck/:deckId/card/:cardId/edit">
               <UpdateCard />
             </Route>
             <Route path="/accountpage">

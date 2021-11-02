@@ -1,16 +1,40 @@
 import "./CardEditor.css";
-import piplup from "../../assets/piplup.png";
+import piplupUpload from "../../assets/piplup-upload.png";
 import heart from "../../assets/heart.png";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { FORM_DEFAULT_PLACEHOLDERS } from "../constants";
+import {
+  FORM_DEFAULT_PLACEHOLDERS,
+  TEMPLATE_STEPS,
+  REGULAR_STEPS,
+} from "../constants";
+import { useState, useRef, useEffect } from "react";
+import { maybeRenderImage, ImageUploaderModal } from "./ImageUploaderModal";
+import Joyride from "react-joyride";
 
 const sectionIds = [0, 1, 2];
 
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
+function CardEditor({ form = {}, setForm, templateData }) {
+  const [showModal, setShowModal] = useState(false);
+  const [finalCrop, setFinalCrop] = useState();
+
+  const imgRef = useRef(null);
+  const previewCanvasRef = useRef(null);
+
   const isPopulatingTemplate = templateData !== undefined;
+  const initialImg = (
+    <img
+      className="CardEditor__image"
+      src={form.image ?? piplupUpload}
+      onClick={() => setShowModal(true)}
+    />
+  );
+
+  useEffect(() => {
+    maybeRenderImage(finalCrop, imgRef, previewCanvasRef, setForm);
+  }, [finalCrop]);
 
   const getPlaceholderText = (field) =>
     isPopulatingTemplate
@@ -18,7 +42,7 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
       : FORM_DEFAULT_PLACEHOLDERS[field];
 
   return (
-    <span className={`CardEditor ${isCentered && "CardEditor--centered"}`}>
+    <span className="CardEditor">
       <form className="CardEditor__form" id="myCard">
         <div className="CardEditor__upperContent">
           <input
@@ -66,11 +90,15 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
               <HeartIcon />
             </div>
           </div>
-          {/* TODO: implement file upload & photo repositioning */}
-          {/* <label htmlFor="file-input"> */}
-          <img className="CardEditor__image" src={piplup} />
-          {/* </label>
-        <input id="file-input" type="file" /> */}
+          {finalCrop && imgRef.current ? (
+            <canvas
+              ref={previewCanvasRef}
+              onClick={() => setShowModal(true)}
+              className="CardEditor__image"
+            />
+          ) : (
+            initialImg
+          )}
         </div>
         <input
           className="CardEditor__summary"
@@ -97,6 +125,7 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
                 <input
                   type="text"
                   className="CardEditor__label"
+                  id={`sectionLabel${id}`}
                   name={`sectionLabel${id}`}
                   placeholder={getPlaceholderText(`sectionLabel${id}`)}
                   value={form[`sectionLabel${id}`]}
@@ -111,6 +140,7 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
               <textarea
                 className="CardEditor__textarea"
                 rows="2"
+                id={`sectionContent${id}`}
                 name={`sectionContent${id}`}
                 placeholder={getPlaceholderText(`sectionContent${id}`)}
                 value={form[`sectionContent${id}`]}
@@ -143,6 +173,7 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
                 <input
                   type="text"
                   className="CardEditor__label"
+                  id="min-slider"
                   name="min-slider"
                   placeholder={getPlaceholderText("sliderLabelMin")}
                   value={form.sliderLabelMin}
@@ -184,6 +215,29 @@ function CardEditor({ form = {}, setForm, templateData, isCentered = false }) {
           />
         </div>
       </form>
+      <ImageUploaderModal
+        imgRef={imgRef}
+        showModal={showModal}
+        onCloseModal={() => setShowModal(false)}
+        setFinalCrop={setFinalCrop}
+      />
+      <Joyride
+        // run={false} don't run if user has created template card / regular card before
+        steps={isPopulatingTemplate ? REGULAR_STEPS : TEMPLATE_STEPS}
+        showProgress={true}
+        continuous={true}
+        showSkipButton={true}
+        spotlightClicks={true}
+        styles={{
+          options: {
+            primaryColor: "#396bba",
+          },
+          buttonClose: {
+            display: "none",
+          },
+          // if we want a close button that ends tour: https://github.com/gilbarbara/react-joyride/issues/357
+        }}
+      />
     </span>
   );
 }

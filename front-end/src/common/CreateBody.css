@@ -1,3 +1,21 @@
+.CreateBody {
+  max-width: 1000px;
+}
+
+.CreateBody__mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+.CreateBody__cardContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.CreateBody__desktop {
+  display: flex;
+}
+
 .CreateBody__btnContainer {
   display: flex;
   justify-content: center;

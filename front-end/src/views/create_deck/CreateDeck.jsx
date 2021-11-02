@@ -9,10 +9,8 @@ function CreateDeck() {
   const prompt = (
     <>
       <p>
-        Start off the deck with your own card! Information entered here will be
-        used as placeholder text in a template card for your teammates. Only you
-        can edit fields such as "Strengths" and "Introvert" – everybody else
-        will see these as plain labels.
+        Start off the deck with your own card! Your info will be used as
+        placeholders in the template card for your teammates.
       </p>
       <p>
         Don't worry if you don't feel like changing much! We'll fill any empty
@@ -32,14 +30,12 @@ function CreateDeck() {
     />
   );
   return (
-    <>
-      <h1>Create a New Deck</h1>
-      <CreateBody
-        prompt={prompt}
-        btn={btn}
-        cardEditorProps={{ form, setForm }}
-      />
-    </>
+    <CreateBody
+      header="Create a New Deck"
+      prompt={prompt}
+      btn={btn}
+      cardEditorProps={{ form, setForm }}
+    />
   );
 }
 

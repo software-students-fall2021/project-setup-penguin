@@ -1,29 +1,24 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
-import { useParams, NavLink} from "react-router-dom";
-import {
-  EMPTY_CARD,
-  TEST_TEMPLATE_DATA,
-} from "../../common/constants";
+import { useParams, NavLink } from "react-router-dom";
+import { EMPTY_CARD, TEST_CARDS_ARRAY } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
 function UpdateCard() {
-  const { deckId } = useParams();
+  const { cardId, deckId } = useParams();
   const [form, setForm] = useState(EMPTY_CARD);
-  const [templateData, setTemplateData] = useState({});
-  
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/deck/${deckId}?key=d5aa71f0`)
+      .get(`https://my.api.mockaroo.com/card/${cardId}?key=d5aa71f0`)
       .then((response) => {
         console.log("data", response.data);
-        setTemplateData(response.data.template);
+        setForm(response.data);
       })
       .catch((err) => {
         console.log("!!", err);
-        setTemplateData(TEST_TEMPLATE_DATA);
+        setForm(TEST_CARDS_ARRAY[0]);
       });
   }, [deckId]);
 
@@ -41,35 +36,33 @@ function UpdateCard() {
       });
   };
 
-      const prompt = (
-        <p>
-          Edit your card so your {deckId} teammates can get the best information about you!
-        </p>
-      );
-    
-      const btn = (
-        <NavLink to={`/deck/${deckId}`}>
-        <Button
-          btnText="Save card changes to deck"
-          onClick={() => {
-            const cardId = saveCard(); //eventually will use user ID
-          }}
-          icon={<Icon.ArrowRight />}
-        /></NavLink>
-      );
-    
-      return (
-        <>
-          <h1>Update Your Card</h1>
-          <CreateBody
-            prompt={prompt}
-            btn={btn}
-            cardEditorProps={{ templateData, form, setForm }}
-          />
-        </>
-      );
+  const prompt = (
+    <p>
+      Edit your card so your {deckId} teammates can get the best information
+      about you!
+    </p>
+  );
+
+  const btn = (
+    <NavLink to={`/deck/${deckId}`}>
+      <Button
+        btnText="Save card changes to deck"
+        onClick={() => {
+          const cardId = saveCard(); //eventually will use user ID
+        }}
+        icon={<Icon.ArrowRight />}
+      />
+    </NavLink>
+  );
+
+  return (
+    <CreateBody
+      header="Update Your Card"
+      prompt={prompt}
+      btn={btn}
+      cardEditorProps={{ form, setForm }}
+    />
+  );
 }
-
-
 
 export default UpdateCard;

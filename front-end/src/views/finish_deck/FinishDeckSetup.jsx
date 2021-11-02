@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import { DeckEditor, AccountPromptModal, Button } from "../../common";
 import * as Icon from "react-bootstrap-icons";
+import "./FinishDeckSetup.css";
 
 function FinishDeckSetup() {
   let data = useLocation();
@@ -40,15 +41,14 @@ function FinishDeckSetup() {
     console.log(apiKey);
 
     axios
-      .post(`https://my.api.mockaroo.com/deck?key=${apiKey}&__method=POST`, {
-        creatorId: userId,
-        deckName: deckName,
-        deckDescription: deckDescription,
-        cardTempate: templateData,
+      .post(`http://localhost:8000/deck`, {
+        userId,
+        deckName,
+        deckDescription,
+        cardTemplate: templateData,
       })
       .then((res) => {
-        deckId = res["data"];
-        console.log(deckId);
+        deckId = res.data.deckId;
         setRedirectLink(`deck/${deckId}`);
         setShowModal(false);
       })
@@ -78,7 +78,7 @@ function FinishDeckSetup() {
   };
 
   return (
-    <div>
+    <div className="FinishDeckSetup">
       <h1>Finalize deck details</h1>
       <div className="mb-5">
         <DeckEditor
@@ -88,13 +88,13 @@ function FinishDeckSetup() {
           setDeckDescription={setDeckDescription}
         />
       </div>
-      {showModal ? (
-        <AccountPromptModal
-          parentType={PARENT_TYPE.DECK}
-          onContinueAsGuest={onContinueAsGuest}
-          onSignupOrLogin={onSignupOrLogin}
-        />
-      ) : null}
+      <AccountPromptModal
+        onCloseModal={() => setShowModal(false)}
+        showModal={showModal}
+        parentType={PARENT_TYPE.DECK}
+        onContinueAsGuest={onContinueAsGuest}
+        onSignupOrLogin={onSignupOrLogin}
+      />
       <Button
         btnText="Create deck"
         onClick={() => {

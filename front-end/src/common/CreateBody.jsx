@@ -1,29 +1,29 @@
 import { CardEditor, useViewport } from "../common";
 import "./CreateBody.css";
 
-function CreateBody({ btn, cardEditorProps, prompt }) {
+function CreateBody({ btn, cardEditorProps, prompt, header }) {
   const { width } = useViewport();
+  const isMobile = width < 1000;
 
-  const mobile = (
-    <>
-      {prompt}
-      <CardEditor {...cardEditorProps} isCentered={true} />
-      <div className="CreateBody__btnContainer">{btn}</div>
-    </>
-  );
-
-  const desktop = (
-    <div className="d-flex row">
-      <div className="col">
-        <CardEditor {...cardEditorProps} />
-      </div>
-      <div className="col">
-        {prompt}
-        {btn}
+  return (
+    <div className="CreateBody">
+      <h1>{header}</h1>
+      <div className={`CreateBody__${isMobile ? "mobile" : "desktop"}`}>
+        {isMobile && prompt}
+        <div className={isMobile ? "CreateBody__cardContainer" : "col"}>
+          <CardEditor {...cardEditorProps} />
+        </div>
+        {isMobile ? (
+          <div className="CreateBody__btnContainer">{btn}</div>
+        ) : (
+          <div className="col">
+            {prompt}
+            {btn}
+          </div>
+        )}
       </div>
     </div>
   );
-  return width < 766 ? mobile : desktop;
 }
 
 export default CreateBody;

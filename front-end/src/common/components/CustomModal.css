@@ -1,0 +1,9 @@
+.CustomModal {
+  max-width: 700px !important;
+}
+
+.CustomModal__content {
+  display: flex;
+  flex-direction: column;
+  padding: 3em 5em;
+}

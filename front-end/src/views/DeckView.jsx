@@ -11,10 +11,12 @@ import {
   TEST_CARDS_ARRAY,
 } from "../common/constants";
 import { useEffect } from "react";
+import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
 function DeckView() {
   let { id } = useParams();
   console.log({ id });
+  const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [templateArray, setTemplateData] = useState([]);
   const [deckTitle, setDeckName] = useState();
   const [deckSubtitle, setDeckDescription] = useState();
@@ -24,19 +26,23 @@ function DeckView() {
       .get(`https://my.api.mockaroo.com/deck/123?key=d5aa71f0`)
       .then((response) => {
         console.log("data", response.data.cards);
+        setIsDeckLoaded(true);
         setTemplateData(response.data.cards);
         setDeckName(response.data.deckName);
         setDeckDescription(response.data.deckDescription);
       })
       .catch((err) => {
         console.log("!!", err);
+        setIsDeckLoaded(true);
         setTemplateData(TEST_CARDS_ARRAY);
         setDeckName("SWE");
         setDeckDescription("Team for SWE Project, Fall 2021");
-      })
+      });
   }, []);
 
-  return (
+  return !isDeckLoaded ? (
+    <LoadingSpinner />
+  ) : (
     <div>
       <div className="header">
         <div className="title-container">
@@ -52,7 +58,7 @@ function DeckView() {
         ))}
       </div>
       <div className="add-card">
-        <Button btnText="Add Card" linkTo={"${id}/add"} />
+        <Button btnText="Add Card" linkTo={`${id}/add`} />
       </div>
     </div>
   );

@@ -90,20 +90,20 @@ function CreateCard() {
 
   return (
     <>
-      <h1>Create Your Card</h1>
       <CreateBody
+        header="Create Your Card"
         prompt={prompt}
         btn={btn}
         cardEditorProps={{ templateData, form, setForm }}
       />
-      {showModal && (
-        <AccountPromptModal
-          parentType={PARENT_TYPE.CARD}
-          onCloseModal={() => setShowModal(false)}
-          onContinueAsGuest={onContinueAsGuest}
-          onSignupOrLogin={onSignupOrLogin}
-        />
-      )}
+      <AccountPromptModal
+        onCloseModal={() => setShowModal(false)}
+        showModal={showModal}
+        parentType={PARENT_TYPE.CARD}
+        onCloseModal={() => setShowModal(false)}
+        onContinueAsGuest={onContinueAsGuest}
+        onSignupOrLogin={onSignupOrLogin}
+      />
     </>
   );
 }

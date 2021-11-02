@@ -1,39 +1,36 @@
-import card1 from "../../media/howto_card.png";
-import card2 from "../../media/howto_card2.png";
-import Button from "../../common/components/Button";
+import pokedex from "../../assets/pokedex.gif";
+import team from "../../assets/team.png";
+import card from "../../assets/card.png";
+import { Button } from "../../common";
+import * as Icon from "react-bootstrap-icons";
 import "./Home.css";
 
+// TODO: arrange horizontally ?
 function Home() {
   return (
     <div className="Home">
-      <div className="Home__header">How it works</div>
-      <div className="Home__body">
+      <div className="Home__title">
+        <h1>How it works</h1>
+        <Button
+          btnText="Get started"
+          linkTo="/createdeck"
+          icon={<Icon.ArrowRight />}
+        />
+      </div>
+      <p className="Home__body">
         Get to know your teammates through Pokémon-inspired trading cards
         highlighting superpowers, weaknesses, communication preferences, and
         more to have a more efficient and enjoyable working experience!
-      </div>
-
-      <div className="Home__list">
-        1. Create a card template for your team
-      </div>
-
-      <img className="Home_imgs" src={card1} alt="HomeCard1" />
-
-      <div className="Home__list">
-        2. Fill out the template with your info
-      </div>
-
-      <img className="Home_imgs" src={card1} alt="HomeCard1" />
-
-      <div className="Home__list"> 3. Invite your teammates to join</div>
-
-      <Button btnText={"Invite Link"}/>
-
-      <div className="Home__list"> 4. Get to know 'em all'</div>
-
-      <img className="Home_imgs" src={card2} alt="HomeCard2" />
-
-      <Button btnText={"Get Started"}/>
+      </p>
+      <p>1. Set up a template card for your team by creating your own card</p>
+      <img className="Home_imgs" src={card} alt="Card" />
+      <p>
+        2. Share a link to with your teammates so that they can add their own
+        cards to your deck
+      </p>
+      <img className="Home_imgs" src={team} alt="Team" />
+      <p> 3. Get to know 'em all!</p>
+      <img className="Home_imgs" src={pokedex} alt="Pokedex" />
     </div>
   );
 }

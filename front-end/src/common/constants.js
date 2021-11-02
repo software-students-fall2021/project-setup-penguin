@@ -32,6 +32,7 @@ export const EMPTY_TEMPLATE = {
   sliderLabelMin: "",
   sliderLabelMax: "",
   sliderValue: 50,
+  image: null,
 };
 
 export const EMPTY_CARD = {
@@ -140,4 +141,96 @@ const TempFive = {
   sliderValue: 10,
 };
 
-export const TEST_CARDS_ARRAY = [TempOne, TempTwo, TempThree, TempFour, TempFive];
+export const TEST_CARDS_ARRAY = [
+  TempOne,
+  TempTwo,
+  TempThree,
+  TempFour,
+  TempFive,
+];
+
+export const TEMPLATE_STEPS = [
+  {
+    target: ".CardEditor__form",
+    content: "Let's create your card together!",
+    placement: "auto",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__tagline",
+    content: "We recommend writing a highlight about yourself here...",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__name",
+    content: "your name here...",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__city",
+    content:
+      "and some short yet meaningful abbreviation here (e.g. office / home location).",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__image",
+    content:
+      "Next, upload a photo so that your teammates can match your face to your info.",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__summary",
+    content:
+      "Whether you find titles and/or working hours important, put down the deets here!",
+    disableBeacon: true,
+  },
+  {
+    target: "#sectionLabel0",
+    content:
+      "Only you can edit section headers like this; your teammates will view whatever headers you choose as fixed labels.",
+    disableBeacon: true,
+  },
+  {
+    target: "#sectionContent0",
+    content:
+      "Whatever you put here will be used as placeholder text for your teammates.",
+    disableBeacon: true,
+  },
+  {
+    target: "#min-slider",
+    content: "The slider labels are also only editable by you.",
+    disableBeacon: true,
+  },
+  {
+    target: ".rc-slider-handle",
+    content:
+      "Drag this dot to reflect wherever you fall on your custom spectrum.",
+    disableBeacon: true,
+  },
+];
+
+export const REGULAR_STEPS = [
+  {
+    target: ".CardEditor__form",
+    content: "Let's create your card together!",
+    placement: "auto",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__tagline",
+    content: "Replace all the placeholders with info about yourself",
+    disableBeacon: true,
+  },
+  {
+    target: ".CardEditor__image",
+    content:
+      "Upload a photo so that your teammates can match your face to your info.",
+    disableBeacon: true,
+  },
+  {
+    target: ".rc-slider-handle",
+    content:
+      "Drag this dot to reflect wherever you fall on the defined spectrum.",
+    disableBeacon: true,
+  },
+];
