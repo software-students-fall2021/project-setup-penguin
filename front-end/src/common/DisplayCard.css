@@ -1,4 +1,9 @@
 /* TODO: scale card down to meet your needs rather than setting fixed width/height */
+.CardEditor__form {
+  width: 25em;
+  height: 40em;
+}
+
 .DisplayCard {
   margin: 16px;
   margin-top: 30px;
