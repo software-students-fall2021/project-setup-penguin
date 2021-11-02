@@ -13,9 +13,78 @@ app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
+// VARIABLES ***
+const deckTemplate = {
+  "template":{
+     "tagline":"Tasmanian devil",
+     "name":"Bontebok",
+     "city":"Elephant, asian",
+     "summary":"Macaw, blue and gold",
+     "sectionLabel0":"Vervet monkey",
+     "sectionLabel1":"Caracara (unidentified)",
+     "sectionLabel2":"Lemur, brown",
+     "sectionContent0":"Civet, common palm",
+     "sectionContent1":"Capybara",
+     "sectionContent2":"Cormorant, pied",
+     "sliderLabelMin":"neural-net",
+     "sliderLabelMax":"array",
+     "sliderValue":41
+  },
+  "cards":[
+     {
+        "tagline":"string",
+        "name":"string",
+        "city":"string",
+        "summary":"string",
+        "sectionLabel0":"string",
+        "sectionLabel1":"string",
+        "sectionLabel2":"string",
+        "sectionContent0":"string",
+        "sectionContent1":"string",
+        "sectionContent2":"string",
+        "sliderLabelMin":"string",
+        "sliderLabelMax":"string",
+        "sliderValue": Number,
+     }
+  ],
+  "deckOwnerId":"string",
+  "deckName":"string",
+  "deckDescription":"string"
+};
+
+// ROUTING ***
 // route for HTTP GET requests to root endpoint
 app.get("/", (req, res) => {
   res.send("Hello!");
+});
+
+// GET endpoint used to get a deck from deckId
+app.get("/deck/:id", (req, res) => {
+  console.log("deckID: ", req.params.id);
+  const deckID = req.params.id;
+
+  res.json(deckTemplate);
+  res.send(deckTemplate);
+});
+
+// PATCH endpoint to update deck metadata
+app.patch("/deck/:deckId", (req, res) => {
+  const deckId = req.params.deckId;
+  const { deckName, deckDescription } = req.body;
+
+  console.log("deckId:", deckId);
+  console.log("deckName:", deckName);
+  console.log("deckDescription:", deckDescription);
+
+  const updatedDeckMetadata = {
+    deckName,
+    deckDescription,
+  };
+
+  // will need to write the update to deck with deckId in database later
+  console.log("updatedDeckMetadata:", updatedDeckMetadata);
+
+  res.status(200).send();
 });
 
 // POST endpoint used to create a new deck
@@ -38,26 +107,6 @@ app.post("/deck", (req, res) => {
   res.json({
     deckId: 1, // dummy deckId
   });
-});
-
-// PATCH endpoint to update deck metadata
-app.patch("/deck/:deckId", (req, res) => {
-  const deckId = req.params.deckId;
-  const { deckName, deckDescription } = req.body;
-
-  console.log("deckId:", deckId);
-  console.log("deckName:", deckName);
-  console.log("deckDescription:", deckDescription);
-
-  const updatedDeckMetadata = {
-    deckName,
-    deckDescription,
-  };
-
-  // will need to write the update to deck with deckId in database later
-  console.log("updatedDeckMetadata:", updatedDeckMetadata);
-
-  res.status(200).send();
 });
 
 module.exports = app;

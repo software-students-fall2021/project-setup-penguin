@@ -23,7 +23,7 @@ function DeckView() {
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/deck/123?key=d5aa71f0`)
+      .get(`http://localhost:8000/deck/${id}`)
       .then((response) => {
         console.log("data", response.data.cards);
         setIsDeckLoaded(true);
