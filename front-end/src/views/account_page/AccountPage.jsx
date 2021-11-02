@@ -11,7 +11,11 @@ import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 
 function AccountPage() { 
     const [isDeckLoaded, setIsDeckLoaded] = useState(false);
+
+//make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
     const states = ["Active", "inactive"]; //array for defining classes of button states
+
+
     let { id } = useParams();
     console.log({ id });
     let pageContent;
@@ -73,7 +77,7 @@ function AccountPage() {
     ) :(
         <div className="container">
         <div className="toggle-switch">
-          <button className={states[deckActive]} id="myDeckView" onClick={activateMyDeckView} type="button">My Decks</button>
+          <button className={states[deckActive]} id="myDeckView" onClick={activateMyDeckView} type="button">Owned Decks</button>
           <button className={states[1-deckActive]} id="joinedDeckView" onClick={activateJoinedDeckView} type="button">Joined Decks</button>
         </div>
             {pageContent}
