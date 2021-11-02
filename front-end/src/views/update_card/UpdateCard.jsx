@@ -2,12 +2,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
 import { useParams, NavLink } from "react-router-dom";
-import { EMPTY_CARD, TEST_CARDS_ARRAY } from "../../common/constants";
+import { TEST_CARDS_ARRAY } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
 function UpdateCard() {
   const { cardId, deckId } = useParams();
-  const [form, setForm] = useState(EMPTY_CARD);
+  const [form, setForm] = useState(TEST_CARDS_ARRAY);
 
   useEffect(() => {
     axios
@@ -20,11 +20,11 @@ function UpdateCard() {
         console.log("!!", err);
         setForm(TEST_CARDS_ARRAY[0]);
       });
-  }, [deckId]);
+  }, [cardId, deckId]);
 
   const saveCard = (userId) => {
     axios
-      .post(`https://my.api.mockaroo.com/deck?key=$d5aa71f0&__method=POST`, {
+      .patch(`http://localhost:8000/card/${cardId}`, {
         newCard: form,
         userId,
       })
@@ -48,7 +48,7 @@ function UpdateCard() {
       <Button
         btnText="Save card changes to deck"
         onClick={() => {
-          const cardId = saveCard(); //eventually will use user ID
+          saveCard();
         }}
         icon={<Icon.ArrowRight />}
       />

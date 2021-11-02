@@ -60,4 +60,20 @@ app.patch("/deck/:deckId", (req, res) => {
   res.status(200).send();
 });
 
+// PATCH endpoint to update card metadata
+app.patch("/card/:cardId", (req, res) => {
+  const cardId = req.params.cardId;
+  //updateCard sends form element containing all card data
+  const cardData = req.body;
+
+  console.log("cardId:", cardId);
+  console.log("cardData:", cardData);
+
+  const updatedCardMetadata = cardData;
+
+  console.log("updatedCardMetadata:", updatedCardMetadata);
+
+  res.status(200).send();
+});
+
 module.exports = app;
