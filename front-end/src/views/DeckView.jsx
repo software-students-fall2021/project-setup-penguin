@@ -46,11 +46,11 @@ function DeckView() {
     <div>
       <div className="header">
         <div className="title-container">
-          <div className="title">{deckTitle}</div>
+          <div className="deckview-title">{deckTitle}</div>
           {/* TODO: only show button for admin */}
           <Button btnText="Edit" linkTo={`${id}/edit`} />
         </div>
-        <div className="subtitle">{deckSubtitle}</div>
+        <div className="deckview-subtitle">{deckSubtitle}</div>
       </div>
       <div class="deck-list">
         {templateArray.map((tempType) => (

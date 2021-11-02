@@ -9,8 +9,8 @@
   flex-direction: column;
 }
 
-.title {
-  font-size: 70px;
+.deckview-title {
+  font-size: 50px;
   font-weight: bold;
 }
 
@@ -20,8 +20,8 @@
   justify-content: space-between;
 }
 
-.subtitle {
-  font-size: 30px;
+.deckview-subtitle {
+  font-size: 20px;
   font-weight: normal;
   border-bottom: 1px solid lightgrey;
   padding-bottom: 20px;

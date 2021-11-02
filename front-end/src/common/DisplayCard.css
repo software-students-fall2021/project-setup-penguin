@@ -1,4 +1,26 @@
 /* TODO: scale card down to meet your needs rather than setting fixed width/height */
+/* TODO: figure out how to use percentage widths and heights without touching the outer div DisplayCard... */
+.CardEditor__form {
+  max-width: 25em;
+  max-height: 35.5em;
+}
+
+.CardEditor__label__right{
+  font-weight: bold;
+  width: 80%;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+.CardEditor__name{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.CardEditor__textarea{
+  padding: 5px 0px;
+}
+
 .DisplayCard {
   margin: 16px;
   margin-top: 30px;
@@ -11,7 +33,8 @@
 }
 
 .slider-group {
-  padding: 5px 0px;
+  padding: 10px 5px;
+  width: 100%;
 }
 
 .CardEditor__textarea,
