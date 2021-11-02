@@ -59,9 +59,9 @@ app.get("/", (req, res) => {
 });
 
 // GET endpoint used to get a deck from deckId
-app.get("/deck/:id", (req, res) => {
-  console.log("deckID: ", req.params.id);
-  const deckID = req.params.id;
+app.get("/deck/:deckId", (req, res) => {
+  const deckId = req.params.deckId;
+  console.log("deckId:", deckId);
 
   res.json(deckTemplate);
   res.send(deckTemplate);
