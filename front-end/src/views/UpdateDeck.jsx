@@ -21,7 +21,7 @@ function UpdateDeck() {
 
   const updateDeckWithRedirect = () => {
     axios
-      .post(`https://my.api.mockaroo.com/deck?key=$d5aa71f0&__method=POST`, {
+      .patch(`http://localhost:8000/deck/${deckId}`, {
         deckName: deckName,
         deckDescription: deckDescription,
       })
