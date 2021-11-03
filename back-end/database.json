@@ -1,0 +1,45 @@
+{
+  "users": [],
+  "decks": [
+    {
+      "id": "05bcbf04-b1b5-4286-a7eb-7c3f93de2b73",
+      "deckName": "Test Deck",
+      "deckDescription": "testing",
+      "cardTemplate": {
+        "name": "Name Here",
+        "city": "NYC",
+        "tagline": "~5 word tagline about yourself",
+        "summary": "ROLE (# YOE), working hours & time zone",
+        "sectionLabel0": "Strengths",
+        "sectionLabel1": "Weaknesses",
+        "sectionLabel2": "Communication Preferences",
+        "sectionContent0": "What do you excel at?",
+        "sectionContent1": "What do you struggle with?",
+        "sectionContent2": "How do you want people to contact you?",
+        "sliderLabelMin": "Introvert",
+        "sliderLabelMax": "Extrovert",
+        "sliderValue": 50,
+        "image": null
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "b1987d67-cf2a-4d71-876b-f2ea64b53d3c",
+      "name": "Name Here",
+      "city": "NYC",
+      "tagline": "~5 word tagline about yourself",
+      "summary": "ROLE (# YOE), working hours & time zone",
+      "sectionLabel0": "Strengths",
+      "sectionLabel1": "Weaknesses",
+      "sectionLabel2": "Communication Preferences",
+      "sectionContent0": "What do you excel at?",
+      "sectionContent1": "What do you struggle with?",
+      "sectionContent2": "How do you want people to contact you?",
+      "sliderLabelMin": "Introvert",
+      "sliderLabelMax": "Extrovert",
+      "sliderValue": 50,
+      "image": null
+    }
+  ]
+}

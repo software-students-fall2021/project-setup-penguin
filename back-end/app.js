@@ -1,5 +1,7 @@
+const fs = require("fs");
 const express = require("express");
 const app = express();
+const { v4: uuidv4 } = require("uuid");
 
 // middleware
 const morgan = require("morgan");
@@ -21,23 +23,92 @@ app.get("/", (req, res) => {
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res) => {
   const { userId, deckName, deckDescription, cardTemplate } = req.body;
+  const deckId = uuidv4();
 
-  // will need to write these values to the deck db later
-  console.log("userId:", userId);
-  console.log("deckName:", deckName);
-  console.log("deckDescription:", deckDescription);
-  console.log("cardTemplate:", cardTemplate);
-
-  // will need to create a user card from the template card
   const cardData = {
     userId,
     ...cardTemplate,
   };
-  console.log("cardData:", cardData);
+
+  fs.readFile("database.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.log("Error reading file from disk:", err);
+      return;
+    }
+    try {
+      const jsonData = JSON.parse(jsonString);
+      console.log({ jsonData });
+
+      jsonData.decks.push({
+        id: deckId,
+        ownerId: userId,
+        deckName,
+        deckDescription,
+        cardTemplate,
+      });
+
+      jsonData.cards.push({
+        id: uuidv4(),
+        ...cardData,
+      });
+
+      const newJsonString = JSON.stringify(jsonData);
+      console.log({ jsonData, jsonString });
+
+      fs.writeFile("database.json", newJsonString, (err) => {
+        if (err) {
+          console.log("Error writing file", err);
+        } else {
+          console.log("Successfully wrote file");
+        }
+      });
+    } catch (err) {
+      console.log("Error parsing JSON string:", err);
+    }
+  });
 
   res.json({
-    deckId: 1, // dummy deckId
+    deckId, // dummy deckId
   });
+});
+
+// PATCH endpoint to update deck metadata
+app.patch("/deck/:deckId", (req, res) => {
+  const deckId = req.params.deckId;
+  const { deckName, deckDescription } = req.body;
+
+  fs.readFile("database.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.log("Error reading file from disk:", err);
+      return;
+    }
+    try {
+      const jsonData = JSON.parse(jsonString);
+      console.log({ jsonData });
+
+      if (deckId in jsonData.decks) {
+        jsonData.decks[deckId].deckName = deckName;
+        jsonData.decks[deckId].deckDescription = deckDescription;
+      } else {
+        console.log("Cannot find deck in database");
+      }
+
+      const newJsonString = JSON.stringify(jsonData);
+      console.log({ jsonData, jsonString });
+
+      fs.writeFile("database.json", newJsonString, (err) => {
+        if (err) {
+          console.log("Error writing file", err);
+        } else {
+          console.log("Successfully wrote file");
+        }
+      });
+    } catch (err) {
+      console.log("Error parsing JSON string:", err);
+    }
+  });
+
+  res.status(200).send();
 });
 
 // POST endpoint used to create a new card
@@ -76,26 +147,6 @@ app.delete("/card/:cardId", (req, res) => {
   res.json({
     cardId, // dummy cardId of deleted card
   });
-});
-
-// PATCH endpoint to update deck metadata
-app.patch("/deck/:deckId", (req, res) => {
-  const deckId = req.params.deckId;
-  const { deckName, deckDescription } = req.body;
-
-  console.log("deckId:", deckId);
-  console.log("deckName:", deckName);
-  console.log("deckDescription:", deckDescription);
-
-  const updatedDeckMetadata = {
-    deckName,
-    deckDescription,
-  };
-
-  // will need to write the update to deck with deckId in database later
-  console.log("updatedDeckMetadata:", updatedDeckMetadata);
-
-  res.status(200).send();
 });
 
 module.exports = app;
