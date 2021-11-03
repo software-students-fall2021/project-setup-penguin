@@ -45,11 +45,13 @@ app.post("/deck", (req, res) => {
     try {
       const jsonData = JSON.parse(jsonString);
 
+      // save card to cards collection
       jsonData.cards[cardId] = {
         id: cardId,
         ...cardData,
       };
 
+      // save deck to decks collection
       jsonData.decks[deckId] = {
         id: deckId,
         ownerId: userId,
@@ -59,6 +61,7 @@ app.post("/deck", (req, res) => {
         cards: [cardId],
       };
 
+      // update user document
       if (userId && userId in jsonData.users) {
         jsonData.users[userId].cards.push(cardId);
       }
@@ -94,6 +97,7 @@ app.patch("/deck/:deckId", (req, res) => {
     try {
       const jsonData = JSON.parse(jsonString);
 
+      // update deck document
       if (deckId in jsonData.decks) {
         jsonData.decks[deckId].deckName = deckName;
         jsonData.decks[deckId].deckDescription = deckDescription;
