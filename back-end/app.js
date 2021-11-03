@@ -22,7 +22,13 @@ app.get("/", (req, res) => {
 
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res) => {
-  const { userId, deckName, deckDescription, cardTemplate } = req.body;
+  // setting default userId until auth set up
+  const {
+    userId = "janethuang@gmail.com",
+    deckName,
+    deckDescription,
+    cardTemplate,
+  } = req.body;
   const deckId = uuidv4();
   const cardId = uuidv4();
 
@@ -38,25 +44,26 @@ app.post("/deck", (req, res) => {
     }
     try {
       const jsonData = JSON.parse(jsonString);
-      console.log({ jsonData });
 
-      jsonData.cards.push({
+      jsonData.cards[cardId] = {
         id: cardId,
         ...cardData,
-      });
+      };
 
-      jsonData.decks.push({
+      jsonData.decks[deckId] = {
         id: deckId,
         ownerId: userId,
         deckName,
         deckDescription,
         cardTemplate,
         cards: [cardId],
-      });
+      };
+
+      if (userId && userId in jsonData.users) {
+        jsonData.users[userId].cards.push(cardId);
+      }
 
       const newJsonString = JSON.stringify(jsonData);
-      console.log({ jsonData, jsonString });
-
       fs.writeFile("database.json", newJsonString, (err) => {
         if (err) {
           console.log("Error writing file", err);
@@ -86,7 +93,6 @@ app.patch("/deck/:deckId", (req, res) => {
     }
     try {
       const jsonData = JSON.parse(jsonString);
-      console.log({ jsonData });
 
       if (deckId in jsonData.decks) {
         jsonData.decks[deckId].deckName = deckName;
@@ -96,8 +102,6 @@ app.patch("/deck/:deckId", (req, res) => {
       }
 
       const newJsonString = JSON.stringify(jsonData);
-      console.log({ jsonData, jsonString });
-
       fs.writeFile("database.json", newJsonString, (err) => {
         if (err) {
           console.log("Error writing file", err);
