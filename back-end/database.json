@@ -1,0 +1,55 @@
+{
+  "users": {
+    "janethuang@gmail.com": {
+      "name": "Janet Huang",
+      "email": "janethuang@gmail.com",
+      "password": "myPassword",
+      "cards": ["87dc6c5a-89bd-439c-b267-8f9819f6073b"]
+    }
+  },
+  "decks": {
+    "2e7f41df-3270-4d64-bdad-02cc91991b2c": {
+      "id": "2e7f41df-3270-4d64-bdad-02cc91991b2c",
+      "ownerId": "janethuang@gmail.com",
+      "deckName": "New Name",
+      "deckDescription": "New Description",
+      "cardTemplate": {
+        "name": "Name Here",
+        "city": "NYC",
+        "tagline": "~5 word tagline about yourself",
+        "summary": "ROLE (# YOE), working hours & time zone",
+        "sectionLabel0": "Strengths",
+        "sectionLabel1": "Weaknesses",
+        "sectionLabel2": "Communication Preferences",
+        "sectionContent0": "What do you excel at?",
+        "sectionContent1": "What do you struggle with?",
+        "sectionContent2": "How do you want people to contact you?",
+        "sliderLabelMin": "Introvert",
+        "sliderLabelMax": "Extrovert",
+        "sliderValue": 50,
+        "image": null
+      },
+      "cards": ["87dc6c5a-89bd-439c-b267-8f9819f6073b"]
+    }
+  },
+  "cards": {
+    "87dc6c5a-89bd-439c-b267-8f9819f6073b": {
+      "id": "87dc6c5a-89bd-439c-b267-8f9819f6073b",
+      "userId": "janethuang@gmail.com",
+      "name": "Name Here",
+      "city": "NYC",
+      "tagline": "~5 word tagline about yourself",
+      "summary": "ROLE (# YOE), working hours & time zone",
+      "sectionLabel0": "Strengths",
+      "sectionLabel1": "Weaknesses",
+      "sectionLabel2": "Communication Preferences",
+      "sectionContent0": "What do you excel at?",
+      "sectionContent1": "What do you struggle with?",
+      "sectionContent2": "How do you want people to contact you?",
+      "sliderLabelMin": "Introvert",
+      "sliderLabelMax": "Extrovert",
+      "sliderValue": 50,
+      "image": null
+    }
+  }
+}
