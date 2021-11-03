@@ -1,18 +1,24 @@
 {
   "users": {
-    "janethuang@gmail.com": {
-      "name": "Janet Huang",
-      "email": "janethuang@gmail.com",
-      "password": "myPassword",
-      "cards": ["87dc6c5a-89bd-439c-b267-8f9819f6073b"]
+    "random@gmail.com": {
+      "name": "janet",
+      "email": "random@gmail.com",
+      "password": "string",
+      "cards": [
+        "cardId1",
+        "cardId2",
+        "cardId3",
+        "c693ebf7-dec7-427c-8417-a8ae59b3ee1e",
+        "8c01b268-8f85-4eab-a634-d5ffa171ddcf"
+      ]
     }
   },
   "decks": {
-    "2e7f41df-3270-4d64-bdad-02cc91991b2c": {
-      "id": "2e7f41df-3270-4d64-bdad-02cc91991b2c",
-      "ownerId": "janethuang@gmail.com",
-      "deckName": "New Name",
-      "deckDescription": "New Description",
+    "f346dfa5-fb71-4e4b-8f55-895efd92c7eb": {
+      "deckId": "f346dfa5-fb71-4e4b-8f55-895efd92c7eb",
+      "ownerId": "someId",
+      "deckName": "Test Deck",
+      "deckDescription": "testing",
       "cardTemplate": {
         "name": "Name Here",
         "city": "NYC",
@@ -27,15 +33,18 @@
         "sliderLabelMin": "Introvert",
         "sliderLabelMax": "Extrovert",
         "sliderValue": 50,
-        "image": null
+        "image": "some string that you can pass directly into src="
       },
-      "cards": ["87dc6c5a-89bd-439c-b267-8f9819f6073b"]
+      "cards": [
+        "44456dad-7313-4ab1-a434-c35bb2601116"
+      ]
     }
   },
   "cards": {
-    "87dc6c5a-89bd-439c-b267-8f9819f6073b": {
-      "id": "87dc6c5a-89bd-439c-b267-8f9819f6073b",
-      "userId": "janethuang@gmail.com",
+    "44456dad-7313-4ab1-a434-c35bb2601116": {
+      "cardId": "44456dad-7313-4ab1-a434-c35bb2601116",
+      "userId": "userId",
+      "deckId": "f346dfa5-fb71-4e4b-8f55-895efd92c7eb",
       "name": "Name Here",
       "city": "NYC",
       "tagline": "~5 word tagline about yourself",
@@ -50,6 +59,32 @@
       "sliderLabelMax": "Extrovert",
       "sliderValue": 50,
       "image": null
+    },
+    "c693ebf7-dec7-427c-8417-a8ae59b3ee1e": {
+      "cardId": "c693ebf7-dec7-427c-8417-a8ae59b3ee1e",
+      "deckId": "123",
+      "userId": "random@gmail.com",
+      "name": "qer",
+      "city": "",
+      "tagline": "qwer",
+      "summary": "qwer",
+      "sectionContent0": "qer",
+      "sectionContent1": "",
+      "sectionContent2": "",
+      "sliderValue": 50
+    },
+    "8c01b268-8f85-4eab-a634-d5ffa171ddcf": {
+      "cardId": "8c01b268-8f85-4eab-a634-d5ffa171ddcf",
+      "deckId": "123",
+      "userId": "random@gmail.com",
+      "name": "",
+      "city": "",
+      "tagline": "",
+      "summary": "",
+      "sectionContent0": "",
+      "sectionContent1": "",
+      "sectionContent2": "",
+      "sliderValue": 50
     }
   }
 }
