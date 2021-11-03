@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 app.post("/deck", (req, res) => {
   const { userId, deckName, deckDescription, cardTemplate } = req.body;
   const deckId = uuidv4();
+  const cardId = uuidv4();
 
   const cardData = {
     userId,
@@ -39,17 +40,18 @@ app.post("/deck", (req, res) => {
       const jsonData = JSON.parse(jsonString);
       console.log({ jsonData });
 
+      jsonData.cards.push({
+        id: cardId,
+        ...cardData,
+      });
+
       jsonData.decks.push({
         id: deckId,
         ownerId: userId,
         deckName,
         deckDescription,
         cardTemplate,
-      });
-
-      jsonData.cards.push({
-        id: uuidv4(),
-        ...cardData,
+        cards: [cardId],
       });
 
       const newJsonString = JSON.stringify(jsonData);

@@ -2,7 +2,7 @@
   "users": [],
   "decks": [
     {
-      "id": "05bcbf04-b1b5-4286-a7eb-7c3f93de2b73",
+      "id": "f346dfa5-fb71-4e4b-8f55-895efd92c7eb",
       "deckName": "Test Deck",
       "deckDescription": "testing",
       "cardTemplate": {
@@ -20,12 +20,13 @@
         "sliderLabelMax": "Extrovert",
         "sliderValue": 50,
         "image": null
-      }
+      },
+      "cards": ["44456dad-7313-4ab1-a434-c35bb2601116"]
     }
   ],
   "cards": [
     {
-      "id": "b1987d67-cf2a-4d71-876b-f2ea64b53d3c",
+      "id": "44456dad-7313-4ab1-a434-c35bb2601116",
       "name": "Name Here",
       "city": "NYC",
       "tagline": "~5 word tagline about yourself",
