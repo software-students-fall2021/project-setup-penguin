@@ -28,7 +28,7 @@ app.post("/deck", (req, res) => {
   console.log("deckDescription:", deckDescription);
   console.log("cardTemplate:", cardTemplate);
 
-  // will need to add the cardData to the user later
+  // will need to create a user card from the template card
   const cardData = {
     userId,
     ...cardTemplate,
@@ -40,7 +40,44 @@ app.post("/deck", (req, res) => {
   });
 });
 
-// PATCH endpoint to update deck metadata
+// POST endpoint used to create a new card
+app.post("/card", (req, res) => {
+  const { userId, newCard, deckId } = req.body;
+
+  // create a new Card instance from newCard and save
+  console.log("newCard:", newCard);
+
+  // add new card's id to cards array of deck with deckId
+  console.log("deckId:", deckId);
+
+  // add new card's id to cards array of user with userId
+  console.log("userId:", userId);
+
+  res.json({
+    cardId: 1, // dummy cardId
+  });
+});
+
+//  axios.delete('baseUrl/card', { data: {userId, deckId} })
+// POST endpoint used to create a new card
+app.delete("/card/:cardId", (req, res) => {
+  const { cardId } = req.params;
+  const { deckId, userId } = req.body;
+
+  // remove cardId from cards array of deck with deckId
+  console.log("deckId:", deckId);
+
+  // remove cardID from cards array of user with userId
+  console.log("userId:", userId);
+
+  // delete Card document with cardId
+  console.log("cardId:", cardId);
+
+  res.json({
+    cardId, // dummy cardId of deleted card
+  });
+
+  // PATCH endpoint to update deck metadata
 app.patch("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;

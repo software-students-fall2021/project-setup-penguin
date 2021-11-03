@@ -36,12 +36,13 @@ function CreateCard() {
 
   const saveCard = (userId) => {
     axios
-      .post(`https://my.api.mockaroo.com/deck?key=$d5aa71f0&__method=POST`, {
+      .post(`http://localhost:8000/card`, {
         newCard: form,
         userId,
+        deckId,
       })
       .then((res) => {
-        return res["data"];
+        return res.data.cardId;
       })
       .catch((err) => {
         console.log(err);
