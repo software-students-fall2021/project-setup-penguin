@@ -76,8 +76,9 @@ app.delete("/card/:cardId", (req, res) => {
   res.json({
     cardId, // dummy cardId of deleted card
   });
+});
 
-  // PATCH endpoint to update deck metadata
+// PATCH endpoint to update deck metadata
 app.patch("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;
