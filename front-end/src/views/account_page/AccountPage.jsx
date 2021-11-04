@@ -7,14 +7,20 @@ import {
   } from "../../common/constants";
 import axios from "axios";
 import { useEffect } from "react";
+import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 
 function AccountPage() { 
+    const [isDeckLoaded, setIsDeckLoaded] = useState(false);
+
+//make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
     const states = ["Active", "inactive"]; //array for defining classes of button states
+
+
     let { id } = useParams();
     console.log({ id });
     let pageContent;
     const [deckActive, setDeckActive] = useState(0); 
-    //0 = deck view, 1 = card view (for easy class switching for styling and content display using states array)
+    //0 = mydeck view, 1 = joinedcard view (for easy class switching for styling and content display using states array)
 
     const [templateArray, setTemplateData] = useState([]);
     const [deckTitle, setDeckName] = useState();
@@ -28,21 +34,23 @@ function AccountPage() {
         setTemplateData(response.data.cards);
         setDeckName(response.data.deckName);
         setDeckDescription(response.data.deckDescription);
+        setIsDeckLoaded(true);
       })
       .catch((err) => {
         console.log("!!", err);
         setTemplateData(TEST_CARDS_ARRAY);
         setDeckName("SWE");
         setDeckDescription("Team for SWE Project, Fall 2021");
+        setIsDeckLoaded(true);
       })
   }, []);
 
 //onClick functions for changing state for display
-    const activateDeckView = () =>{
+    const activateMyDeckView = () =>{
         setDeckActive(0);
     }
 
-    const activateCardView = () =>{
+    const activateJoinedDeckView = () =>{
         setDeckActive(1);
     }
 
@@ -51,21 +59,26 @@ function AccountPage() {
     will use arrays to display multiple cards/decks when user functionality is further along */
     if(deckActive === 0){
         pageContent = <><NavLink to={`deck/${id}`} className="title">{deckTitle}</NavLink>
-        <h2>{deckSubtitle}</h2></>;
+        <h2 className="subtitle">{deckSubtitle}</h2>
+        <div className="displayedCard">
+          <DisplayCard tempArray={templateArray[0]}></DisplayCard>
+        </div></>;
         
     }
     else{
-        pageContent = <><div class="deck-list">
-        {templateArray.map((tempType) => (
-          <DisplayCard tempArray={tempType}></DisplayCard>
-        ))}
-      </div></>;
+        pageContent = <><NavLink to={`deck/${id}`} className="title">{deckTitle}</NavLink>
+        <h2 className="subtitle">{deckSubtitle}</h2>
+        <div className="displayedCard">
+          <DisplayCard tempArray={templateArray[1]}></DisplayCard>
+          </div></>;
     }
-    return(
+    return !isDeckLoaded ? (
+      <LoadingSpinner />
+    ) :(
         <div className="container">
         <div className="toggle-switch">
-          <button className={states[deckActive]} id="deckView" onClick={activateDeckView} type="button">My Decks</button>
-          <button className={states[deckActive-1]} id="cardView" onClick={activateCardView} type="button">My Cards</button>
+          <button className={states[deckActive]} id="myDeckView" onClick={activateMyDeckView} type="button">Owned Decks</button>
+          <button className={states[1-deckActive]} id="joinedDeckView" onClick={activateJoinedDeckView} type="button">Joined Decks</button>
         </div>
             {pageContent}
         </div>
