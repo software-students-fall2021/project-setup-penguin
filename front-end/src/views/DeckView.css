@@ -1,7 +1,20 @@
+.deckview-overall{
+  width: 100%;
+}
+
 .deck-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.deckview-buttons{
+  display: flex;
+  flex-direction: row;
+}
+
+.edit, .add, .delete{
+  margin: 5px;
 }
 
 .header {

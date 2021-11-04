@@ -1,4 +1,3 @@
-import "./card-editor/CardEditor.css";
 import "./DisplayCard.css";
 import heart from "../assets/heart.png";
 import piplup from "../assets/piplup.png";
@@ -12,27 +11,27 @@ function DisplayCard(props) {
 
   return (
     <div className="DisplayCard">
-      <div className="CardEditor__form" id="myCard">
-        <div className="CardEditor__upperContent">
-          <div className="CardEditor__tagline">{displayArray.tagline}</div>
-          <div className="CardEditor__header">
-            <div className="CardEditor__name">{displayArray.name}</div>
+      <div className="CardDisplay__form" id="myCard">
+        <div className="CardDisplay__upperContent">
+          <div className="CardDisplay__tagline">{displayArray.tagline}</div>
+          <div className="CardDisplay__header">
+            <div className="CardDisplay__name">{displayArray.name}</div>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="CardEditor__city">{displayArray.city}</div>
+              <div className="CardDisplay__city">{displayArray.city}</div>
               <HeartIcon />
             </div>
           </div>
-          <img className="CardEditor__image" src={piplup} />
+          <img className="CardDisplay__image" src={piplup} />
         </div>
-        <div className="CardEditor__summary">{displayArray.summary}</div>
+        <div className="CardDisplay__summary">{displayArray.summary}</div>
         {sectionIds.map((id) => (
-          <div className="CardEditor__section">
+          <div className="CardDisplay__section">
             <HeartIcon />
-            <div className="CardEditor__sectionContent">
-              <div className="CardEditor__label">
+            <div className="CardDisplay__sectionContent">
+              <div className="CardDisplay__label">
                 {displayArray[`sectionLabel${id}`]}
               </div>
-              <div className="CardEditor__textarea">
+              <div className="CardDisplay__textarea">
                 {displayArray[`sectionContent${id}`]}
               </div>
             </div>
@@ -40,10 +39,10 @@ function DisplayCard(props) {
         ))}
         <div class="slider-group">
           <div class="slider-labels">
-            <div className="CardEditor__label">
+            <div className="CardDisplay__label">
               {displayArray.sliderLabelMin}
             </div>
-            <div className="CardEditor__label__right">
+            <div className="CardDisplay__label__right">
               {displayArray.sliderLabelMax}
             </div>
           </div>

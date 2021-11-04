@@ -64,17 +64,20 @@ app.get("/", (req, res) => {
 // get from json file
 app.get("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
+
   console.log("hello", req.body);
   // const { cards, deckOwnerId, deckName, deckDescription } = req.body;
   console.log("deckId:", deckId);
 
-
-  const fs = require('fs');
-
-  fs.readFile('student.json', (err, data) => {
+  fs.readFile('database.json', (err, data) => {
       if (err) throw err;
       let student = JSON.parse(data);
       console.log(student);
+      res.send(student);
+  })
+});
+
+
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res) => {
   // setting default userId until auth set up

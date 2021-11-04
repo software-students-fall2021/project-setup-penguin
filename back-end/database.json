@@ -9,7 +9,8 @@
         "cardId2",
         "cardId3",
         "c693ebf7-dec7-427c-8417-a8ae59b3ee1e",
-        "8c01b268-8f85-4eab-a634-d5ffa171ddcf"
+        "8c01b268-8f85-4eab-a634-d5ffa171ddcf",
+        "c08b035d-a1af-463a-ad4b-a90594884331"
       ]
     }
   },
@@ -35,8 +36,31 @@
         "sliderValue": 50,
         "image": "some string that you can pass directly into src="
       },
+      "cards": ["44456dad-7313-4ab1-a434-c35bb2601116"]
+    },
+    "63ca83e4-1287-4abe-b64c-e48efd2f0348": {
+      "id": "63ca83e4-1287-4abe-b64c-e48efd2f0348",
+      "ownerId": "janethuang@gmail.com",
+      "deckName": "Pokedek Team",
+      "deckDescription": "Introducing the Pokedek team... through Pokedek!",
+      "cardTemplate": {
+        "name": "Cindy Kim",
+        "city": "NYC",
+        "tagline": "CS @ NYU",
+        "summary": "SWE (1 YOE), 9AM-5PM EDT",
+        "sectionLabel0": "Strengths",
+        "sectionLabel1": "Weaknesses",
+        "sectionLabel2": "Communication Preferances",
+        "sectionContent0": "Ranking coffees",
+        "sectionContent1": "Waking up on time",
+        "sectionContent2": "Call or text!",
+        "sliderLabelMin": "Introvert",
+        "sliderLabelMax": "Extrovert",
+        "sliderValue": 63,
+        "image": null
+      },
       "cards": [
-        "44456dad-7313-4ab1-a434-c35bb2601116"
+        "c996e683-9b2c-405c-8160-7be1dd91a8d8"
       ]
     }
   },
@@ -85,6 +109,24 @@
       "sectionContent1": "",
       "sectionContent2": "",
       "sliderValue": 50
+    },
+    "c996e683-9b2c-405c-8160-7be1dd91a8d8": {
+      "id": "c996e683-9b2c-405c-8160-7be1dd91a8d8",
+      "userId": "janethuang@gmail.com",
+      "name": "Cindy Kim",
+      "city": "NYC",
+      "tagline": "CS @ NYU",
+      "summary": "SWE (1 YOE), 9AM-5PM EDT",
+      "sectionLabel0": "Strengths",
+      "sectionLabel1": "Weaknesses",
+      "sectionLabel2": "Communication Preferances",
+      "sectionContent0": "Ranking coffees",
+      "sectionContent1": "Waking up on time",
+      "sectionContent2": "Call or text!",
+      "sliderLabelMin": "Introvert",
+      "sliderLabelMax": "Extrovert",
+      "sliderValue": 63,
+      "image": null
     }
   }
 }

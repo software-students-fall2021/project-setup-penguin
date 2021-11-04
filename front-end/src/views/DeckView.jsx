@@ -25,11 +25,30 @@ function DeckView() {
     axios
       .get(`http://localhost:8000/deck/${id}`)
       .then((response) => {
-        console.log("data", response.data.cards);
+        console.log("data", response.data);
+
+        //Parse through the JSON array to get the current IDs
+        //Use IDs to get currect deck, and create cards array containing appropriate cards
+        let deckArray = response.data.decks[id];
+        console.log("deckArray", deckArray);
+        //Array of cardIDs within this deck
+        let cardIDArray = response.data.decks[id].cards;
+        console.log("cardIDArray", cardIDArray);
+        //Array of actual card objects within this deck
+        let cards = [];
+        for (const id in cardIDArray){
+          console.log("id", cardIDArray[id]);
+          let currCard = response.data.cards[cardIDArray[id]];
+          console.log("currCard", currCard);
+          cards.push(currCard);
+        }
+
+        console.log("cards", cards);
+
         setIsDeckLoaded(true);
-        setTemplateData(response.data.cards);
-        setDeckName(response.data.deckName);
-        setDeckDescription(response.data.deckDescription);
+        setTemplateData(cards);
+        setDeckName(deckArray.deckName);
+        setDeckDescription(deckArray.deckDescription);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -43,12 +62,16 @@ function DeckView() {
   return !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
-    <div>
+    <div className="deckview-overall">
       <div className="header">
         <div className="title-container">
           <div className="deckview-title">{deckTitle}</div>
           {/* TODO: only show button for admin */}
-          <Button btnText="Edit" linkTo={`${id}/edit`} />
+          <div className="deckview-buttons">
+            <div className="edit"><Button btnText="Edit" linkTo={`${id}/edit`} /></div>
+            <div className="add"><Button btnText="Add Card" linkTo={`${id}/add`} /></div>
+            <div className="delete"><Button btnText="Delete"/></div>
+          </div>
         </div>
         <div className="deckview-subtitle">{deckSubtitle}</div>
       </div>
@@ -57,9 +80,9 @@ function DeckView() {
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
-      <div className="add-card">
+      {/* <div className="add-card">
         <Button btnText="Add Card" linkTo={`${id}/add`} />
-      </div>
+      </div> */}
     </div>
   );
 }
