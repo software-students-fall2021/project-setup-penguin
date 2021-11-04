@@ -5,13 +5,20 @@
       "email": "random@gmail.com",
       "password": "string",
       "cards": [
-        "cardId1",
-        "cardId2",
-        "cardId3",
-        "c693ebf7-dec7-427c-8417-a8ae59b3ee1e",
-        "8c01b268-8f85-4eab-a634-d5ffa171ddcf",
-        "c08b035d-a1af-463a-ad4b-a90594884331"
+        "19e6251f-0ecc-4141-914f-3109c436d85a",
+        "baa7321e-711c-411a-9e4f-150a45ced36c",
+        "7b923fc4-2903-483d-90ea-230918342502",
+        "65367cf5-f8e2-4f66-be48-f7ac72f5134b",
+        "f40787f7-0dae-4511-bab7-4a4cd43d53c7",
+        "43a50a65-47f1-4257-a0c5-1ded1c2f32d4",
+        "f8ae6139-cc01-4e9e-b4bc-dc3da5e045dd"
       ]
+    },
+    "janethuang@gmail.com": {
+      "name": "Janet Huang",
+      "email": "janethuang@gmail.com",
+      "password": "myPassword",
+      "cards": []
     }
   },
   "decks": {
@@ -59,9 +66,7 @@
         "sliderValue": 63,
         "image": null
       },
-      "cards": [
-        "c996e683-9b2c-405c-8160-7be1dd91a8d8"
-      ]
+      "cards": ["c996e683-9b2c-405c-8160-7be1dd91a8d8"]
     }
   },
   "cards": {
@@ -84,18 +89,30 @@
       "sliderValue": 50,
       "image": null
     },
-    "c693ebf7-dec7-427c-8417-a8ae59b3ee1e": {
-      "cardId": "c693ebf7-dec7-427c-8417-a8ae59b3ee1e",
-      "deckId": "123",
-      "userId": "random@gmail.com",
-      "name": "qer",
-      "city": "",
-      "tagline": "qwer",
-      "summary": "qwer",
-      "sectionContent0": "qer",
-      "sectionContent1": "",
-      "sectionContent2": "",
-      "sliderValue": 50
+    "decks": {
+      "a12ccfc9-21da-4430-a37c-69416621dc09": {
+        "deckId": "a12ccfc9-21da-4430-a37c-69416621dc09",
+        "ownerId": "janethuang@gmail.com",
+        "deckName": "Test Deck",
+        "deckDescription": "testing\n",
+        "cardTemplate": {
+          "name": "Name Here",
+          "city": "NYC",
+          "tagline": "~5 word tagline about yourself",
+          "summary": "ROLE (# YOE), working hours & time zone",
+          "sectionLabel0": "Strengths",
+          "sectionLabel1": "Weaknesses",
+          "sectionLabel2": "Communication Preferences",
+          "sectionContent0": "What do you excel at?",
+          "sectionContent1": "What do you struggle with?",
+          "sectionContent2": "How do you want people to contact you?",
+          "sliderLabelMin": "Introvert",
+          "sliderLabelMax": "Extrovert",
+          "sliderValue": 50,
+          "image": null
+        },
+        "cards": ["19e6251f-0ecc-4141-914f-3109c436d85a"]
+      }
     },
     "8c01b268-8f85-4eab-a634-d5ffa171ddcf": {
       "cardId": "8c01b268-8f85-4eab-a634-d5ffa171ddcf",
@@ -127,6 +144,19 @@
       "sliderLabelMax": "Extrovert",
       "sliderValue": 63,
       "image": null
+    },
+    "19e6251f-0ecc-4141-914f-3109c436d85a": {
+      "cardId": "19e6251f-0ecc-4141-914f-3109c436d85a",
+      "deckId": "a12ccfc9-21da-4430-a37c-69416621dc09",
+      "userId": "random@gmail.com",
+      "name": "Janeet",
+      "city": "",
+      "tagline": "",
+      "summary": "",
+      "sectionContent0": "",
+      "sectionContent1": "",
+      "sectionContent2": "",
+      "sliderValue": 50
     }
   }
 }

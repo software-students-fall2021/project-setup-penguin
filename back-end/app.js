@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("mz/fs");
 const express = require("express");
 const app = express();
 const { v4: uuidv4 } = require("uuid");
@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // middleware
 const morgan = require("morgan");
 const cors = require("cors");
+const { nextTick } = require("process");
 
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -14,45 +15,6 @@ app.use(cors()); // prevents requests from being blocked by CORS
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
-
-// VARIABLES ***
-const deckTemplate = {
-  "template":{
-     "tagline":"Tasmanian devil",
-     "name":"Bontebok",
-     "city":"Elephant, asian",
-     "summary":"Macaw, blue and gold",
-     "sectionLabel0":"Vervet monkey",
-     "sectionLabel1":"Caracara (unidentified)",
-     "sectionLabel2":"Lemur, brown",
-     "sectionContent0":"Civet, common palm",
-     "sectionContent1":"Capybara",
-     "sectionContent2":"Cormorant, pied",
-     "sliderLabelMin":"neural-net",
-     "sliderLabelMax":"array",
-     "sliderValue":41
-  },
-  "cards":[
-     {
-        "tagline":"string",
-        "name":"string",
-        "city":"string",
-        "summary":"string",
-        "sectionLabel0":"string",
-        "sectionLabel1":"string",
-        "sectionLabel2":"string",
-        "sectionContent0":"string",
-        "sectionContent1":"string",
-        "sectionContent2":"string",
-        "sliderLabelMin":"string",
-        "sliderLabelMax":"string",
-        "sliderValue": Number,
-     }
-  ],
-  "deckOwnerId":"string",
-  "deckName":"string",
-  "deckDescription":"string"
-};
 
 // ROUTING ***
 // route for HTTP GET requests to root endpoint
@@ -79,7 +41,7 @@ app.get("/deck/:deckId", (req, res) => {
 
 
 // POST endpoint used to create a new deck
-app.post("/deck", (req, res) => {
+app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
   const {
     userId = "janethuang@gmail.com",
@@ -91,156 +53,159 @@ app.post("/deck", (req, res) => {
   const cardId = uuidv4();
 
   const cardData = {
+    cardId,
+    deckId,
     userId,
     ...cardTemplate,
   };
 
-  fs.readFile("database.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.log("Error reading file from disk:", err);
-      return;
-    }
-    try {
-      const jsonData = JSON.parse(jsonString);
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-      // save card to cards collection
-      jsonData.cards[cardId] = {
-        id: cardId,
-        ...cardData,
-      };
+        // save card to cards collection
+        jsonData.cards[cardId] = cardData;
 
-      // save deck to decks collection
-      jsonData.decks[deckId] = {
-        id: deckId,
-        ownerId: userId,
-        deckName,
-        deckDescription,
-        cardTemplate,
-        cards: [cardId],
-      };
+        // save deck to decks collection
+        jsonData.decks[deckId] = {
+          deckId,
+          ownerId: userId,
+          deckName,
+          deckDescription,
+          cardTemplate,
+          cards: [cardId],
+        };
 
-      // update user document
-      if (userId && userId in jsonData.users) {
-        jsonData.users[userId].cards.push(cardId);
-      }
-
-      const newJsonString = JSON.stringify(jsonData);
-      fs.writeFile("database.json", newJsonString, (err) => {
-        if (err) {
-          console.log("Error writing file", err);
-        } else {
-          console.log("Successfully wrote file");
+        // update user document
+        if (userId && userId in jsonData.users) {
+          jsonData.users[userId].cards.push(cardId);
         }
-      });
-    } catch (err) {
-      console.log("Error parsing JSON string:", err);
-    }
-  });
 
-  res.json({
-    deckId, // dummy deckId
-  });
-  
-  console.log('This is after the read call');
-
-  // res.json(deckTemplate);
-  // res.send(deckTemplate);
+        const jsonString = JSON.stringify(jsonData);
+        fs.writeFile("database.json", jsonString)
+          .then(() => res.json({ deckId }))
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 // PATCH endpoint to update deck metadata
-app.patch("/deck/:deckId", (req, res) => {
+app.patch("/deck/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;
 
-  fs.readFile("database.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.log("Error reading file from disk:", err);
-      return;
-    }
-    try {
-      const jsonData = JSON.parse(jsonString);
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-      // update deck document
-      if (deckId in jsonData.decks) {
-        jsonData.decks[deckId].deckName = deckName;
-        jsonData.decks[deckId].deckDescription = deckDescription;
-      } else {
-        console.log("Cannot find deck in database");
-      }
+        // update deck document
+        if (deckId in jsonData.decks) {
+          jsonData.decks[deckId].deckName = deckName;
+          jsonData.decks[deckId].deckDescription = deckDescription;
 
-      const newJsonString = JSON.stringify(jsonData);
-      fs.writeFile("database.json", newJsonString, (err) => {
-        if (err) {
-          console.log("Error writing file", err);
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              res.json(jsonData.decks[deckId]);
+            })
+            .catch((err) => next(err));
         } else {
-          console.log("Successfully wrote file");
+          next({ message: "Cannot find deck in database" });
         }
-      });
-    } catch (err) {
-      console.log("Error parsing JSON string:", err);
-    }
-  });
-
-  res.status(200).send();
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 // POST endpoint used to create a new card
-app.post("/card", (req, res) => {
-  const { newCard, deckId } = req.body;
-  const userId = "random@gmail.com";
+app.post("/card", (req, res, next) => {
+  const { newCard, deckId, userId = "random@gmail.com" } = req.body;
   const cardId = uuidv4();
 
-  fs.readFile("database.json", "utf8", (err, jsonString) => {
-    if (err) {
-      console.log("Error reading file from disk:", err);
-      return;
-    }
-    try {
-      const jsonData = JSON.parse(jsonString);
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-      // add card to the cards collection
-      jsonData.cards[cardId] = {
-        cardId,
-        deckId,
-        userId,
-        ...newCard,
-      };
+        if (deckId && deckId in jsonData.decks) {
+          jsonData.cards[cardId] = {
+            cardId,
+            deckId,
+            userId,
+            ...newCard,
+          };
+          jsonData.decks[deckId].cards.push(cardId);
 
-      // add card reference to the deck object
-      if (deckId && deckId in jsonData.decks) {
-        jsonData.decks[deckId].cards.push(cardId);
-      }
+          // add card reference to the user object
+          if (userId && userId in jsonData.users) {
+            // if the userId is populated, the userId must be valid
+            // for guests, the card will not be mapped to a user
+            jsonData.users[userId].cards.push(cardId);
+          }
 
-      // add card reference to the user object
-      if (userId && userId in jsonData.users) {
-        // if the userId is populated, the userId must be valid
-        // for guests, the card will not be mapped to a user
-        jsonData.users[userId].cards.push(cardId);
-      }
-
-      const newJsonString = JSON.stringify(jsonData);
-      fs.writeFile("database.json", newJsonString, (err) => {
-        if (err) {
-          console.log("Error writing file", err);
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => res.json({ cardId }))
+            .catch((err) => next(err));
         } else {
-          console.log("Successfully wrote file");
+          next({ message: "Cannot add card to nonexistent deck" });
         }
-      });
-    } catch (err) {
-      console.log("Error parsing JSON string:", err);
-    }
-  });
-
-  res.json({
-    cardId: cardId,
-  });
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 //  axios.delete('baseUrl/card', { data: {userId, deckId} })
 // POST endpoint used to create a new card
-app.delete("/card/:cardId", (req, res) => {
-  const { cardId } = req.params;
-  const { deckId, userId } = req.body;
+app.delete("/card/:cardId", (req, res, next) => {
+  // current dummy default values since we're not calling the delete endpoint yet
+  const { cardId = "a3ac30da-4402-4359-9ffb-9ed5b8a27ba0" } = req.params;
+  const {
+    deckId = "a12ccfc9-21da-4430-a37c-69416621dc09",
+    userId = "janethuang@gmail.com",
+  } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (
+          cardId in jsonData.cards &&
+          deckId in jsonData.decks &&
+          userId in jsonData.users
+        ) {
+          // will need to make this group of operations atomic later
+          // delete the card object
+          delete jsonData.cards[cardId];
+          // remove the cardId from the deck object
+          jsonData.decks[deckId].cards = jsonData.decks[deckId].cards.filter(
+            (card) => card != cardId
+          );
+          // remove the cardId from the user object
+          jsonData.users[userId].cards = jsonData.users[userId].cards.filter(
+            (card) => card != cardId
+          );
+
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => res.json({ cardId }))
+            .catch((err) => next(err));
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 
   // remove cardId from cards array of deck with deckId
   console.log("deckId:", deckId);
@@ -254,6 +219,12 @@ app.delete("/card/:cardId", (req, res) => {
   res.json({
     cardId, // dummy cardId of deleted card
   });
+});
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error("!!", err.message);
+  res.status(500).send({ error: err });
 });
 
 module.exports = app;
