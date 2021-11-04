@@ -1,18 +1,1 @@
-{
-  "users": {
-    "random@gmail.com": {
-      "name": "janet",
-      "email": "random@gmail.com",
-      "password": "string",
-      "cards": [],
-      "janethuang@gmail.com": {
-        "name": "Janet Huang",
-        "email": "janethuang@gmail.com",
-        "password": "myPassword",
-        "cards": []
-      }
-    },
-    "decks": {},
-    "cards": {}
-  }
-}
+{"users":{"random@gmail.com":{"name":"janet","email":"random@gmail.com","password":"string","cards":["19e6251f-0ecc-4141-914f-3109c436d85a","baa7321e-711c-411a-9e4f-150a45ced36c","7b923fc4-2903-483d-90ea-230918342502","65367cf5-f8e2-4f66-be48-f7ac72f5134b","f40787f7-0dae-4511-bab7-4a4cd43d53c7","43a50a65-47f1-4257-a0c5-1ded1c2f32d4","f8ae6139-cc01-4e9e-b4bc-dc3da5e045dd"]},"janethuang@gmail.com":{"name":"Janet Huang","email":"janethuang@gmail.com","password":"myPassword","cards":["a3ac30da-4402-4359-9ffb-9ed5b8a27ba0"]}},"decks":{"a12ccfc9-21da-4430-a37c-69416621dc09":{"deckId":"a12ccfc9-21da-4430-a37c-69416621dc09","ownerId":"janethuang@gmail.com","deckName":"Test Deck","deckDescription":"testing\n","cardTemplate":{"name":"Name Here","city":"NYC","tagline":"~5 word tagline about yourself","summary":"ROLE (# YOE), working hours & time zone","sectionLabel0":"Strengths","sectionLabel1":"Weaknesses","sectionLabel2":"Communication Preferences","sectionContent0":"What do you excel at?","sectionContent1":"What do you struggle with?","sectionContent2":"How do you want people to contact you?","sliderLabelMin":"Introvert","sliderLabelMax":"Extrovert","sliderValue":50,"image":null},"cards":["a3ac30da-4402-4359-9ffb-9ed5b8a27ba0","19e6251f-0ecc-4141-914f-3109c436d85a"]}},"cards":{"a3ac30da-4402-4359-9ffb-9ed5b8a27ba0":{"cardId":"a3ac30da-4402-4359-9ffb-9ed5b8a27ba0","deckId":"a12ccfc9-21da-4430-a37c-69416621dc09","userId":"janethuang@gmail.com","name":"Name Here","city":"NYC","tagline":"~5 word tagline about yourself","summary":"ROLE (# YOE), working hours & time zone","sectionLabel0":"Strengths","sectionLabel1":"Weaknesses","sectionLabel2":"Communication Preferences","sectionContent0":"What do you excel at?","sectionContent1":"What do you struggle with?","sectionContent2":"How do you want people to contact you?","sliderLabelMin":"Introvert","sliderLabelMax":"Extrovert","sliderValue":50,"image":null},"19e6251f-0ecc-4141-914f-3109c436d85a":{"cardId":"19e6251f-0ecc-4141-914f-3109c436d85a","deckId":"a12ccfc9-21da-4430-a37c-69416621dc09","userId":"random@gmail.com","name":"Janeet","city":"","tagline":"","summary":"","sectionContent0":"","sectionContent1":"","sectionContent2":"","sliderValue":50}}}
