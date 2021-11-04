@@ -11,8 +11,8 @@
 
   /* TODO: maybe we don't want this as a fixed size */
   padding: 0.25em 1em;
-  max-width: 25em;
-  max-height: 35.5em;
+  width: 25em;
+  height: 36em;
 }
 
 .CardDisplay__upperContent {
@@ -108,6 +108,7 @@
 
 .slider-group {
   padding: 10px 5px;
+  padding-bottom: 20px;
   width: 100%;
 }
 
