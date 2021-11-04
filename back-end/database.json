@@ -89,31 +89,6 @@
       "sliderValue": 50,
       "image": null
     },
-    "decks": {
-      "a12ccfc9-21da-4430-a37c-69416621dc09": {
-        "deckId": "a12ccfc9-21da-4430-a37c-69416621dc09",
-        "ownerId": "janethuang@gmail.com",
-        "deckName": "Test Deck",
-        "deckDescription": "testing\n",
-        "cardTemplate": {
-          "name": "Name Here",
-          "city": "NYC",
-          "tagline": "~5 word tagline about yourself",
-          "summary": "ROLE (# YOE), working hours & time zone",
-          "sectionLabel0": "Strengths",
-          "sectionLabel1": "Weaknesses",
-          "sectionLabel2": "Communication Preferences",
-          "sectionContent0": "What do you excel at?",
-          "sectionContent1": "What do you struggle with?",
-          "sectionContent2": "How do you want people to contact you?",
-          "sliderLabelMin": "Introvert",
-          "sliderLabelMax": "Extrovert",
-          "sliderValue": 50,
-          "image": null
-        },
-        "cards": ["19e6251f-0ecc-4141-914f-3109c436d85a"]
-      }
-    },
     "8c01b268-8f85-4eab-a634-d5ffa171ddcf": {
       "cardId": "8c01b268-8f85-4eab-a634-d5ffa171ddcf",
       "deckId": "123",
