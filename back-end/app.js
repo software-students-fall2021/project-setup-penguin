@@ -59,12 +59,26 @@ app.get("/", (req, res) => {
 });
 
 // GET endpoint used to get a deck from deckId
+// get from json file
 app.get("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
+  console.log("hello", req.body);
+  // const { cards, deckOwnerId, deckName, deckDescription } = req.body;
   console.log("deckId:", deckId);
 
-  res.json(deckTemplate);
-  res.send(deckTemplate);
+
+  const fs = require('fs');
+
+  fs.readFile('student.json', (err, data) => {
+      if (err) throw err;
+      let student = JSON.parse(data);
+      console.log(student);
+  });
+  
+  console.log('This is after the read call');
+
+  // res.json(deckTemplate);
+  // res.send(deckTemplate);
 });
 
 // PATCH endpoint to update deck metadata
@@ -92,6 +106,7 @@ app.post("/deck", (req, res) => {
   const { userId, deckName, deckDescription, cardTemplate } = req.body;
 
   // will need to write these values to the deck db later
+  // post to json file
   console.log("userId:", userId);
   console.log("deckName:", deckName);
   console.log("deckDescription:", deckDescription);

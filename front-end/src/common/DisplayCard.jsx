@@ -52,6 +52,7 @@ function DisplayCard(props) {
             handleStyle={{ borderColor: "pink" }}
             railStyle={{ backgroundColor: "pink" }}
             trackStyle={{ backgroundColor: "pink" }}
+            disabled='true'
           />
         </div>
       </div>
