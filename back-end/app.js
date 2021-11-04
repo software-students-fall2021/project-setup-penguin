@@ -123,19 +123,53 @@ app.patch("/deck/:deckId", (req, res) => {
 
 // POST endpoint used to create a new card
 app.post("/card", (req, res) => {
-  const { userId, newCard, deckId } = req.body;
+  const { newCard, deckId } = req.body;
+  const userId = "random@gmail.com";
+  const cardId = uuidv4();
 
-  // create a new Card instance from newCard and save
-  console.log("newCard:", newCard);
+  fs.readFile("database.json", "utf8", (err, jsonString) => {
+    if (err) {
+      console.log("Error reading file from disk:", err);
+      return;
+    }
+    try {
+      const jsonData = JSON.parse(jsonString);
 
-  // add new card's id to cards array of deck with deckId
-  console.log("deckId:", deckId);
+      // add card to the cards collection
+      jsonData.cards[cardId] = {
+        cardId,
+        deckId,
+        userId,
+        ...newCard,
+      };
 
-  // add new card's id to cards array of user with userId
-  console.log("userId:", userId);
+      // add card reference to the deck object
+      if (deckId && deckId in jsonData.decks) {
+        jsonData.decks[deckId].cards.push(cardId);
+      }
+
+      // add card reference to the user object
+      if (userId && userId in jsonData.users) {
+        // if the userId is populated, the userId must be valid
+        // for guests, the card will not be mapped to a user
+        jsonData.users[userId].cards.push(cardId);
+      }
+
+      const newJsonString = JSON.stringify(jsonData);
+      fs.writeFile("database.json", newJsonString, (err) => {
+        if (err) {
+          console.log("Error writing file", err);
+        } else {
+          console.log("Successfully wrote file");
+        }
+      });
+    } catch (err) {
+      console.log("Error parsing JSON string:", err);
+    }
+  });
 
   res.json({
-    cardId: 1, // dummy cardId
+    cardId: cardId,
   });
 });
 
