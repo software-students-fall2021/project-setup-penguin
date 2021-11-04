@@ -91,7 +91,7 @@ app.patch("/deck/:deckId", (req, res, next) => {
           const jsonString = JSON.stringify(jsonData);
           fs.writeFile("database.json", jsonString)
             .then(() => {
-              res.json(jsonData.decks[deckId]);
+              res.json({ deckId });
             })
             .catch((err) => next(err));
         } else {
