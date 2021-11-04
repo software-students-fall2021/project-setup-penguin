@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 // middleware
 const morgan = require("morgan");
 const cors = require("cors");
+const { nextTick } = require("process");
 
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -146,9 +147,46 @@ app.post("/card", (req, res, next) => {
 
 //  axios.delete('baseUrl/card', { data: {userId, deckId} })
 // POST endpoint used to create a new card
-app.delete("/card/:cardId", (req, res) => {
-  const { cardId } = req.params;
-  const { deckId, userId } = req.body;
+app.delete("/card/:cardId", (req, res, next) => {
+  // current dummy default values since we're not calling the delete endpoint yet
+  const { cardId = "a3ac30da-4402-4359-9ffb-9ed5b8a27ba0" } = req.params;
+  const {
+    deckId = "a12ccfc9-21da-4430-a37c-69416621dc09",
+    userId = "janethuang@gmail.com",
+  } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (
+          cardId in jsonData.cards &&
+          deckId in jsonData.decks &&
+          userId in jsonData.users
+        ) {
+          // will need to make this group of operations atomic later
+          // delete the card object
+          delete jsonData.cards[cardId];
+          // remove the cardId from the deck object
+          jsonData.decks[deckId].cards = jsonData.decks[deckId].cards.filter(
+            (card) => card != cardId
+          );
+          // remove the cardId from the user object
+          jsonData.users[userId].cards = jsonData.users[userId].cards.filter(
+            (card) => card != cardId
+          );
+
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => res.json({ cardId }))
+            .catch((err) => next(err));
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 
   // remove cardId from cards array of deck with deckId
   console.log("deckId:", deckId);
