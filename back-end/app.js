@@ -31,7 +31,6 @@ app.get("/user/:userID", (req, res, next) => {
       try {
         const jsonData = JSON.parse(data);
 
-        // update user document
         if (!(userID in jsonData.users)) {
           throw "User does not exist";
         }
