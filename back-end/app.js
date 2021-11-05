@@ -74,6 +74,34 @@ app.post("/deck", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// DELETE endpoint for user deletion
+app.delete("/user/:userID", (req, res, next) => {
+  const userID = req.params.userID;
+  
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update user document
+        if (!(userID in jsonData.users)) {
+          throw "User does not exist";
+        }
+
+        // delete user
+        delete jsonData.users[userID];
+
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        fs.writeFile("database.json", jsonString)
+          .then(() => res.json({ userID }))
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+})
+
 // PATCH endpoint to update deck metadata
 app.patch("/deck/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
