@@ -23,15 +23,15 @@ app.get("/", (req, res) => {
 
 // GET endpoint used to get decks and cards belonging to an user
 
-app.get("/user/:userID", (req, res, next) => {
-  const userID = req.params.userID;
+app.get("/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
 
   fs.readFile("database.json")
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
 
-        if (!(userID in jsonData.users)) {
+        if (!(userId in jsonData.users)) {
           throw "User does not exist";
         }
 
@@ -40,12 +40,12 @@ app.get("/user/:userID", (req, res, next) => {
           decks: [],
         };
 
-        jsonData.users[userID].cards.forEach((card) => {
+        jsonData.users[userId].cards.forEach((card) => {
           if (jsonData.cards[card] != null)
             userData.cards.push(jsonData.cards[card]);
         });
 
-        jsonData.users[userID].decks.forEach((deck) => {
+        jsonData.users[userId].decks.forEach((deck) => {
           if (jsonData.decks[deck] != null)
             userData.decks.push(jsonData.decks[deck]);
         });
