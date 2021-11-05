@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 });
 
 // PATCH endpoint used to update user metadata
-//if changing username then need to delete entry and rechange
 app.patch("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
   const { username, password, name } = req.body;
