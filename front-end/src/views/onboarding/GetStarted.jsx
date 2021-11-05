@@ -12,6 +12,9 @@ function GetStarted() {
           <Link to="/createdeck" className="GetStarted__button">
             <img src={pokeball} className="GetStarted__img" />
             <p className="GetStarted__label">Create a new deck</p>
+            <p className="GetStarted__text">
+              If your team isn't on Pokédek yet, take the lead here!
+            </p>
           </Link>
         </div>
 
@@ -19,6 +22,9 @@ function GetStarted() {
           <Link to="/joindeck" className="GetStarted__button">
             <img src={pokeball} className="GetStarted__img" />
             <p className="GetStarted__label">Join an existing deck</p>
+            <p className="GetStarted__text">
+              If your teammate already started a deck, choose this option.
+            </p>
           </Link>
         </div>
       </div>
