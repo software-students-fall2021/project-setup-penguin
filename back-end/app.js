@@ -209,19 +209,42 @@ app.use((err, req, res, next) => {
 });
 
 // PATCH endpoint to update card metadata
-app.patch("/card/:cardId", (req, res) => {
+app.patch("/card/:cardId", (req, res, next) => {
   const cardId = req.params.cardId;
-  //updateCard sends form element containing all card data
-  const cardData = req.body;
+  const { name, city, tagline, summary, 
+    sectionContent0, sectionContent1, 
+    sectionContent2,sliderValue } = req.body;
 
-  console.log("cardId:", cardId);
-  console.log("cardData:", cardData);
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-  const updatedCardMetadata = cardData;
+        // update card data
+        if (cardId in jsonData.cards) {
+          jsonData.cards[cardId].name = name;
+          jsonData.cards[cardId].city = city;
+          jsonData.cards[cardId].tagline = tagline;
+          jsonData.cards[cardId].summary = summary;
+          jsonData.cards[cardId].sectionContent0 = sectionContent0;
+          jsonData.cards[cardId].sectionContent1 = sectionContent1;
+          jsonData.cards[cardId].sectionContent2 = sectionContent2;
+          jsonData.cards[cardId].sliderValue = sliderValue;
 
-  console.log("updatedCardMetadata:", updatedCardMetadata);
-
-  res.status(200).send();
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              res.json(jsonData.cards[cardId]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find card in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 module.exports = app;

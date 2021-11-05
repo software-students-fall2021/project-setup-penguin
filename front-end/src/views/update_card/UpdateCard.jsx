@@ -2,12 +2,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
 import { useParams, NavLink } from "react-router-dom";
-import { TEST_CARDS_ARRAY } from "../../common/constants";
+import { EMPTY_CARD } from "../../common/constants";
 import * as Icon from "react-bootstrap-icons";
 
 function UpdateCard() {
   const { cardId, deckId } = useParams();
-  const [form, setForm] = useState(TEST_CARDS_ARRAY);
+  const [form, setForm] = useState(EMPTY_CARD);
 
   useEffect(() => {
     axios
@@ -18,14 +18,21 @@ function UpdateCard() {
       })
       .catch((err) => {
         console.log("!!", err);
-        setForm(TEST_CARDS_ARRAY[0]);
+        setForm(EMPTY_CARD);
       });
   }, [cardId, deckId]);
 
   const saveCard = (userId) => {
     axios
       .patch(`http://localhost:8000/card/${cardId}`, {
-        newCard: form,
+        name: form.name,
+        city: form.city,
+        tagline: form.tagline,
+        summary: form.summary, 
+        sectionContent0: form.sectionContent0, 
+        sectionContent1: form.sectionContent1, 
+        sectionContent2: form.sectionContent2,
+        sliderValue: form.sliderValue,
         userId,
       })
       .then((res) => {
