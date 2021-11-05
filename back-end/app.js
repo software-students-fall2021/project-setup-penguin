@@ -202,6 +202,28 @@ app.delete("/card/:cardId", (req, res, next) => {
   });
 });
 
+//GET endpoint used to get a card from cardId
+app.get("/card/:cardId", (req, res, next) => {
+  const cardId = req.params.cardId;
+  fs.readFile("database.json")
+    .then((data) => {
+      try{
+          const jsonData = JSON.parse(data);
+
+          //check if card exists
+          if(cardId in jsonData.cards) {
+            res.json(jsonData.cards[cardId]);
+          } else {
+            next({ message: "Cannot find card in database" });
+          }
+        } catch(err) {
+          next(err);
+        }
+      })
+      .catch((err) => next(err));
+});
+
+
 // error handling middleware
 app.use((err, req, res, next) => {
   console.error("!!", err.message);
