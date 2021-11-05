@@ -21,6 +21,44 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// PATCH endpoint used to update user metadata
+//if changing username then need to delete entry and rechange
+app.patch("/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+  const { username, password, name } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update user document
+        if (userId in jsonData.users) {
+          if (username != userId) {
+            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
+          }
+          
+          jsonData.users[username].email = username;
+          jsonData.users[username].password = password;
+          jsonData.users[username].name = name;
+
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              console.log(jsonData.users[username]);
+              res.json(jsonData.users[username]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find user in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
