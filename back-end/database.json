@@ -44,29 +44,6 @@
         "image": "some string that you can pass directly into src="
       },
       "cards": ["44456dad-7313-4ab1-a434-c35bb2601116"]
-    },
-    "63ca83e4-1287-4abe-b64c-e48efd2f0348": {
-      "id": "63ca83e4-1287-4abe-b64c-e48efd2f0348",
-      "ownerId": "janethuang@gmail.com",
-      "deckName": "Pokedek Team",
-      "deckDescription": "Introducing the Pokedek team... through Pokedek!",
-      "cardTemplate": {
-        "name": "Cindy Kim",
-        "city": "NYC",
-        "tagline": "CS @ NYU",
-        "summary": "SWE (1 YOE), 9AM-5PM EDT",
-        "sectionLabel0": "Strengths",
-        "sectionLabel1": "Weaknesses",
-        "sectionLabel2": "Communication Preferances",
-        "sectionContent0": "Ranking coffees",
-        "sectionContent1": "Waking up on time",
-        "sectionContent2": "Call or text!",
-        "sliderLabelMin": "Introvert",
-        "sliderLabelMax": "Extrovert",
-        "sliderValue": 63,
-        "image": null
-      },
-      "cards": ["c996e683-9b2c-405c-8160-7be1dd91a8d8"]
     }
   },
   "cards": {
@@ -101,24 +78,6 @@
       "sectionContent1": "",
       "sectionContent2": "",
       "sliderValue": 50
-    },
-    "c996e683-9b2c-405c-8160-7be1dd91a8d8": {
-      "id": "c996e683-9b2c-405c-8160-7be1dd91a8d8",
-      "userId": "janethuang@gmail.com",
-      "name": "Cindy Kim",
-      "city": "NYC",
-      "tagline": "CS @ NYU",
-      "summary": "SWE (1 YOE), 9AM-5PM EDT",
-      "sectionLabel0": "Strengths",
-      "sectionLabel1": "Weaknesses",
-      "sectionLabel2": "Communication Preferances",
-      "sectionContent0": "Ranking coffees",
-      "sectionContent1": "Waking up on time",
-      "sectionContent2": "Call or text!",
-      "sliderLabelMin": "Introvert",
-      "sliderLabelMax": "Extrovert",
-      "sliderValue": 63,
-      "image": null
     },
     "19e6251f-0ecc-4141-914f-3109c436d85a": {
       "cardId": "19e6251f-0ecc-4141-914f-3109c436d85a",

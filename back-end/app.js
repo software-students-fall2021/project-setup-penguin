@@ -16,19 +16,18 @@ app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
-// ROUTING ***
 // route for HTTP GET requests to root endpoint
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+/*****************************************/
+/**************** DECKS ******************/
+/*****************************************/
+
 // GET endpoint used to get a deck from deckId
-// get from json file
 app.get("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
-
-  console.log("hello", req.body);
-  // const { cards, deckOwnerId, deckName, deckDescription } = req.body;
   console.log("deckId:", deckId);
 
   fs.readFile('database.json', (err, data) => {
@@ -38,7 +37,6 @@ app.get("/deck/:deckId", (req, res) => {
       res.send(student);
   })
 });
-
 
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
@@ -123,6 +121,62 @@ app.patch("/deck/:deckId", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
+
+// DELETE endpoint to delete a deck
+app.delete("/deck/:deckId", (req, res) => {
+  const deckId = req.params.deckId;
+  const usersInDeck = [];
+  console.log("deckId:", deckId);
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+        if ( deckId in jsonData.decks){
+          let cardIDArray = jsonData.decks[deckId].cards;
+          console.log("DELETING DECK", jsonData.decks[deckId]);
+          // delete deck
+          delete jsonData.decks[deckId];
+
+          // delete all cards from deck
+          for (let i = 0; i < cardIDArray.length; i++){
+            console.log("DELETING CARD", jsonData.cards[cardIDArray[i]])
+            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+
+            delete jsonData.cards[cardIDArray[i]];
+          }
+
+          // remove cardIDs from ALL users in deck
+          console.log("users in deck", usersInDeck);
+          console.log("card id array", cardIDArray);
+          for (let x = 0; x < usersInDeck.length; x++){
+            let currCards = jsonData.users[usersInDeck[x]].cards;
+            for (let j = 0; j < currCards.length; j++){
+              if (cardIDArray.includes(currCards[j])){
+                console.log("deleting!", jsonData.users[usersInDeck[x]].cards[j]);
+                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+              }
+              else{
+                console.log("not deleting...",jsonData.users[usersInDeck[x]].cards[j]);
+              }
+            }
+          }
+        }
+        console.log("FINISHED DELETING..", jsonData);
+        const jsonString = JSON.stringify(jsonData);
+        fs.writeFile("database.json", jsonString)
+          .then(() => res.json({ deckId }))
+          .catch((err) => console.log("!!", err));
+      }
+      catch (err) {
+        console.log("!!", err);
+      }
+  });
+});
+
+/*****************************************/
+/**************** CARDS ******************/
+/*****************************************/
 
 // POST endpoint used to create a new card
 app.post("/card", (req, res, next) => {

@@ -17,9 +17,10 @@ function DeckView() {
   let { id } = useParams();
   console.log({ id });
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
-  const [templateArray, setTemplateData] = useState([]);
+  const [cardsArray, setCardsData] = useState([]);
   const [deckTitle, setDeckName] = useState();
   const [deckSubtitle, setDeckDescription] = useState();
+  // const [cardIDArray, setCardIDArray] = useState([]);
 
   useEffect(() => {
     axios
@@ -32,32 +33,54 @@ function DeckView() {
         let deckArray = response.data.decks[id];
         console.log("deckArray", deckArray);
         //Array of cardIDs within this deck
-        let cardIDArray = response.data.decks[id].cards;
+        console.log(response.data.decks[id].cards);
+        const cardIDArray = response.data.decks[id].cards;
         console.log("cardIDArray", cardIDArray);
         //Array of actual card objects within this deck
         let cards = [];
         for (const id in cardIDArray){
           console.log("id", cardIDArray[id]);
           let currCard = response.data.cards[cardIDArray[id]];
-          console.log("currCard", currCard);
           cards.push(currCard);
         }
 
         console.log("cards", cards);
 
         setIsDeckLoaded(true);
-        setTemplateData(cards);
+        setCardsData(cards);
         setDeckName(deckArray.deckName);
         setDeckDescription(deckArray.deckDescription);
       })
       .catch((err) => {
         console.log("!!", err);
         setIsDeckLoaded(true);
-        setTemplateData(TEST_CARDS_ARRAY);
+        setCardsData(TEST_CARDS_ARRAY);
         setDeckName("SWE");
         setDeckDescription("Team for SWE Project, Fall 2021");
       });
+      //Cleanup function to avoid warning/errors.
+      return () => {
+        setIsDeckLoaded(false);
+        setCardsData([]);
+        setDeckName();
+        setDeckDescription();
+      }
   }, []);
+
+  function deleteDeck(){
+    console.log("oops, delete!");
+
+    axios
+      .delete(`http://localhost:8000/deck/${id}`)
+      .then(() => {
+        //After deleting, redirect user back to homepage.
+        console.log("You've deleted!");
+        window.location.href="http://localhost:3000"
+      })
+      .catch((err) => {
+        console.log("!!", err)
+      })
+  }
 
   return !isDeckLoaded ? (
     <LoadingSpinner />
@@ -70,13 +93,13 @@ function DeckView() {
           <div className="deckview-buttons">
             <div className="edit"><Button btnText="Edit" linkTo={`${id}/edit`} /></div>
             <div className="add"><Button btnText="Add Card" linkTo={`${id}/add`} /></div>
-            <div className="delete"><Button btnText="Delete"/></div>
+            <div className="delete"><Button btnText="Delete" onClick={() => deleteDeck() }/></div>
           </div>
         </div>
         <div className="deckview-subtitle">{deckSubtitle}</div>
       </div>
       <div class="deck-list">
-        {templateArray.map((tempType) => (
+        {cardsArray.map((tempType) => (
           <DisplayCard tempArray={tempType}></DisplayCard>
         ))}
       </div>
