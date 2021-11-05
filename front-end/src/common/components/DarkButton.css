@@ -1,0 +1,31 @@
+.DarkButton {
+    background-color: #396bba;
+    padding: 0.25em 1em;
+    border: 1px solid #396bba;
+    border-radius: 0.5em;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .DarkButton--disabled {
+    background-color: #98a1a9;
+    border: 1px solid #98a1a9;
+    color: white;
+  }
+  
+  .DarkButton:hover {
+    background-color: #2c5494;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .DarkButton--disabled:hover {
+    background-color: #98a1a9;
+    cursor: not-allowed;
+  }
+  
+  .DarkButton__iconContainer {
+    padding-left: 0.75em;
+  }
+  

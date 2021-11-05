@@ -14,7 +14,28 @@
 }
 
 .edit, .add, .delete{
-  margin: 5px;
+  margin: 0px 7px;
+}
+
+.deck-share{
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+.deck-share:hover{
+  cursor: pointer;
+}
+
+#shared-text{
+  font-size: 14px;
+  color: grey;
+  font-weight: normal;
+}
+
+.fake-button{
+  border: none;
+  background: none;
 }
 
 .header {
@@ -25,6 +46,9 @@
 .deckview-title {
   font-size: 50px;
   font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .title-container {

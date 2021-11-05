@@ -1,17 +1,13 @@
 import { useParams, NavLink } from "react-router-dom";
-import { Button, DisplayCard } from "../common";
+import { DarkButton, Button, DisplayCard } from "../common";
+// import Button from "../common/components";
 import "./DeckView.css";
 import axios from "axios";
 import { useState } from "react";
-import {
-  EMPTY_CARD,
-  PARENT_TYPE,
-  MODAL_PAGE_TYPE,
-  TEST_TEMPLATE_DATA,
-  TEST_CARDS_ARRAY,
-} from "../common/constants";
+import {  TEST_CARDS_ARRAY } from "../common/constants";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
+import share from "../assets/share.png";
 
 function DeckView() {
   let { id } = useParams();
@@ -20,7 +16,6 @@ function DeckView() {
   const [cardsArray, setCardsData] = useState([]);
   const [deckTitle, setDeckName] = useState();
   const [deckSubtitle, setDeckDescription] = useState();
-  // const [cardIDArray, setCardIDArray] = useState([]);
 
   useEffect(() => {
     axios
@@ -82,18 +77,31 @@ function DeckView() {
       })
   }
 
+  function shareDeck(){
+    // TODO: Have url copied for user when click on button!
+
+    document.getElementById("shared-text").innerHTML="Copied share link!";
+    setTimeout(function(){
+      document.getElementById("shared-text").innerHTML="";
+    }, 3000)
+  }
+
   return !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
     <div className="deckview-overall">
       <div className="header">
         <div className="title-container">
-          <div className="deckview-title">{deckTitle}</div>
+          <div className="deckview-title">{deckTitle}
+            <button className="fake-button" onClick={() => shareDeck() }>
+              <img className="deck-share" src={share} />
+            </button><div id="shared-text"></div>
+          </div>
           {/* TODO: only show button for admin */}
           <div className="deckview-buttons">
             <div className="edit"><Button btnText="Edit" linkTo={`${id}/edit`} /></div>
-            <div className="add"><Button btnText="Add Card" linkTo={`${id}/add`} /></div>
             <div className="delete"><Button btnText="Delete" onClick={() => deleteDeck() }/></div>
+            <div className="add"><DarkButton btnText="Add Card" linkTo={`${id}/add`} /></div>
           </div>
         </div>
         <div className="deckview-subtitle">{deckSubtitle}</div>
