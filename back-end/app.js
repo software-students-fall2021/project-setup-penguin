@@ -21,6 +21,44 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// GET endpoint used to get decks and cards belonging to an user
+
+app.get("/user/:userID", (req, res, next) => {
+  const userID = req.params.userID;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update user document
+        if (!(userID in jsonData.users)) {
+          throw "User does not exist";
+        }
+
+        const userData = {
+          cards: [],
+          decks: [],
+        };
+
+        jsonData.users[userID].cards.forEach((card) => {
+          if (jsonData.cards[card] != null)
+            userData.cards.push(jsonData.cards[card]);
+        });
+
+        jsonData.users[userID].decks.forEach((deck) => {
+          if (jsonData.decks[deck] != null)
+            userData.decks.push(jsonData.decks[deck]);
+        });
+
+        res.json({ userData });
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
