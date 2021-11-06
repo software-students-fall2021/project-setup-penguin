@@ -51,7 +51,7 @@ app.post("/user", (req, res, next) => {
 
         const jsonString = JSON.stringify(jsonData, null, 2);
         fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ username }))
+          .then(() => res.json({ username, name }))
           .catch((err) => next(err));
       } catch (err) {
         next(err);
