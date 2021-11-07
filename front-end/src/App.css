@@ -1,3 +1,13 @@
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none !important;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -19,8 +29,11 @@ h3 {
 }
 
 .customContainer {
-  padding: 2em 0em 3em 0em;
+  margin-top: 10px;
+  border-top: 2px solid #396bba;
+  padding: 3em 0em 3em 0em;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 75vh;
 }
