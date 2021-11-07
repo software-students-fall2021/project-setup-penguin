@@ -204,7 +204,7 @@ app.delete("/card/:cardId", (req, res, next) => {
 
 //GET endpoint used to get a card from cardId
 app.get("/card/:cardId", (req, res, next) => {
-  const cardId = req.params.cardId;
+  const {cardId} = req.params;
   fs.readFile("database.json")
     .then((data) => {
       try{
