@@ -229,10 +229,6 @@ app.post("/deck", (req, res, next) => {
   const deckId = uuidv4();
   const cardId = uuidv4();
 
-  console.log("userId:", userId);
-  console.log("deckName:", userId);
-  console.log("deckDescription:", userId);
-
   const cardData = {
     cardId,
     deckId,
