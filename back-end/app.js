@@ -25,6 +25,7 @@ app.post("/user", (req, res, next) => {
     username,
     password,
     name,
+    cards: [],
   };
 
   fs.readFile("database.json")
@@ -168,6 +169,29 @@ app.patch("/user/:userId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+app.post("/user/login", (req, res, next) => {
+  const { userId, password } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (
+          userId in jsonData.users &&
+          jsonData.users[userId].password === password
+        ) {
+          res.json({ userId });
+        } else {
+          throw "Invalid Login";
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 /*****************************************/
 /**************** DECKS ******************/
 /*****************************************/
@@ -234,12 +258,7 @@ app.get("/deck/:deckId", (req, res, next) => {
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
-  const {
-    userId = "janethuang@gmail.com",
-    deckName,
-    deckDescription,
-    cardTemplate,
-  } = req.body;
+  const { userId, deckName, deckDescription, cardTemplate } = req.body;
   const deckId = uuidv4();
   const cardId = uuidv4();
 
