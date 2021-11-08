@@ -49,7 +49,6 @@ function FinishDeckSetup() {
       })
       .catch((err) => {
         console.log(err);
-        setRedirectLink(`deck/${123}`);
         setShowModal(false);
       });
   };
