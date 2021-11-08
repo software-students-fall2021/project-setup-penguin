@@ -400,4 +400,34 @@ app.use((err, req, res, next) => {
   res.status(500).send({ error: err });
 });
 
+// PATCH endpoint to update card metadata
+app.patch("/card/:cardId", (req, res, next) => {
+  const {cardId} = req.params;
+  const {newCard} = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update card data
+        if (cardId in jsonData.cards) {
+          jsonData.cards[cardId] = newCard;
+          
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              res.json(jsonData.cards[cardId]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find card in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 module.exports = app;
