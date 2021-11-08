@@ -31,8 +31,8 @@ app.get("/deck/:deckId", (req, res) => {
 
   fs.readFile('database.json', (err, data) => {
       if (err) throw err;
-      let student = JSON.parse(data);
-      res.send(student);
+      let jsonData = JSON.parse(data);
+      res.send(jsonData);
   })
 });
 
