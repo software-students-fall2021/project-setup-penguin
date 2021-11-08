@@ -29,6 +29,7 @@ app.post("/user", (req, res, next) => {
     username,
     password,
     name,
+    cards: [],
   };
 
   fs.readFile("database.json")
@@ -67,7 +68,7 @@ app.delete("/user/:userId", (req, res, next) => {
         if (!(userId in jsonData.users)) {
           throw "User does not exist";
         }
-        
+
         // delete cards associated with user
         jsonData.users[userId].cards.forEach((card) => {
           if (card && card in jsonData.cards) {
@@ -95,7 +96,7 @@ app.delete("/user/:userId", (req, res, next) => {
       }
     })
     .catch((err) => next(err));
-})
+});
 
 // GET endpoint used to get decks and cards belonging to an user
 app.get("/user/:userId", (req, res, next) => {
@@ -162,6 +163,27 @@ app.patch("/user/:userId", (req, res, next) => {
   }
 });
 
+app.post("/user/login", (req, res, next) => {
+  const { userId, password } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (
+          userId in jsonData.users &&
+          jsonData.users[userId].password == password
+        ) {
+          res.json({ userId });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 /*****************************************/
 /**************** DECKS ******************/
 /*****************************************/
@@ -184,16 +206,16 @@ app.get("/deckIds", (req, res, next) => {
 app.get("/deck/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
 
-  fs.readFile('database.json')
+  fs.readFile("database.json")
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
 
-        if (!(deckId in jsonData.decks)){
+        if (!(deckId in jsonData.decks)) {
           throw "Deck does not exit";
         }
         res.send(jsonData);
-      } catch(err){
+      } catch (err) {
         next(err);
       }
     })
@@ -203,14 +225,13 @@ app.get("/deck/:deckId", (req, res, next) => {
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
-  const {
-    userId = "janethuang@gmail.com",
-    deckName,
-    deckDescription,
-    cardTemplate,
-  } = req.body;
+  const { userId, deckName, deckDescription, cardTemplate } = req.body;
   const deckId = uuidv4();
   const cardId = uuidv4();
+
+  console.log("userId:", userId);
+  console.log("deckName:", userId);
+  console.log("deckDescription:", userId);
 
   const cardData = {
     cardId,
@@ -292,38 +313,38 @@ app.delete("/deck/:deckId", (req, res) => {
   fs.readFile("database.json")
     .then((data) => {
       try {
-      const jsonData = JSON.parse(data);
-      if (deckId in jsonData.decks) {
-        let cardIDArray = jsonData.decks[deckId].cards;
-        // delete deck
-        delete jsonData.decks[deckId];
+        const jsonData = JSON.parse(data);
+        if (deckId in jsonData.decks) {
+          let cardIDArray = jsonData.decks[deckId].cards;
+          // delete deck
+          delete jsonData.decks[deckId];
 
-        // delete all cards from deck
-        for (let i = 0; i < cardIDArray.length; i++) {
-          usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+          // delete all cards from deck
+          for (let i = 0; i < cardIDArray.length; i++) {
+            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
 
-          delete jsonData.cards[cardIDArray[i]];
-        }
+            delete jsonData.cards[cardIDArray[i]];
+          }
 
-        // remove cardIDs from ALL users in deck
-        for (let x = 0; x < usersInDeck.length; x++) {
-          let currCards = jsonData.users[usersInDeck[x]].cards;
-          for (let j = 0; j < currCards.length; j++) {
-            if (cardIDArray.includes(currCards[j])) {
-              jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-            } else {
+          // remove cardIDs from ALL users in deck
+          for (let x = 0; x < usersInDeck.length; x++) {
+            let currCards = jsonData.users[usersInDeck[x]].cards;
+            for (let j = 0; j < currCards.length; j++) {
+              if (cardIDArray.includes(currCards[j])) {
+                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+              } else {
+              }
             }
           }
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => res.json({ deckId }))
+            .catch((err) => console.log("!!", err));
         }
-        const jsonString = JSON.stringify(jsonData);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ deckId }))
-          .catch((err) => console.log("!!", err));
+      } catch (err) {
+        next(err);
       }
-  } catch (err) {
-    next(err);
-  }
-  })
+    })
     .catch((err) => next(err));
 });
 
@@ -449,12 +470,6 @@ app.get("/card/:cardId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-// error handling middleware
-app.use((err, req, res, next) => {
-  console.error("!!", err.message);
-  res.status(500).send({ error: err });
-});
-
 // PATCH endpoint to update card metadata
 app.patch("/card/:cardId", (req, res, next) => {
   const { cardId } = req.params;
@@ -483,6 +498,12 @@ app.patch("/card/:cardId", (req, res, next) => {
       }
     })
     .catch((err) => next(err));
+});
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error("!!", err.message);
+  res.status(500).send({ error: err });
 });
 
 module.exports = app;
