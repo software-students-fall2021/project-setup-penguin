@@ -124,7 +124,7 @@ app.patch("/deck/:deckId", (req, res, next) => {
 
 // DELETE endpoint to delete a deck
 app.delete("/deck/:deckId", (req, res) => {
-  const deckId = req.params.deckId;
+  const {deckId} = req.params;
   const usersInDeck = [];
 
   fs.readFile("database.json")
