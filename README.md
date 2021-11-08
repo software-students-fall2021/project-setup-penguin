@@ -36,7 +36,7 @@ To start the application,
 - Open up http://localhost:3000/!
 
 To run tests,
-- In `/back-end` directory, run `npm test`
+- In `/back-end` directory, run `npm test` – this doesn't seem to work on some machines, so an alternative is `npx mocha test/routes.js`
 
 ## Link to Application
 This is to be determined at a later date.
