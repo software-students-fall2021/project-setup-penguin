@@ -126,7 +126,6 @@ app.patch("/deck/:deckId", (req, res, next) => {
 app.delete("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
   const usersInDeck = [];
-  console.log("deckId:", deckId);
 
   fs.readFile("database.json")
     .then((data) => {
@@ -134,35 +133,28 @@ app.delete("/deck/:deckId", (req, res) => {
         const jsonData = JSON.parse(data);
         if ( deckId in jsonData.decks){
           let cardIDArray = jsonData.decks[deckId].cards;
-          console.log("DELETING DECK", jsonData.decks[deckId]);
           // delete deck
           delete jsonData.decks[deckId];
 
           // delete all cards from deck
           for (let i = 0; i < cardIDArray.length; i++){
-            console.log("DELETING CARD", jsonData.cards[cardIDArray[i]])
             usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
 
             delete jsonData.cards[cardIDArray[i]];
           }
 
           // remove cardIDs from ALL users in deck
-          console.log("users in deck", usersInDeck);
-          console.log("card id array", cardIDArray);
           for (let x = 0; x < usersInDeck.length; x++){
             let currCards = jsonData.users[usersInDeck[x]].cards;
             for (let j = 0; j < currCards.length; j++){
               if (cardIDArray.includes(currCards[j])){
-                console.log("deleting!", jsonData.users[usersInDeck[x]].cards[j]);
                 jsonData.users[usersInDeck[x]].cards.splice(j, 1);
               }
               else{
-                console.log("not deleting...",jsonData.users[usersInDeck[x]].cards[j]);
               }
             }
           }
         }
-        console.log("FINISHED DELETING..", jsonData);
         const jsonString = JSON.stringify(jsonData);
         fs.writeFile("database.json", jsonString)
           .then(() => res.json({ deckId }))

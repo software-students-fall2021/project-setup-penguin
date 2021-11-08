@@ -21,25 +21,17 @@ function DeckView() {
     axios
       .get(`http://localhost:8000/deck/${id}`)
       .then((response) => {
-        console.log("data", response.data);
-
         //Parse through the JSON array to get the current IDs
         //Use IDs to get currect deck, and create cards array containing appropriate cards
         let deckArray = response.data.decks[id];
-        console.log("deckArray", deckArray);
         //Array of cardIDs within this deck
-        console.log(response.data.decks[id].cards);
         const cardIDArray = response.data.decks[id].cards;
-        console.log("cardIDArray", cardIDArray);
         //Array of actual card objects within this deck
         let cards = [];
         for (const id in cardIDArray){
-          console.log("id", cardIDArray[id]);
           let currCard = response.data.cards[cardIDArray[id]];
           cards.push(currCard);
         }
-
-        console.log("cards", cards);
 
         setIsDeckLoaded(true);
         setCardsData(cards);
@@ -63,13 +55,10 @@ function DeckView() {
   }, []);
 
   function deleteDeck(){
-    console.log("oops, delete!");
-
     axios
       .delete(`http://localhost:8000/deck/${id}`)
       .then(() => {
         //After deleting, redirect user back to homepage.
-        console.log("You've deleted!");
         window.location.href="http://localhost:3000"
       })
       .catch((err) => {
