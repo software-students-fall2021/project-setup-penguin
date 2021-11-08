@@ -40,12 +40,22 @@ function Navigation() {
                 activeClassName="Navigation__active"
                 to="/createdeck"
               >
-                CREATE A DECK
+                CREATE DECK
               </NavLink>
             </Nav.Link>
             <Nav.Link>
               <NavLink
                 eventKey="2"
+                className="Navigation__link"
+                activeClassName="Navigation__active"
+                to="/joindeck"
+              >
+                JOIN DECK
+              </NavLink>
+            </Nav.Link>
+            <Nav.Link>
+              <NavLink
+                eventKey="3"
                 className="Navigation__link"
                 activeClassName="Navigation__active"
                 to="/login"
@@ -55,7 +65,7 @@ function Navigation() {
             </Nav.Link>
             <Nav.Link>
               <NavLink
-                eventKey="3"
+                eventKey="4"
                 className="Navigation__link"
                 activeClassName="Navigation__active"
                 to="/signup"
