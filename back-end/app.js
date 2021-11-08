@@ -16,10 +16,43 @@ app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
-// route for HTTP GET requests to root endpoint
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
+// POST endpoint for user creation
+app.post("/user", (req, res, next) => {
+  const {
+    username,
+    password,
+    name,
+  } = req.body;
+
+  const userData = {
+    username,
+    password,
+    name,
+  }
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update user document
+        if (username in jsonData.users) {
+          throw "User already exists";
+        }
+
+        // save username
+        jsonData.users[username] = userData;
+
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        fs.writeFile("database.json", jsonString)
+          .then(() => res.json({ username, name }))
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+})
 
 // GET endpoint used to get decks and cards belonging to an user
 
@@ -57,6 +90,7 @@ app.get("/user/:userId", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
+
 
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
