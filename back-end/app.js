@@ -1,4 +1,4 @@
-const fs = require("mz/fs");
+const fs = require("fs").promises;
 const express = require("express");
 const app = express();
 const { v4: uuidv4 } = require("uuid");
@@ -386,7 +386,7 @@ app.delete("/deck/:deckId", (req, res) => {
 
 // POST endpoint used to create a new card
 app.post("/card", (req, res, next) => {
-  const { newCard, deckId, userId = "random@gmail.com" } = req.body;
+  const { newCard, deckId, userId } = req.body;
   const cardId = uuidv4();
 
   fs.readFile("database.json")

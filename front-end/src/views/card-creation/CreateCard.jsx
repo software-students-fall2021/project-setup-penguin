@@ -40,35 +40,40 @@ function CreateCard() {
         userId,
         deckId,
       })
-      .then((res) => {
-        return res.data.cardId;
+      .then(() => {
+        setShowModal(false);
+        setRedirect(true);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const closeModalWithRedirect = () => {
-    setShowModal(false);
-    setRedirect(true);
-  };
-
   const onContinueAsGuest = () => {
-    const cardId = saveCard();
-    closeModalWithRedirect(cardId);
+    saveCard();
   };
 
   const onSignupOrLogin = (pageType, name, email, password) => {
-    let userId;
-
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
-      // TODO: create & save account – get id of newly created account
+      axios
+        .post("http://localhost:8000/user", {
+          name,
+          username: email,
+          password,
+        })
+        .then((res) => {
+          saveCard(res.data.username);
+        });
     } else {
-      // log user in – get id of existing account
+      axios
+        .post("http://localhost:8000/user/login", {
+          userId: email,
+          password,
+        })
+        .then((res) => {
+          saveCard(res.data.userId);
+        });
     }
-
-    const cardId = saveCard(userId);
-    closeModalWithRedirect(cardId);
   };
 
   const prompt = (
