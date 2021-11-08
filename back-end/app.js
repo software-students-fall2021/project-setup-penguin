@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require("uuid");
 // middleware
 const morgan = require("morgan");
 const cors = require("cors");
-const { nextTick } = require("process");
 
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -15,11 +14,6 @@ app.use(cors()); // prevents requests from being blocked by CORS
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
-
-// route for HTTP GET requests to root endpoint
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
 
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
@@ -67,7 +61,7 @@ app.delete("/user/:userId", (req, res, next) => {
         if (!(userId in jsonData.users)) {
           throw "User does not exist";
         }
-        
+
         // delete cards associated with user
         jsonData.users[userId].cards.forEach((card) => {
           if (card && card in jsonData.cards) {
@@ -95,7 +89,7 @@ app.delete("/user/:userId", (req, res, next) => {
       }
     })
     .catch((err) => next(err));
-})
+});
 
 // GET endpoint used to get decks and cards belonging to an user
 app.get("/user/:userId", (req, res, next) => {
@@ -146,9 +140,11 @@ app.patch("/user/:userId", (req, res, next) => {
         // update user document
         if (userId in jsonData.users) {
           if (username != userId) {
-            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
+            delete Object.assign(jsonData.users, {
+              [username]: jsonData.users[userId],
+            })[userId];
           }
-          
+
           jsonData.users[username].email = username;
           jsonData.users[username].password = password;
           jsonData.users[username].name = name;
@@ -188,20 +184,45 @@ app.get("/deckIds", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-// GET endpoint used to get a deck from deckId
-app.get("/deck/:deckId", (req, res, next) => {
+// GET endpoint used to retrieve a deck's card template
+app.get("/deckTemplate/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
 
-  fs.readFile('database.json')
+  fs.readFile("database.json")
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
 
-        if (!(deckId in jsonData.decks)){
-          throw "Deck does not exit";
+        if (deckId in jsonData.decks) {
+          res.json(jsonData.decks[deckId].cardTemplate);
+        } else {
+          next({ message: "Cannot find deck in database" });
         }
-        res.send(jsonData);
-      } catch(err){
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
+// GET endpoint used to get a deck from deckId
+app.get("/deck/:deckId", (req, res, next) => {
+  const deckId = req.params.deckId;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (deckId in jsonData.decks) {
+          const cardObjs = jsonData.decks[deckId].cards.map(
+            (cardId) => jsonData.cards[cardId]
+          );
+          res.json({ ...jsonData.decks[deckId], cards: cardObjs });
+        } else {
+          next({ message: "Cannot find deck in database" });
+        }
+      } catch (err) {
         next(err);
       }
     })
@@ -300,37 +321,40 @@ app.delete("/deck/:deckId", (req, res) => {
   fs.readFile("database.json")
     .then((data) => {
       try {
-      const jsonData = JSON.parse(data);
-      if (deckId in jsonData.decks) {
-        let cardIDArray = jsonData.decks[deckId].cards;
-        // delete deck
-        delete jsonData.decks[deckId];
+        const jsonData = JSON.parse(data);
+        if (deckId in jsonData.decks) {
+          let cardIDArray = jsonData.decks[deckId].cards;
+          // delete deck
+          delete jsonData.decks[deckId];
 
-        // delete all cards from deck
-        for (let i = 0; i < cardIDArray.length; i++) {
-          usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+          // delete all cards from deck
+          for (let i = 0; i < cardIDArray.length; i++) {
+            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
 
-          delete jsonData.cards[cardIDArray[i]];
-        }
+            delete jsonData.cards[cardIDArray[i]];
+          }
 
-        // remove cardIDs from ALL users in deck
-        for (let x = 0; x < usersInDeck.length; x++) {
-          let currCards = jsonData.users[usersInDeck[x]].cards;
-          for (let j = 0; j < currCards.length; j++) {
-            if (cardIDArray.includes(currCards[j])) {
-              jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+          // remove cardIDs from ALL users in deck
+          for (let x = 0; x < usersInDeck.length; x++) {
+            let currCards = jsonData.users[usersInDeck[x]].cards;
+            for (let j = 0; j < currCards.length; j++) {
+              if (cardIDArray.includes(currCards[j])) {
+                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+              }
             }
           }
+
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => res.json({ deckId }))
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find deck in database" });
         }
-        const jsonString = JSON.stringify(jsonData);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ deckId }))
-          .catch((err) => console.log("!!", err));
+      } catch (err) {
+        next(err);
       }
-    } catch (err) {
-      next(err);
-    }
-  })
+    })
     .catch((err) => next(err));
 });
 
@@ -456,12 +480,6 @@ app.get("/card/:cardId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-// error handling middleware
-app.use((err, req, res, next) => {
-  console.error("!!", err.message);
-  res.status(500).send({ error: err });
-});
-
 // PATCH endpoint to update card metadata
 app.patch("/card/:cardId", (req, res, next) => {
   const { cardId } = req.params;
@@ -490,6 +508,12 @@ app.patch("/card/:cardId", (req, res, next) => {
       }
     })
     .catch((err) => next(err));
+});
+
+// error handling middleware
+app.use((err, req, res, next) => {
+  console.error("!!", err.message);
+  res.status(500).send({ error: err });
 });
 
 module.exports = app;

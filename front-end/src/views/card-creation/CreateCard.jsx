@@ -19,10 +19,9 @@ function CreateCard() {
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/deck/${deckId}?key=d5aa71f0`)
+      .get(`http://localhost:8000/deckTemplate/${deckId}`)
       .then((response) => {
-        console.log("data", response.data);
-        setTemplateData(response.data.template);
+        setTemplateData(response.data);
       })
       .catch((err) => {
         console.log("!!", err);
