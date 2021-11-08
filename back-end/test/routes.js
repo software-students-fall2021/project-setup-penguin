@@ -60,6 +60,20 @@ describe("Decks", () => {
         });
     });
   });
+  describe("GET /", () => {
+    it("should return an error when getting nonexistent deck", (done) => {
+      chai
+        .request(app)
+        .get("/deck/-1")
+        .end((err, res) => {
+          expect(res).to.have.status(500);
+          expect(res.body.error.message).to.equal(
+            "Cannot find deck in database"
+          );
+          done();
+        });
+    });
+  });
 });
 
 describe("Cards", () => {
