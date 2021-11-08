@@ -1,6 +1,7 @@
 .DeckEditor {
   display: flex;
   justify-content: center;
+  margin-bottom: 5em;
 }
 
 .DeckEditor__form {

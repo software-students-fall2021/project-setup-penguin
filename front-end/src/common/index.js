@@ -5,6 +5,7 @@ import TextInput from "./components/TextInput";
 import TextArea from "./components/TextArea";
 import Button from "./components/Button";
 import DarkButton from "./components/DarkButton";
+import ErrorMessage from "./components/ErrorMessage";
 import CustomModal from "./components/CustomModal";
 import DisplayCard from "./DisplayCard";
 import Navigation from "./Navigation";
@@ -12,6 +13,7 @@ import { ViewportProvider, useViewport } from "./utils/ViewportProvider";
 import CreateBody from "./CreateBody";
 
 export {
+  ErrorMessage,
   CustomModal,
   DisplayCard,
   CardEditor,

@@ -23,17 +23,13 @@ app.get("/", (req, res) => {
 
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
-  const {
-    username,
-    password,
-    name,
-  } = req.body;
+  const { username, password, name } = req.body;
 
   const userData = {
     username,
     password,
     name,
-  }
+  };
 
   fs.readFile("database.json")
     .then((data) => {
@@ -57,7 +53,7 @@ app.post("/user", (req, res, next) => {
       }
     })
     .catch((err) => next(err));
-})
+});
 
 // DELETE endpoint for user deletion
 app.delete("/user/:userId", (req, res, next) => {
@@ -142,41 +138,47 @@ app.patch("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
   const { username, password, name } = req.body;
 
+  // update user document
+  if (userId in jsonData.users) {
+    if (username != userId) {
+      delete Object.assign(jsonData.users, {
+        [username]: jsonData.users[userId],
+      })[userId];
+    }
+
+    jsonData.users[username].email = username;
+    jsonData.users[username].password = password;
+    jsonData.users[username].name = name;
+
+    const jsonString = JSON.stringify(jsonData, null, 2);
+    fs.writeFile("database.json", jsonString)
+      .then(() => {
+        console.log(jsonData.users[username]);
+        res.json(jsonData.users[username]);
+      })
+      .catch((err) => next(err));
+  } else {
+    next({ message: "Cannot find user in database" });
+  }
+});
+
+/*****************************************/
+/**************** DECKS ******************/
+/*****************************************/
+
+// GET endpoint used to get ids of all decks in db
+app.get("/deckIds", (req, res, next) => {
   fs.readFile("database.json")
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
-
-        // update user document
-        if (userId in jsonData.users) {
-          if (username != userId) {
-            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
-          }
-          
-          jsonData.users[username].email = username;
-          jsonData.users[username].password = password;
-          jsonData.users[username].name = name;
-
-          const jsonString = JSON.stringify(jsonData, null, 2);
-          fs.writeFile("database.json", jsonString)
-            .then(() => {
-              console.log(jsonData.users[username]);
-              res.json(jsonData.users[username]);
-            })
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find user in database" });
-        }
+        res.json({ deckIds: Object.keys(jsonData.decks) });
       } catch (err) {
         next(err);
       }
     })
     .catch((err) => next(err));
 });
-
-/*****************************************/
-/**************** DECKS ******************/
-/*****************************************/
 
 // GET endpoint used to get a deck from deckId
 app.get("/deck/:deckId", (req, res, next) => {
@@ -284,34 +286,32 @@ app.patch("/deck/:deckId", (req, res, next) => {
 
 // DELETE endpoint to delete a deck
 app.delete("/deck/:deckId", (req, res) => {
-  const {deckId} = req.params;
+  const { deckId } = req.params;
   const usersInDeck = [];
 
   fs.readFile("database.json")
     .then((data) => {
       try {
-        const jsonData = JSON.parse(data);
-        if ( deckId in jsonData.decks){
-          let cardIDArray = jsonData.decks[deckId].cards;
-          // delete deck
-          delete jsonData.decks[deckId];
+      const jsonData = JSON.parse(data);
+      if (deckId in jsonData.decks) {
+        let cardIDArray = jsonData.decks[deckId].cards;
+        // delete deck
+        delete jsonData.decks[deckId];
 
-          // delete all cards from deck
-          for (let i = 0; i < cardIDArray.length; i++){
-            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+        // delete all cards from deck
+        for (let i = 0; i < cardIDArray.length; i++) {
+          usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
 
-            delete jsonData.cards[cardIDArray[i]];
-          }
+          delete jsonData.cards[cardIDArray[i]];
+        }
 
-          // remove cardIDs from ALL users in deck
-          for (let x = 0; x < usersInDeck.length; x++){
-            let currCards = jsonData.users[usersInDeck[x]].cards;
-            for (let j = 0; j < currCards.length; j++){
-              if (cardIDArray.includes(currCards[j])){
-                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-              }
-              else{
-              }
+        // remove cardIDs from ALL users in deck
+        for (let x = 0; x < usersInDeck.length; x++) {
+          let currCards = jsonData.users[usersInDeck[x]].cards;
+          for (let j = 0; j < currCards.length; j++) {
+            if (cardIDArray.includes(currCards[j])) {
+              jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+            } else {
             }
           }
         }
@@ -320,9 +320,9 @@ app.delete("/deck/:deckId", (req, res) => {
           .then(() => res.json({ deckId }))
           .catch((err) => console.log("!!", err));
       }
-      catch (err) {
-        next(err);
-      }
+  } catch (err) {
+    next(err);
+  }
   })
     .catch((err) => next(err));
 });
@@ -430,30 +430,59 @@ app.delete("/card/:cardId", (req, res, next) => {
 
 //GET endpoint used to get a card from cardId
 app.get("/card/:cardId", (req, res, next) => {
-  const {cardId} = req.params;
+  const { cardId } = req.params;
   fs.readFile("database.json")
     .then((data) => {
-      try{
-          const jsonData = JSON.parse(data);
+      try {
+        const jsonData = JSON.parse(data);
 
-          //check if card exists
-          if(cardId in jsonData.cards) {
-            res.json(jsonData.cards[cardId]);
-          } else {
-            next({ message: "Cannot find card in database" });
-          }
-        } catch(err) {
-          next(err);
+        //check if card exists
+        if (cardId in jsonData.cards) {
+          res.json(jsonData.cards[cardId]);
+        } else {
+          next({ message: "Cannot find card in database" });
         }
-      })
-      .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
-
 
 // error handling middleware
 app.use((err, req, res, next) => {
   console.error("!!", err.message);
   res.status(500).send({ error: err });
+});
+
+// PATCH endpoint to update card metadata
+app.patch("/card/:cardId", (req, res, next) => {
+  const { cardId } = req.params;
+  const { newCard } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update card data
+        if (cardId in jsonData.cards) {
+          jsonData.cards[cardId] = newCard;
+
+          const jsonString = JSON.stringify(jsonData);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              res.json(jsonData.cards[cardId]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find card in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 module.exports = app;

@@ -80,14 +80,12 @@ function FinishDeckSetup() {
   return (
     <div className="FinishDeckSetup">
       <h1>Finalize deck details</h1>
-      <div className="mb-5">
-        <DeckEditor
-          deckName={deckName}
-          setDeckName={setDeckName}
-          deckDescription={deckDescription}
-          setDeckDescription={setDeckDescription}
-        />
-      </div>
+      <DeckEditor
+        deckName={deckName}
+        setDeckName={setDeckName}
+        deckDescription={deckDescription}
+        setDeckDescription={setDeckDescription}
+      />
       <AccountPromptModal
         onCloseModal={() => setShowModal(false)}
         showModal={showModal}
