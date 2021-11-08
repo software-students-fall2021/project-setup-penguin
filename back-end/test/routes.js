@@ -10,6 +10,32 @@ const app = require("../app.js");
 chai.use(chaiHttp);
 const expect = chai.expect;
 
+describe("User", () => {
+  describe("POST /", () => {
+    it("should return error when password is incorrect", (done) => {
+      chai
+        .request(app)
+        .post("/user/login")
+        .send({ userId: "notrandom@gmail.com", password: "notstring" })
+        .end((err, res) => {
+          expect(res).to.have.status(500);
+          done();
+        });
+    });
+    it("should return username and name when successful", (done) => {
+      chai
+        .request(app)
+        .post("/user/login")
+        .send({ userId: "random@gmail.com", password: "string" })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property("userId");
+          done();
+        });
+    });
+  });
+});
+
 describe("Decks", () => {
   describe("POST /", () => {
     it("should return id of newly created deck", (done) => {
