@@ -29,6 +29,8 @@ app.post("/user", (req, res, next) => {
     username,
     password,
     name,
+    card: [],
+    deck: []
   };
 
   fs.readFile("database.json")
