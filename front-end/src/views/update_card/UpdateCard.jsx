@@ -25,14 +25,7 @@ function UpdateCard() {
   const saveCard = (userId) => {
     axios
       .patch(`http://localhost:8000/card/${cardId}`, {
-        name: form.name,
-        city: form.city,
-        tagline: form.tagline,
-        summary: form.summary, 
-        sectionContent0: form.sectionContent0, 
-        sectionContent1: form.sectionContent1, 
-        sectionContent2: form.sectionContent2,
-        sliderValue: form.sliderValue,
+        newCard: form,
         userId,
       })
       .then((res) => {

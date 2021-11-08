@@ -269,10 +269,8 @@ app.use((err, req, res, next) => {
 
 // PATCH endpoint to update card metadata
 app.patch("/card/:cardId", (req, res, next) => {
-  const cardId = req.params.cardId;
-  const { name, city, tagline, summary, 
-    sectionContent0, sectionContent1, 
-    sectionContent2,sliderValue } = req.body;
+  const {cardId} = req.params;
+  const {newCard} = req.body;
 
   fs.readFile("database.json")
     .then((data) => {
@@ -281,15 +279,8 @@ app.patch("/card/:cardId", (req, res, next) => {
 
         // update card data
         if (cardId in jsonData.cards) {
-          jsonData.cards[cardId].name = name;
-          jsonData.cards[cardId].city = city;
-          jsonData.cards[cardId].tagline = tagline;
-          jsonData.cards[cardId].summary = summary;
-          jsonData.cards[cardId].sectionContent0 = sectionContent0;
-          jsonData.cards[cardId].sectionContent1 = sectionContent1;
-          jsonData.cards[cardId].sectionContent2 = sectionContent2;
-          jsonData.cards[cardId].sliderValue = sliderValue;
-
+          jsonData.cards[cardId] = newCard;
+          
           const jsonString = JSON.stringify(jsonData);
           fs.writeFile("database.json", jsonString)
             .then(() => {
