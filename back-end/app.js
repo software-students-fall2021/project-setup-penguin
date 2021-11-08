@@ -91,49 +91,42 @@ app.get("/user/:userId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-
-// DELETE endpoint for user deletion
-app.delete("/user/:userId", (req, res, next) => {
+// PATCH endpoint used to update user metadata
+app.patch("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
+  const { username, password, name } = req.body;
+
   fs.readFile("database.json")
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
 
         // update user document
-        if (!(userId in jsonData.users)) {
-          throw "User does not exist";
-        }
-        
-        // delete cards associated with user
-        jsonData.users[userId].cards.forEach((card) => {
-          if (card && card in jsonData.cards) {
-            const deck = jsonData.cards[card].deckId;
-            const deckArr = jsonData.decks[deck].cards;
-            for (let i = 0; i < deckArr.length; i++) {
-              if (deckArr[i] === card) {
-                deckArr.splice(i, 1);
-                break;
-              }
-            }
-            delete jsonData.cards[card];
+        if (userId in jsonData.users) {
+          if (username != userId) {
+            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
           }
-        });
+          
+          jsonData.users[username].email = username;
+          jsonData.users[username].password = password;
+          jsonData.users[username].name = name;
 
-        // delete user
-        delete jsonData.users[userId];
-
-        const jsonString = JSON.stringify(jsonData, null, 2);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ userId }))
-          .catch((err) => next(err));
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              console.log(jsonData.users[username]);
+              res.json(jsonData.users[username]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find user in database" });
+        }
       } catch (err) {
         next(err);
       }
     })
     .catch((err) => next(err));
-})
-
+});
 
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
