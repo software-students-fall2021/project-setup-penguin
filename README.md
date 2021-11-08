@@ -34,7 +34,7 @@ In `/back-end` directory,
 run `npm install` then `npx nodemon server.js`
 
 In `/front-end` directory,
-run `npm install` then `npx nodemon server.js`
+run `npm install` then `npm start`
 
 Open up http://localhost:3000/!
 
