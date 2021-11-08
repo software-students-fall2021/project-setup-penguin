@@ -16,12 +16,6 @@ app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
-
-// route for HTTP GET requests to root endpoint
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
   const {
@@ -59,6 +53,43 @@ app.post("/user", (req, res, next) => {
     })
     .catch((err) => next(err));
 })
+
+// GET endpoint used to get decks and cards belonging to an user
+
+app.get("/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (!(userId in jsonData.users)) {
+          throw "User does not exist";
+        }
+
+        const userData = {
+          cards: [],
+          decks: [],
+        };
+
+        jsonData.users[userId].cards.forEach((card) => {
+          if (jsonData.cards[card] != null)
+            userData.cards.push(jsonData.cards[card]);
+        });
+
+        jsonData.users[userId].decks.forEach((deck) => {
+          if (jsonData.decks[deck] != null)
+            userData.decks.push(jsonData.decks[deck]);
+        });
+
+        res.json({ userData });
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
 
 
 // POST endpoint used to create a new deck
@@ -241,6 +272,28 @@ app.delete("/card/:cardId", (req, res, next) => {
     cardId, // dummy cardId of deleted card
   });
 });
+
+//GET endpoint used to get a card from cardId
+app.get("/card/:cardId", (req, res, next) => {
+  const {cardId} = req.params;
+  fs.readFile("database.json")
+    .then((data) => {
+      try{
+          const jsonData = JSON.parse(data);
+
+          //check if card exists
+          if(cardId in jsonData.cards) {
+            res.json(jsonData.cards[cardId]);
+          } else {
+            next({ message: "Cannot find card in database" });
+          }
+        } catch(err) {
+          next(err);
+        }
+      })
+      .catch((err) => next(err));
+});
+
 
 // error handling middleware
 app.use((err, req, res, next) => {
