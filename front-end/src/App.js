@@ -14,6 +14,8 @@ import {
   AccountPage,
   UpdateDeck,
   UpdateCard,
+  HowItWorks,
+  GetStarted,
 } from "./views";
 
 function App() {
@@ -25,6 +27,12 @@ function App() {
           <Switch>
             <Route exact path="/">
               <Home />
+            </Route>
+            <Route exact path="/howitworks">
+              <HowItWorks />
+            </Route>
+            <Route exact path="/getstarted">
+              <GetStarted />
             </Route>
             <Route path="/login">
               <LoginSignup pageType={MODAL_PAGE_TYPE.LOGIN} />
