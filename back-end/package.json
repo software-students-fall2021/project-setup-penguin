@@ -4,11 +4,12 @@
   "description": "The back-end of your project will live in this directory.",
   "main": "app.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
