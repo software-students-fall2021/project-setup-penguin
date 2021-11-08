@@ -16,6 +16,11 @@ app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
 
+// route for HTTP GET requests to root endpoint
+app.get("/", (req, res) => {
+  res.send("Hello!");
+});
+
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
   const {
@@ -55,7 +60,6 @@ app.post("/user", (req, res, next) => {
 })
 
 // GET endpoint used to get decks and cards belonging to an user
-
 app.get("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
 
@@ -91,6 +95,42 @@ app.get("/user/:userId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// PATCH endpoint used to update user metadata
+app.patch("/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+  const { username, password, name } = req.body;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        // update user document
+        if (userId in jsonData.users) {
+          if (username != userId) {
+            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
+          }
+          
+          jsonData.users[username].email = username;
+          jsonData.users[username].password = password;
+          jsonData.users[username].name = name;
+
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              console.log(jsonData.users[username]);
+              res.json(jsonData.users[username]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find user in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
 
 // DELETE endpoint for user deletion
 app.delete("/user/:userId", (req, res, next) => {
@@ -133,7 +173,6 @@ app.delete("/user/:userId", (req, res, next) => {
     })
     .catch((err) => next(err));
 })
-
 
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
@@ -315,28 +354,6 @@ app.delete("/card/:cardId", (req, res, next) => {
     cardId, // dummy cardId of deleted card
   });
 });
-
-//GET endpoint used to get a card from cardId
-app.get("/card/:cardId", (req, res, next) => {
-  const {cardId} = req.params;
-  fs.readFile("database.json")
-    .then((data) => {
-      try{
-          const jsonData = JSON.parse(data);
-
-          //check if card exists
-          if(cardId in jsonData.cards) {
-            res.json(jsonData.cards[cardId]);
-          } else {
-            next({ message: "Cannot find card in database" });
-          }
-        } catch(err) {
-          next(err);
-        }
-      })
-      .catch((err) => next(err));
-});
-
 
 // error handling middleware
 app.use((err, req, res, next) => {
