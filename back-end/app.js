@@ -138,28 +138,36 @@ app.patch("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
   const { username, password, name } = req.body;
 
-  // update user document
-  if (userId in jsonData.users) {
-    if (username != userId) {
-      delete Object.assign(jsonData.users, {
-        [username]: jsonData.users[userId],
-      })[userId];
-    }
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-    jsonData.users[username].email = username;
-    jsonData.users[username].password = password;
-    jsonData.users[username].name = name;
+        // update user document
+        if (userId in jsonData.users) {
+          if (username != userId) {
+            delete Object.assign(jsonData.users, {[username]: jsonData.users[userId] })[userId];
+          }
+          
+          jsonData.users[username].email = username;
+          jsonData.users[username].password = password;
+          jsonData.users[username].name = name;
 
-    const jsonString = JSON.stringify(jsonData, null, 2);
-    fs.writeFile("database.json", jsonString)
-      .then(() => {
-        console.log(jsonData.users[username]);
-        res.json(jsonData.users[username]);
-      })
-      .catch((err) => next(err));
-  } else {
-    next({ message: "Cannot find user in database" });
-  }
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              console.log(jsonData.users[username]);
+              res.json(jsonData.users[username]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find user in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 /*****************************************/
@@ -311,7 +319,6 @@ app.delete("/deck/:deckId", (req, res) => {
           for (let j = 0; j < currCards.length; j++) {
             if (cardIDArray.includes(currCards[j])) {
               jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-            } else {
             }
           }
         }
@@ -320,9 +327,9 @@ app.delete("/deck/:deckId", (req, res) => {
           .then(() => res.json({ deckId }))
           .catch((err) => console.log("!!", err));
       }
-  } catch (err) {
-    next(err);
-  }
+    } catch (err) {
+      next(err);
+    }
   })
     .catch((err) => next(err));
 });
