@@ -77,7 +77,7 @@
   font-size: 0.9em;
 }
 
-.CardDisplay__label__right{
+.CardDisplay__label__right {
   font-weight: bold;
   width: 80%;
   font-size: 0.9em;
@@ -123,4 +123,8 @@
 
 .rc-slider-handle {
   cursor: default;
+}
+
+.rc-slider-disabled {
+  background-color: transparent !important;
 }

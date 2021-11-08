@@ -2,20 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { DeckEditor, Button } from "../common";
 import { Redirect, useParams } from "react-router-dom";
+import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
 // TODO: restrict page to deck owner
 function UpdateDeck() {
   const { deckId } = useParams();
+  const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deckName, setDeckName] = useState();
   const [deckDescription, setDeckDescription] = useState();
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     axios
-      .get("https://my.api.mockaroo.com/deck/123?key=d5aa71f0")
-      .then((response) => {
-        setDeckName(response.data.deckName);
-        setDeckDescription(response.data.deckDescription);
+      .get(`http://localhost:8000/deck/${deckId}`)
+      .then((res) => {
+        setIsDeckLoaded(true);
+        setDeckName(res.data.deckName);
+        setDeckDescription(res.data.deckDescription);
+      })
+      .catch((err) => {
+        setIsDeckLoaded(true);
+        console.log("!!", err);
       });
   }, []);
 
@@ -39,7 +46,9 @@ function UpdateDeck() {
     return <Redirect to={`/deck/${deckId}`} />;
   }
 
-  return (
+  return !isDeckLoaded ? (
+    <LoadingSpinner />
+  ) : (
     <div className="FinishDeckSetup">
       <h1>Update deck details</h1>
       <div className="mb-5">
