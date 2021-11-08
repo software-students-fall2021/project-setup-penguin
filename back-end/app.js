@@ -28,12 +28,10 @@ app.get("/", (req, res) => {
 // GET endpoint used to get a deck from deckId
 app.get("/deck/:deckId", (req, res) => {
   const deckId = req.params.deckId;
-  console.log("deckId:", deckId);
 
   fs.readFile('database.json', (err, data) => {
       if (err) throw err;
       let student = JSON.parse(data);
-      console.log(student);
       res.send(student);
   })
 });
