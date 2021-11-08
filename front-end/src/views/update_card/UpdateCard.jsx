@@ -11,9 +11,8 @@ function UpdateCard() {
 
   useEffect(() => {
     axios
-      .get(`https://my.api.mockaroo.com/card/${cardId}?key=d5aa71f0`)
+      .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
-        console.log("data", response.data);
         setForm(response.data);
       })
       .catch((err) => {

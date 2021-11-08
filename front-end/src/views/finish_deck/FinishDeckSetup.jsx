@@ -23,6 +23,7 @@ function FinishDeckSetup() {
   }
 
   const saveDeck = (userId) => {
+    console.log("userId:", userId);
     let deckId;
 
     // user-entered template data would be contained in data.state.templateData
@@ -33,12 +34,6 @@ function FinishDeckSetup() {
         templateData[key] = FORM_DEFAULT_PLACEHOLDERS[key];
       }
     });
-
-    // TODO: save deck data (updatedTemplate, name, desc)
-    // link deck to userId if exists (and vice versa)
-
-    const apiKey = process.env.REACT_APP_MOCKAROO_API_KEY;
-    console.log(apiKey);
 
     axios
       .post(`http://localhost:8000/deck`, {
@@ -54,8 +49,6 @@ function FinishDeckSetup() {
       })
       .catch((err) => {
         console.log(err);
-
-        // while mockaroo is down...
         setRedirectLink(`deck/${123}`);
         setShowModal(false);
       });
@@ -66,15 +59,26 @@ function FinishDeckSetup() {
   };
 
   const onSignupOrLogin = (pageType, name, email, password) => {
-    let userId;
-
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
-      // TODO: create & save account – get id of newly created account
+      axios
+        .post("http://localhost:8000/user", {
+          name,
+          username: email,
+          password,
+        })
+        .then((res) => {
+          saveDeck(res.data.username);
+        });
     } else {
-      // TODO: log user in – get id of existing account
+      axios
+        .post("http://localhost:8000/user/login", {
+          userId: email,
+          password,
+        })
+        .then((res) => {
+          saveDeck(res.data.userId);
+        });
     }
-
-    saveDeck(userId);
   };
 
   return (
