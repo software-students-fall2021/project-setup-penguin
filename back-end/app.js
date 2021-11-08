@@ -21,6 +21,43 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// GET endpoint used to get decks and cards belonging to an user
+
+app.get("/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (!(userId in jsonData.users)) {
+          throw "User does not exist";
+        }
+
+        const userData = {
+          cards: [],
+          decks: [],
+        };
+
+        jsonData.users[userId].cards.forEach((card) => {
+          if (jsonData.cards[card] != null)
+            userData.cards.push(jsonData.cards[card]);
+        });
+
+        jsonData.users[userId].decks.forEach((deck) => {
+          if (jsonData.decks[deck] != null)
+            userData.decks.push(jsonData.decks[deck]);
+        });
+
+        res.json({ userData });
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
@@ -201,6 +238,28 @@ app.delete("/card/:cardId", (req, res, next) => {
     cardId, // dummy cardId of deleted card
   });
 });
+
+//GET endpoint used to get a card from cardId
+app.get("/card/:cardId", (req, res, next) => {
+  const {cardId} = req.params;
+  fs.readFile("database.json")
+    .then((data) => {
+      try{
+          const jsonData = JSON.parse(data);
+
+          //check if card exists
+          if(cardId in jsonData.cards) {
+            res.json(jsonData.cards[cardId]);
+          } else {
+            next({ message: "Cannot find card in database" });
+          }
+        } catch(err) {
+          next(err);
+        }
+      })
+      .catch((err) => next(err));
+});
+
 
 // error handling middleware
 app.use((err, req, res, next) => {
