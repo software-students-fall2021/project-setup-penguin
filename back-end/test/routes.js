@@ -34,6 +34,18 @@ describe("User", () => {
         });
     });
   });
+  describe("POST /", () => {
+    it("error when creating account", (done) => {
+      chai
+        .request(app)
+        .post("/user")
+        .send({ userId: "random@gmail.com", password: "string", name: "me"})
+        .end((err, res) => {
+          expect(res).to.have.status(500);
+          done();
+        });
+    });
+  });
 });
 
 describe("Decks", () => {
