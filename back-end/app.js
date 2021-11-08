@@ -184,6 +184,27 @@ app.get("/deckIds", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// GET endpoint used to retrieve a deck's card template
+app.get("/deckTemplate/:deckId", (req, res, next) => {
+  const deckId = req.params.deckId;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (deckId in jsonData.decks) {
+          res.json(jsonData.decks[deckId].cardTemplate);
+        } else {
+          next({ message: "Cannot find deck in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 // GET endpoint used to get a deck from deckId
 app.get("/deck/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
