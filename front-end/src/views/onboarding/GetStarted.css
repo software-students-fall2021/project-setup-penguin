@@ -3,7 +3,7 @@
   max-width: 1000px;
 }
 .GetStarted__cardsContainer {
-  padding-top: 5em;
+  padding-top: 2em;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -18,7 +18,7 @@
 
 .GetStarted__button {
   color: black;
-  width: 60%;
+  width: 50%;
 }
 
 .GetStarted__button:hover {
@@ -31,11 +31,12 @@
 }
 
 .GetStarted__label {
-  font-size: 1.5em;
+  /* font-size: 1.5em; */
   text-align: center;
-  font-weight: medium;
+  font-weight: bold;
 }
 
 .GetStarted__text {
   text-align: center;
+  /* font-size: 1em; */
 }

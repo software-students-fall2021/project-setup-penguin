@@ -16,6 +16,7 @@ import {
   UpdateCard,
   HowItWorks,
   GetStarted,
+  JoinDeck,
 } from "./views";
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
             </Route>
             <Route path="/createdeck">
               <CreateDeck />
+            </Route>
+            <Route path="/joindeck">
+              <JoinDeck />
             </Route>
             <Route path="/finishdeck">
               <FinishDeckSetup />

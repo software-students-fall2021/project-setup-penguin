@@ -9,6 +9,7 @@ import DeckView from "./DeckView";
 import AccountPage from "./account_page/AccountPage";
 import UpdateDeck from "./UpdateDeck";
 import UpdateCard from "./update_card/UpdateCard";
+import JoinDeck from "./JoinDeck";
 
 export {
   Home,
@@ -22,4 +23,5 @@ export {
   AccountPage,
   UpdateDeck,
   UpdateCard,
+  JoinDeck,
 };

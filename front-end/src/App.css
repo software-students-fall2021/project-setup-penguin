@@ -31,9 +31,9 @@ h3 {
 .customContainer {
   margin-top: 10px;
   border-top: 2px solid #396bba;
-  padding: 3em 0em 3em 0em;
+  padding: 4.5em 0em 5em 0em;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   min-height: 75vh;
 }
