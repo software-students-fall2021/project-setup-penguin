@@ -12,8 +12,10 @@ app.use(morgan("dev")); // morgan has a few logging default styles - dev is a ni
 app.use(cors()); // prevents requests from being blocked by CORS
 
 // use express's builtin body-parser middleware to parse any data included in a request
-app.use(express.json()); // decode JSON-formatted incoming POST data
-app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
+app.use(express.json({ limit: "50mb" }));
+app.use(
+  express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
+);
 
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
