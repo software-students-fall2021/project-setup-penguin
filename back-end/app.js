@@ -128,6 +128,21 @@ app.patch("/user/:userId", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+/*****************************************/
+/**************** DECKS ******************/
+/*****************************************/
+
+// GET endpoint used to get a deck from deckId
+app.get("/deck/:deckId", (req, res) => {
+  const deckId = req.params.deckId;
+
+  fs.readFile('database.json', (err, data) => {
+      if (err) throw err;
+      let jsonData = JSON.parse(data);
+      res.send(jsonData);
+  })
+});
+
 // POST endpoint used to create a new deck
 app.post("/deck", (req, res, next) => {
   // setting default userId until auth set up
@@ -211,6 +226,54 @@ app.patch("/deck/:deckId", (req, res, next) => {
     })
     .catch((err) => next(err));
 });
+
+// DELETE endpoint to delete a deck
+app.delete("/deck/:deckId", (req, res) => {
+  const {deckId} = req.params;
+  const usersInDeck = [];
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+        if ( deckId in jsonData.decks){
+          let cardIDArray = jsonData.decks[deckId].cards;
+          // delete deck
+          delete jsonData.decks[deckId];
+
+          // delete all cards from deck
+          for (let i = 0; i < cardIDArray.length; i++){
+            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+
+            delete jsonData.cards[cardIDArray[i]];
+          }
+
+          // remove cardIDs from ALL users in deck
+          for (let x = 0; x < usersInDeck.length; x++){
+            let currCards = jsonData.users[usersInDeck[x]].cards;
+            for (let j = 0; j < currCards.length; j++){
+              if (cardIDArray.includes(currCards[j])){
+                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
+              }
+              else{
+              }
+            }
+          }
+        }
+        const jsonString = JSON.stringify(jsonData);
+        fs.writeFile("database.json", jsonString)
+          .then(() => res.json({ deckId }))
+          .catch((err) => console.log("!!", err));
+      }
+      catch (err) {
+        console.log("!!", err);
+      }
+  });
+});
+
+/*****************************************/
+/**************** CARDS ******************/
+/*****************************************/
 
 // POST endpoint used to create a new card
 app.post("/card", (req, res, next) => {
