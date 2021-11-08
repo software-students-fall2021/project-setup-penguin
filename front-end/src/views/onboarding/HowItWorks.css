@@ -1,4 +1,4 @@
-.Home {
+.HowItWorks {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,22 +6,22 @@
   max-width: 1000px;
 }
 
-.Home__title {
+.HowItWorks__title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 3em;
 }
 
-.Home__title > h1 {
+.HowItWorks__title > h1 {
   padding: 0;
 }
 
-.Home__body {
+.HowItWorks__body {
   margin-bottom: 2em;
 }
 
-.Home_imgs {
+.HowItWorks_imgs {
   width: 100%;
   max-width: 400px;
   margin-bottom: 2em;
