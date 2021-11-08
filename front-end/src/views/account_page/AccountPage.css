@@ -24,7 +24,7 @@
 }
 
 .title {
-    font-size: 40px;
+    font-size: 35px;
     font-weight: bold;
     text-decoration: none;
     color: black;
@@ -58,4 +58,8 @@
   grid-column-end: 3;
   justify-self: start;
   border-radius: 0px 20px 20px 0px;
+}
+
+.deck {
+  text-align: center;
 }
