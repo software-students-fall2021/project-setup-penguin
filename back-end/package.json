@@ -4,7 +4,7 @@
   "description": "The back-end of your project will live in this directory.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc mocha"
   },
   "author": "",
   "license": "ISC",
