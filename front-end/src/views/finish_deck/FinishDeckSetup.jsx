@@ -35,9 +35,6 @@ function FinishDeckSetup() {
       }
     });
 
-    const apiKey = process.env.REACT_APP_MOCKAROO_API_KEY;
-    console.log(apiKey);
-
     axios
       .post(`http://localhost:8000/deck`, {
         userId,
@@ -52,8 +49,6 @@ function FinishDeckSetup() {
       })
       .catch((err) => {
         console.log(err);
-
-        // while mockaroo is down...
         setRedirectLink(`deck/${123}`);
         setShowModal(false);
       });

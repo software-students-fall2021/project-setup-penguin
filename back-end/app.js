@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require("uuid");
 // middleware
 const morgan = require("morgan");
 const cors = require("cors");
-const { nextTick } = require("process");
 
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -15,11 +14,6 @@ app.use(cors()); // prevents requests from being blocked by CORS
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()); // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })); // decode url-encoded incoming POST data
-
-// route for HTTP GET requests to root endpoint
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
 
 // POST endpoint for user creation
 app.post("/user", (req, res, next) => {
@@ -139,28 +133,38 @@ app.patch("/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
   const { username, password, name } = req.body;
 
-  // update user document
-  if (userId in jsonData.users) {
-    if (username != userId) {
-      delete Object.assign(jsonData.users, {
-        [username]: jsonData.users[userId],
-      })[userId];
-    }
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
 
-    jsonData.users[username].email = username;
-    jsonData.users[username].password = password;
-    jsonData.users[username].name = name;
+        // update user document
+        if (userId in jsonData.users) {
+          if (username != userId) {
+            delete Object.assign(jsonData.users, {
+              [username]: jsonData.users[userId],
+            })[userId];
+          }
 
-    const jsonString = JSON.stringify(jsonData, null, 2);
-    fs.writeFile("database.json", jsonString)
-      .then(() => {
-        console.log(jsonData.users[username]);
-        res.json(jsonData.users[username]);
-      })
-      .catch((err) => next(err));
-  } else {
-    next({ message: "Cannot find user in database" });
-  }
+          jsonData.users[username].email = username;
+          jsonData.users[username].password = password;
+          jsonData.users[username].name = name;
+
+          const jsonString = JSON.stringify(jsonData, null, 2);
+          fs.writeFile("database.json", jsonString)
+            .then(() => {
+              console.log(jsonData.users[username]);
+              res.json(jsonData.users[username]);
+            })
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find user in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
 });
 
 app.post("/user/login", (req, res, next) => {
@@ -202,6 +206,27 @@ app.get("/deckIds", (req, res, next) => {
     .catch((err) => next(err));
 });
 
+// GET endpoint used to retrieve a deck's card template
+app.get("/deckTemplate/:deckId", (req, res, next) => {
+  const deckId = req.params.deckId;
+
+  fs.readFile("database.json")
+    .then((data) => {
+      try {
+        const jsonData = JSON.parse(data);
+
+        if (deckId in jsonData.decks) {
+          res.json(jsonData.decks[deckId].cardTemplate);
+        } else {
+          next({ message: "Cannot find deck in database" });
+        }
+      } catch (err) {
+        next(err);
+      }
+    })
+    .catch((err) => next(err));
+});
+
 // GET endpoint used to get a deck from deckId
 app.get("/deck/:deckId", (req, res, next) => {
   const deckId = req.params.deckId;
@@ -211,10 +236,14 @@ app.get("/deck/:deckId", (req, res, next) => {
       try {
         const jsonData = JSON.parse(data);
 
-        if (!(deckId in jsonData.decks)) {
-          throw "Deck does not exit";
+        if (deckId in jsonData.decks) {
+          const cardObjs = jsonData.decks[deckId].cards.map(
+            (cardId) => jsonData.cards[cardId]
+          );
+          res.json({ ...jsonData.decks[deckId], cards: cardObjs });
+        } else {
+          next({ message: "Cannot find deck in database" });
         }
-        res.send(jsonData);
       } catch (err) {
         next(err);
       }
@@ -332,14 +361,16 @@ app.delete("/deck/:deckId", (req, res) => {
             for (let j = 0; j < currCards.length; j++) {
               if (cardIDArray.includes(currCards[j])) {
                 jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-              } else {
               }
             }
           }
+
           const jsonString = JSON.stringify(jsonData);
           fs.writeFile("database.json", jsonString)
             .then(() => res.json({ deckId }))
-            .catch((err) => console.log("!!", err));
+            .catch((err) => next(err));
+        } else {
+          next({ message: "Cannot find deck in database" });
         }
       } catch (err) {
         next(err);
