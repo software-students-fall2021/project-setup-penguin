@@ -31,7 +31,7 @@ Instructions on how to contribute can be found in the CONTRIBUTING.md document. 
 - [Link to Figma](https://www.figma.com/file/cbgk4UxRgy6Ale7D3uBbiX/Wireframes?node-id=0%3A1)
 ## Building and Testing
 To start the application,
-- In `/back-end` directory, run `npm install` then `npx nodemon server.js`
+- In `/back-end` directory, run `npm install` then `node server.js`
 - In `/front-end` directory, run `npm install` then `npm start`
 - Open up http://localhost:3000/!
 
