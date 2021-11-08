@@ -37,6 +37,8 @@ To start the application,
 
 To run tests,
 - In `/back-end` directory, run `npm test` – this doesn't seem to work on some machines, so an alternative is `npx mocha test/routes.js`
+<img width="664" alt="Screen Shot 2021-11-07 at 11 47 03 PM" src="https://user-images.githubusercontent.com/58224004/140685827-78d1101a-2233-42aa-af2c-dbbf6f528dcb.png">
+
 
 ## Link to Application
 This is to be determined at a later date.
