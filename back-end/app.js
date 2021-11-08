@@ -26,7 +26,7 @@ app.post("/user", (req, res, next) => {
     password,
     name,
     card: [],
-    deck: []
+    deck: [],
   };
 
   fs.readFile("database.json")
@@ -284,7 +284,7 @@ app.post("/deck", (req, res, next) => {
           ownerId: userId,
           deckName,
           deckDescription,
-          cardTemplate,
+          cardTemplate: { ...cardTemplate, image: null },
           cards: [cardId],
         };
 

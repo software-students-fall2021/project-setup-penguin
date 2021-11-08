@@ -19,7 +19,7 @@ function DisplayCard({ card = {}, template = {} }) {
               <HeartIcon />
             </div>
           </div>
-          <img className="CardDisplay__image" src={piplup} />
+          <img className="CardDisplay__image" src={card.image} />
         </div>
         <div className="CardDisplay__summary">{card.summary}</div>
         {sectionIds.map((id) => (
