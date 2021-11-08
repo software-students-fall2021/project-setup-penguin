@@ -177,9 +177,11 @@ app.post("/user/login", (req, res, next) => {
 
         if (
           userId in jsonData.users &&
-          jsonData.users[userId].password == password
+          jsonData.users[userId].password === password
         ) {
           res.json({ userId });
+        } else {
+          throw "Invalid Login";
         }
       } catch (err) {
         next(err);
