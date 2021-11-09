@@ -15,7 +15,6 @@ function AccountPage() {
 //make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
     const states = ["Active", "inactive"]; //array for defining classes of button states
 
-    //let { id } = useParams();
     let { id } = useParams();
     let pageContent;
     let pageElement;
@@ -33,26 +32,27 @@ function AccountPage() {
       axios
         .get(`http://localhost:8000/user/${id}`)
         .then((response) => {
-          setIsDeckLoaded(true);
-          let userDecks = response.data.users.decks;
-          let userCards = response.data.users.cards;
-
+          let userDecks = response.data.userData.decks;
+          let userCards = response.data.userData.cards;
+          
           let ownedTitles = [];
 
           //finds all users owned decks
+
           for (const id in userDecks) {
-            ownedTitles.push(response.data.decks[userDecks[id]].deckName);
+            ownedTitles.push(userDecks[id].deckName);
           }
+
 
           let ownedCards = [];
 
           for (const id in userDecks) {
             //checks for matching cards to have corresponding cards and decks in same position of arrays for display
             let cardNum = 0;
-            while (response.data.cards[userCards[cardNum]].deckId !== userDecks[id]){
+            while (cardNum < userCards.length && userCards[cardNum].deckId !== userDecks[id]){
               cardNum++;
             }
-            ownedCards.push(response.data.cards[userCards[cardNum]]);
+            ownedCards.push(userCards[cardNum]);
           }
 
           let joinedCards = [];
@@ -66,19 +66,22 @@ function AccountPage() {
                 break;
               }
             }
-            if (!isOwned){
-              joinedCards.push(response.data.cards[userCards[id]]);
+            if (!isOwned) {
+              joinedCards.push(userCards[id]);
             }
           }
 
         let joinedDecks = [];
         let joinedIds = [];
 
+        //TO DO: Update card data to contain deck name so Joined Decks can be properly displayed
         for (const id in joinedCards) {
           //finds corresponding deck names for owned cards that aren't in owned decks
-          joinedDecks.push(response.data.decks[joinedCards[id].deckId].deckName);
+          //joinedDecks.push(joinedCards[id].deckName);
+          joinedDecks.push(joinedCards[id].deckId);
           joinedIds.push(joinedCards[id].deckId);
         }
+
 
           setOwnedDeckNameData(ownedTitles);
           setOwnedDeckIdData(userDecks);
@@ -86,6 +89,7 @@ function AccountPage() {
           setJoinedDeckNameData(joinedDecks);
           setJoinedDeckIdData(joinedIds);
           setJoinedCardsData(joinedCards);
+          setIsDeckLoaded(true);
         })
         .catch((err) => {
           console.log("!!", err);
