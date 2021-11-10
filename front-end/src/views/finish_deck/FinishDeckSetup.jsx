@@ -83,11 +83,16 @@ function FinishDeckSetup() {
   return (
     <div className="FinishDeckSetup">
       <h1>Finalize deck details</h1>
+      {/* TODO: FE validation for deckName requirement */}
       <DeckEditor
         deckName={deckName}
         setDeckName={setDeckName}
         deckDescription={deckDescription}
         setDeckDescription={setDeckDescription}
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          setShowModal(true);
+        }}
       />
       <AccountPromptModal
         onCloseModal={() => setShowModal(false)}

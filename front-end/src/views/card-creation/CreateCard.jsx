@@ -19,7 +19,7 @@ function CreateCard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deckTemplate/${deckId}`)
+      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
       .then((response) => {
         setTemplateData(response.data);
       })

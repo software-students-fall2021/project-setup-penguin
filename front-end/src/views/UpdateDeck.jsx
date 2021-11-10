@@ -56,6 +56,10 @@ function UpdateDeck() {
           setDeckName={setDeckName}
           deckDescription={deckDescription}
           setDeckDescription={setDeckDescription}
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            updateDeckWithRedirect();
+          }}
         />
       </div>
       <Button btnText="Update deck" onClick={updateDeckWithRedirect} />
