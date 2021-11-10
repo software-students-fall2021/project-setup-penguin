@@ -13,7 +13,7 @@ function JoinDeck() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deckIds`)
+      .get(`http://localhost:8000/deck/deckIds`)
       .then((res) => {
         setDeckIds(res.data.deckIds);
       })
