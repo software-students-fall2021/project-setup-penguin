@@ -1,44 +1,42 @@
 const Card = require("../models/card");
+const Deck = require("../models/deck");
 const fs = require("fs").promises;
-const { v4: uuidv4 } = require("uuid");
+const db = require("../db.js");
 
-const createCard = (req, res, next) => {
+const createCard = async (req, res, next) => {
   const { newCard, deckId, userId } = req.body;
-  const cardId = uuidv4();
+  let cardId;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        if (deckId && deckId in jsonData.decks) {
-          jsonData.cards[cardId] = {
-            cardId,
-            deckId,
-            userId,
-            ...newCard,
-          };
-          jsonData.decks[deckId].cards.push(cardId);
-
-          // add card reference to the user object
-          if (userId && userId in jsonData.users) {
-            // if the userId is populated, the userId must be valid
-            // for guests, the card will not be mapped to a user
-            jsonData.users[userId].cards.push(cardId);
-          }
-
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => res.json({ cardId }))
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot add card to nonexistent deck" });
-        }
-      } catch (err) {
-        next(err);
-      }
+  const session = await db.startSession();
+  await session.withTransaction(async () => {
+    const card = await new Card({
+      deckId,
+      userId,
+      ...newCard,
     })
-    .catch((err) => next(err));
+      .save()
+      .catch((err) => {
+        next(err);
+      });
+    cardId = card._id;
+
+    await Deck.findOneAndUpdate(
+      { _id: deckId },
+      { $push: { cards: cardId } }
+    ).catch((err) => {
+      next(err);
+    });
+
+    if (userId) {
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { $push: { cards: cardId } }
+      );
+    }
+  });
+
+  session.endSession();
+  res.json({ cardId });
 };
 
 const deleteCard = (req, res, next) => {
