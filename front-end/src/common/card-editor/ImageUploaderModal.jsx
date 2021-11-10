@@ -45,7 +45,7 @@ export const maybeRenderImage = (
 
   setForm((prevState) => ({
     ...prevState,
-    image: canvas.toDataURL(),
+    // image: canvas.toDataURL(), TODO: replace w/ multer
   }));
 };
 
