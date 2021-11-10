@@ -48,9 +48,9 @@ function Navigation() {
                 eventKey="2"
                 className="Navigation__link"
                 activeClassName="Navigation__active"
-                to="/joindeck"
+                to="/finddeck"
               >
-                JOIN DECK
+                FIND DECK
               </NavLink>
             </Nav.Link>
             <Nav.Link>

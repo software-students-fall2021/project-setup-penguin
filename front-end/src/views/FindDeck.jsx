@@ -4,21 +4,25 @@ import { Button, TextInput, ErrorMessage } from "../common";
 import axios from "axios";
 import * as Icon from "react-bootstrap-icons";
 
-function JoinDeck() {
-  const [maybeDeckId, setMaybeDeckId] = useState("");
+function FindDeck() {
+  const [maybeAccessCode, setMaybeAccessCode] = useState("");
   const [deckIds, setDeckIds] = useState([]);
-  //   const [password, setPassword] = useState("");
+  const [accessCodes, setAccessCodes] = useState([]);
   const [redirectLink, setRedirectLink] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/deckIds`)
+      .get(`http://localhost:8000/deck/accessCodes`)
       .then((res) => {
-        setDeckIds(res.data.deckIds);
+        const accessCodes = res.data.map((deck) => deck.accessCode);
+        const deckIds = res.data.map((deck) => deck._id);
+        console.log({ accessCodes });
+        setAccessCodes(accessCodes);
+        setDeckIds(deckIds);
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.message);
       });
   }, []);
 
@@ -28,29 +32,27 @@ function JoinDeck() {
 
   const onContinue = (evt) => {
     evt.preventDefault();
-    if (deckIds.includes(maybeDeckId)) {
-      setRedirectLink(`/deck/${maybeDeckId}`);
+    const maybeIdx = accessCodes.indexOf(maybeAccessCode);
+    if (maybeIdx >= 0) {
+      setRedirectLink(`/deck/${deckIds[maybeIdx]}`);
     } else {
-      setError(`Deck with id ${maybeDeckId} does not exist :(`);
+      setError(`Deck with join code ${maybeAccessCode} does not exist :(`);
     }
   };
 
   return (
     <div className="FinishDeckSetup">
-      <h1>Join an existing deck</h1>
-      <p className="mb-5">
-        Ask your teammate for a direct link to your team's page, or navigate
-        there by entering your deck's ID below!
-      </p>
+      <h1>Find an existing deck</h1>
+      <p className="mb-5">Enter your deck's access code below!</p>
       <div className="DeckEditor">
         <form className="DeckEditor__form" onSubmit={(evt) => onContinue(evt)}>
           {/* should this be numeric? */}
           <TextInput
             isLarge={true}
-            placeholder="Deck Id"
-            value={maybeDeckId}
+            placeholder="Code"
+            value={maybeAccessCode}
             onChange={(e) => {
-              setMaybeDeckId(e.target.value);
+              setMaybeAccessCode(e.target.value);
               setError("");
             }}
           />
@@ -66,7 +68,7 @@ function JoinDeck() {
         </form>
       </div>
       <Button
-        btnText="Go to team deck"
+        btnText="Find my deck"
         onClick={onContinue}
         icon={<Icon.ArrowRight />}
       />
@@ -74,4 +76,4 @@ function JoinDeck() {
   );
 }
 
-export default JoinDeck;
+export default FindDeck;
