@@ -88,6 +88,10 @@ function FinishDeckSetup() {
         setDeckName={setDeckName}
         deckDescription={deckDescription}
         setDeckDescription={setDeckDescription}
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          setShowModal(true);
+        }}
       />
       <AccountPromptModal
         onCloseModal={() => setShowModal(false)}

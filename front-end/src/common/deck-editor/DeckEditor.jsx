@@ -6,10 +6,11 @@ function DeckEditor({
   setDeckName,
   deckDescription,
   setDeckDescription,
+  onSubmit,
 }) {
   return (
     <div className="DeckEditor">
-      <form className="DeckEditor__form">
+      <form className="DeckEditor__form" onSubmit={onSubmit}>
         <TextInput
           isLarge={true}
           placeholder="Name your deck"
