@@ -46,10 +46,9 @@ function FindDeck() {
       <p className="mb-5">Enter your deck's access code below!</p>
       <div className="DeckEditor">
         <form className="DeckEditor__form" onSubmit={(evt) => onContinue(evt)}>
-          {/* should this be numeric? */}
           <TextInput
             isLarge={true}
-            placeholder="Code"
+            placeholder="Access Code"
             value={maybeAccessCode}
             onChange={(e) => {
               setMaybeAccessCode(e.target.value);
