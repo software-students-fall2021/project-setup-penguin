@@ -1,18 +1,15 @@
-const Deck = require("../models/deck");
 const fs = require("fs").promises;
-const { v4: uuidv4 } = require("uuid");
+const shortid = require("shortid");
 
-const getDeckIds = (req, res, next) => {
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-        res.json({ deckIds: Object.keys(jsonData.decks) });
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+const db = require("../db.js");
+const User = require("../models/user");
+const Card = require("../models/card");
+const Deck = require("../models/deck");
+
+const getaccessCodes = async (req, res, next) => {
+  const decks = await Deck.find({}).select("accessCode");
+  console.log(decks);
+  res.json(decks);
 };
 
 const getDeckTemplate = (req, res, next) => {
@@ -58,81 +55,63 @@ const getDeck = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const createDeck = (req, res, next) => {
-  // setting default userId until auth set up
+const createDeck = async (req, res, next) => {
   const { userId, deckName, deckDescription, cardTemplate } = req.body;
-  const deckId = uuidv4();
-  const cardId = uuidv4();
+  const accessCode = shortid.generate();
+  let deckId;
 
-  const cardData = {
-    cardId,
-    deckId,
-    userId,
-    ...cardTemplate,
-  };
+  const session = await db.startSession();
+  await session.withTransaction(async () => {
+    const deck = await new Deck({
+      accessCode,
+      ownerId: userId,
+      deckName,
+      deckDescription,
+      cardTemplate: { ...cardTemplate, image: null },
+      cards: [],
+    })
+      .save()
+      .catch((err) => {
+        next(err);
+      });
+    deckId = deck._id;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+    const card = await new Card({ userId, deckId, ...cardTemplate })
+      .save()
+      .catch((err) => {
+        next(err);
+      });
 
-        // save card to cards collection
-        jsonData.cards[cardId] = cardData;
-
-        // save deck to decks collection
-        jsonData.decks[deckId] = {
-          deckId,
-          ownerId: userId,
-          deckName,
-          deckDescription,
-          cardTemplate: { ...cardTemplate, image: null },
-          cards: [cardId],
-        };
-
-        // update user document
-        if (userId && userId in jsonData.users) {
-          jsonData.users[userId].cards.push(cardId);
-        }
-
-        const jsonString = JSON.stringify(jsonData);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ deckId }))
-          .catch((err) => next(err));
-      } catch (err) {
+    await Deck.findOneAndUpdate({ _id: deckId }, { cards: [card._id] }).catch(
+      (err) => {
         next(err);
       }
-    })
-    .catch((err) => next(err));
+    );
+
+    if (userId) {
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { $push: { cards: card._id } }
+      );
+    }
+  });
+
+  session.endSession();
+  res.json({ deckId });
 };
 
-const updateDeck = (req, res, next) => {
+const updateDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  await Deck.findOneAndUpdate(
+    { _id: deckId },
+    { deckName, deckDescription }
+  ).catch((err) => {
+    next(err);
+  });
 
-        // update deck document
-        if (deckId in jsonData.decks) {
-          jsonData.decks[deckId].deckName = deckName;
-          jsonData.decks[deckId].deckDescription = deckDescription;
-
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => {
-              res.json(jsonData.decks[deckId]);
-            })
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  res.json({ deckId });
 };
 
 const deleteDeck = (req, res, next) => {
@@ -180,7 +159,7 @@ const deleteDeck = (req, res, next) => {
 };
 
 module.exports = {
-  getDeckIds,
+  getaccessCodes,
   getDeckTemplate,
   getDeck,
   createDeck,

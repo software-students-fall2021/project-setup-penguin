@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const deckController = require("../controllers/deckController");
 
-router.get("/deckIds", deckController.getDeckIds);
+router.get("/accessCodes", deckController.getaccessCodes);
 
 router.get("/deckTemplate/:deckId", deckController.getDeckTemplate);
 
