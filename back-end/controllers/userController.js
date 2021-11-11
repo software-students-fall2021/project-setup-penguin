@@ -1,5 +1,8 @@
 const User = require("../models/user");
+const Card = require("../models/card");
+const Deck = require("../models/deck");
 const fs = require("fs").promises;
+const db = require("../db.js");
 
 const createUser = (req, res, next) => {
   const { username, password, name } = req.body;
@@ -77,38 +80,41 @@ const deleteUser = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const getUser = (req, res, next) => {
+const getUser = async (req, res, next) => {
   const userId = req.params.userId;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  // query DB for user data and extract array of cardIds
+  const userData = await User.findOne({ _id: userId });
+  const userCardIds = userData.cards;
 
-        if (!(userId in jsonData.users)) {
-          throw "User does not exist";
-        }
+  // query DB and replace cardIds with card objects
+  const userCards = await Promise.all(
+    userCardIds.map(
+      async (cardId) => await Card.findOne({ _id: cardId.toString() })
+    )
+  );
 
-        const userData = {
-          cards: [],
-          decks: [],
-        };
+  // query DB for whether user owns the deck
+  const userCardsWithDeckData = await Promise.all(
+    userCards.map(async (userCard) => {
+      console.log("userCard:", typeof userCard);
+      const deckData = await Deck.findOne({
+        _id: userCard.deckId.toString(),
+      });
 
-        jsonData.users[userId].cards.forEach((card) => {
-          if (jsonData.cards[card] != null)
-            userData.cards.push(jsonData.cards[card]);
-        });
-
-        jsonData.users[userId].decks.forEach((deck) => {
-          if (jsonData.decks[deck] != null)
-            userData.decks.push(jsonData.decks[deck]);
-        });
-        res.json({ userData });
-      } catch (err) {
-        next(err);
-      }
+      return {
+        isOwned: deckData.ownerId === userId,
+        deckName: deckData.deckName,
+        cardData: {
+          ...userCard.toObject(),
+          _id: userCard._id.toString(),
+          deckId: userCard.deckId.toString(),
+        },
+      };
     })
-    .catch((err) => next(err));
+  );
+
+  res.send(userCardsWithDeckData);
 };
 
 const updateUser = (req, res, next) => {
