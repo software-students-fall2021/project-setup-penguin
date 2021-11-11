@@ -12,8 +12,8 @@ const howToSteps = [
     content:
       'Set up a template card for your team. Decide the qualities you want to share and learn about your teammates!',
     button: {
-      text: 'Create a deck',
-      link: 'www.google.com',
+      text: '',
+      link: '',
     },
   },
   {
