@@ -9,6 +9,7 @@ const createCard = async (req, res, next) => {
 
   const session = await db.startSession();
   await session.withTransaction(async () => {
+    // create & save new Card document
     const card = await new Card({
       deckId,
       userId,
@@ -20,6 +21,7 @@ const createCard = async (req, res, next) => {
       });
     cardId = card._id;
 
+    // update Deck document w/ id of newly added Card
     await Deck.findOneAndUpdate(
       { _id: deckId },
       { $push: { cards: cardId } }
@@ -27,6 +29,7 @@ const createCard = async (req, res, next) => {
       next(err);
     });
 
+    // update User document w/ id of newly added Card
     if (userId) {
       await User.findOneAndUpdate(
         { _id: userId },

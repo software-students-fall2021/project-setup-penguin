@@ -12,6 +12,7 @@ require("./db.js");
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()); // prevents requests from being blocked by CORS
+app.use(express.static("uploads"));
 
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json({ limit: "50mb" }));
