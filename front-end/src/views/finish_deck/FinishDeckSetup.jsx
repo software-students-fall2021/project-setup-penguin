@@ -34,11 +34,12 @@ function FinishDeckSetup() {
       }
     });
 
-    // set textData = all entries from templateData except for image
-    const { image, ...textData } = templateData;
     const formData = new FormData();
     formData.append("deckName", deckName);
     formData.append("deckDescription", deckDescription);
+
+    // set textData = all entries from templateData except for image
+    const { image, ...textData } = templateData;
     formData.append("cardText", JSON.stringify(textData));
 
     if (userId) {
