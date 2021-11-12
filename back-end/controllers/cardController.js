@@ -70,39 +70,6 @@ const deleteCard = async (req, res, next) => {
   } else {
     throw "Error: nonexistent cardId or deckId or userId";
   }
-
-  // fs.readFile("database.json")
-  //   .then((data) => {
-  //     try {
-  //       const jsonData = JSON.parse(data);
-
-  //       if (
-  //         cardId in jsonData.cards &&
-  //         deckId in jsonData.decks &&
-  //         userId in jsonData.users
-  //       ) {
-  //         // will need to make this group of operations atomic later
-  //         // delete the card object
-  //         delete jsonData.cards[cardId];
-  //         // remove the cardId from the deck object
-  //         jsonData.decks[deckId].cards = jsonData.decks[deckId].cards.filter(
-  //           (card) => card != cardId
-  //         );
-  //         // remove the cardId from the user object
-  //         jsonData.users[userId].cards = jsonData.users[userId].cards.filter(
-  //           (card) => card != cardId
-  //         );
-
-  //         const jsonString = JSON.stringify(jsonData);
-  //         fs.writeFile("database.json", jsonString)
-  //           .then(() => res.json({ cardId }))
-  //           .catch((err) => next(err));
-  //       }
-  //     } catch (err) {
-  //       next(err);
-  //     }
-  //   })
-  //   .catch((err) => next(err));
 };
 
 const getCard = (req, res, next) => {
