@@ -5,7 +5,10 @@ const fs = require("fs").promises;
 const db = require("../db.js");
 
 const createCard = async (req, res, next) => {
-  const { newCard, deckId, userId } = req.body;
+  const { deckId, userId, cardText } = req.body;
+  const { filename } = req.file;
+
+  const newCard = JSON.parse(cardText);
   let cardId;
 
   const session = await db.startSession();
@@ -15,6 +18,7 @@ const createCard = async (req, res, next) => {
       deckId,
       userId,
       ...newCard,
+      filename,
     })
       .save()
       .catch((err) => {
