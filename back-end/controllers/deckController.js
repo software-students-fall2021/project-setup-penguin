@@ -7,32 +7,36 @@ const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
 
-const getaccessCodes = async (req, res, next) => {
-  const decks = await Deck.find({}).select("accessCode");
-  console.log(decks);
+const getAccessCodes = async (req, res, next) => {
+  const decks = await Deck.find({})
+    .select("accessCode")
+    .catch((err) => {
+      next(err);
+    });
   res.json(decks);
 };
 
-const getDeckTemplate = (req, res, next) => {
-  const deckId = req.params.deckId;
-
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        if (deckId in jsonData.decks) {
-          res.json(jsonData.decks[deckId].cardTemplate);
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+// get cardTemplate from deck
+const getDeckTemplate = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("cardTemplate")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
 };
 
+// get deckName and deckDescription from deck
+const getDeckDetails = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("deckName deckDescription")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
+};
+
+// get all deck data, including data for each of its cards
 const getDeck = (req, res, next) => {
   const deckId = req.params.deckId;
 
@@ -181,7 +185,8 @@ const deleteDeck = (req, res, next) => {
 };
 
 module.exports = {
-  getaccessCodes,
+  getDeckDetails,
+  getAccessCodes,
   getDeckTemplate,
   getDeck,
   createDeck,
