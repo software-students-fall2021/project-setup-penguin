@@ -3,9 +3,11 @@ const router = express.Router();
 const deckController = require("../controllers/deckController");
 const upload = require("../multerConfig");
 
-router.get("/accessCodes", deckController.getaccessCodes);
+router.get("/accessCodes", deckController.getAccessCodes);
 
 router.get("/deckTemplate/:deckId", deckController.getDeckTemplate);
+
+router.get("/deckDetails/:deckId", deckController.getDeckDetails);
 
 router.get("/:deckId", deckController.getDeck);
 
