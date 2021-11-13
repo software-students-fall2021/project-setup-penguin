@@ -1,5 +1,6 @@
 const Card = require("../models/card");
 const Deck = require("../models/deck");
+const User = require("../models/user");
 const fs = require("fs").promises;
 const db = require("../db.js");
 
@@ -42,46 +43,36 @@ const createCard = async (req, res, next) => {
   res.json({ cardId });
 };
 
-const deleteCard = (req, res, next) => {
+const deleteCard = async (req, res, next) => {
   // current dummy default values since we're not calling the delete endpoint yet
-  const { cardId = "a3ac30da-4402-4359-9ffb-9ed5b8a27ba0" } = req.params;
-  const {
-    deckId = "a12ccfc9-21da-4430-a37c-69416621dc09",
-    userId = "janethuang@gmail.com",
-  } = req.body;
+  const { cardId } = req.params;
+  const { deckId, userId } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  const doesCardExist = await Card.exists({ _id: cardId });
+  const doesDeckExist = await Deck.exists({ _id: deckId });
+  const doesUserExist = await User.exists({ _id: userId });
 
-        if (
-          cardId in jsonData.cards &&
-          deckId in jsonData.decks &&
-          userId in jsonData.users
-        ) {
-          // will need to make this group of operations atomic later
-          // delete the card object
-          delete jsonData.cards[cardId];
-          // remove the cardId from the deck object
-          jsonData.decks[deckId].cards = jsonData.decks[deckId].cards.filter(
-            (card) => card != cardId
-          );
-          // remove the cardId from the user object
-          jsonData.users[userId].cards = jsonData.users[userId].cards.filter(
-            (card) => card != cardId
-          );
+  if (doesCardExist && doesDeckExist && doesUserExist) {
+    const session = await db.startSession();
+    await session.withTransaction(async () => {
+      // delete card document
+      await Card.deleteOne({ _id: cardId }).catch((err) => next(err));
 
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => res.json({ cardId }))
-            .catch((err) => next(err));
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+      // delete cardId from deck object
+      const deck = await Deck.findById(deckId);
+      deck.cards = deck.cards.filter((currCardId) => currCardId != cardId);
+      deck.save();
+
+      // delete cardId from user object
+      const user = await User.findById(userId);
+      user.cards = user.cards.filter((currCardId) => currCardId != cardId);
+      user.save();
+    });
+
+    res.send({ cardId });
+  } else {
+    throw "Error: nonexistent cardId or deckId or userId";
+  }
 };
 
 const getCard = (req, res, next) => {
