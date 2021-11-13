@@ -43,10 +43,13 @@ export const maybeRenderImage = (
     finalCrop.height * scaleY
   );
 
-  setForm((prevState) => ({
-    ...prevState,
-    // image: canvas.toDataURL(), TODO: replace w/ multer
-  }));
+  // TODO: doesn't always convert to blob fast enough
+  canvas.toBlob((blob) => {
+    setForm((prevState) => ({
+      ...prevState,
+      image: blob,
+    }));
+  });
 };
 
 export const ImageUploaderModal = ({

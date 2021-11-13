@@ -56,18 +56,22 @@ const getDeck = (req, res, next) => {
 };
 
 const createDeck = async (req, res, next) => {
-  const { userId, deckName, deckDescription, cardTemplate } = req.body;
+  const { userId, deckName, deckDescription, cardText } = req.body;
+  const { filename } = req.file;
+
+  const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
   let deckId;
 
   const session = await db.startSession();
   await session.withTransaction(async () => {
+    // create & save new Deck document
     const deck = await new Deck({
       accessCode,
       ownerId: userId,
       deckName,
       deckDescription,
-      cardTemplate: { ...cardTemplate, image: null },
+      cardTemplate,
       cards: [],
     })
       .save()
@@ -76,18 +80,26 @@ const createDeck = async (req, res, next) => {
       });
     deckId = deck._id;
 
-    const card = await new Card({ userId, deckId, ...cardTemplate })
+    // create & save new Card document
+    const card = await new Card({
+      userId,
+      deckId,
+      filename,
+      ...cardTemplate,
+    })
       .save()
       .catch((err) => {
         next(err);
       });
 
+    // update Deck document w/ id of newly added Card
     await Deck.findOneAndUpdate({ _id: deckId }, { cards: [card._id] }).catch(
       (err) => {
         next(err);
       }
     );
 
+    // update User document w/ id of newly added Card
     if (userId) {
       await User.findOneAndUpdate(
         { _id: userId },
