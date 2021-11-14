@@ -1,23 +1,29 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { CreateBody, Button } from "../../common";
-import { useParams, NavLink } from "react-router-dom";
-import { EMPTY_CARD } from "../../common/constants";
+import { useParams, Redirect } from "react-router-dom";
+import { EMPTY_TEMPLATE, TEST_TEMPLATE_DATA } from "../../common/constants";
+import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 import * as Icon from "react-bootstrap-icons";
 
 function UpdateCard() {
   const { cardId, deckId } = useParams();
-  const [form, setForm] = useState(EMPTY_CARD);
+  const [form, setForm] = useState(EMPTY_TEMPLATE);
+  const [isCardLoaded, setIsCardLoaded] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
         setForm(response.data);
+        setIsCardLoaded(true);
       })
       .catch((err) => {
         console.log("!!", err);
-        setForm(EMPTY_CARD);
+        setForm(TEST_TEMPLATE_DATA);
+        setIsCardLoaded(true);
       });
   }, [cardId, deckId]);
 
@@ -28,6 +34,7 @@ function UpdateCard() {
         userId,
       })
       .then((res) => {
+        setRedirect(true);
         return res["data"];
       })
       .catch((err) => {
@@ -35,31 +42,47 @@ function UpdateCard() {
       });
   };
 
+  if (redirect) {
+    return <Redirect to={`/deck/${deckId}`} />;
+  }
+
+  //extract 'templateData' to pass to cardEditorProps so that deck specific fields aren't editable
+  const templateData = {
+    "sectionLabel0": form["sectionLabel0"],
+    "sectionLabel1": form["sectionLabel1"],
+    "sectionLabel2": form["sectionLabel2"],
+    "sliderLabelMin": form["sliderLabelMin"],
+    "sliderLabelMax": form["sliderLabelMax"]
+  };
+
   const prompt = (
     <p>
-      Edit your card so your {deckId} teammates can get the best information
+      Edit your card so your teammates can get the best information
       about you!
     </p>
   );
 
   const btn = (
-    <NavLink to={`/deck/${deckId}`}>
       <Button
         btnText="Save card changes to deck"
         onClick={() => {
-          saveCard();
+          saveCard();      
         }}
         icon={<Icon.ArrowRight />}
       />
-    </NavLink>
+    
   );
 
-  return (
+  const shouldDisableTour = true;
+
+  return !isCardLoaded ? (
+    <LoadingSpinner />
+  ) : (
     <CreateBody
       header="Update Your Card"
       prompt={prompt}
       btn={btn}
-      cardEditorProps={{ form, setForm }}
+      cardEditorProps={{ shouldDisableTour, templateData, form, setForm }}
     />
   );
 }
