@@ -62,10 +62,10 @@ function DeckView() {
           {/* TODO: only show button for admin */}
           <div className="deckview-buttons">
             <div className="edit">
-              <Button btnText="Edit" linkTo={`${id}/edit`} />
+              <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
             </div>
             <div className="delete">
-              <Button btnText="Delete" onClick={() => deleteDeck()} />
+              <Button btnText="Delete Deck" onClick={() => deleteDeck()} />
             </div>
             <div className="add">
               <DarkButton btnText="Add Card" linkTo={`${id}/add`} />
