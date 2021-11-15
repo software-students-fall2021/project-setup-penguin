@@ -12,7 +12,7 @@ const CardSchema = new Schema({
   sectionContent1: { type: String },
   sectionContent2: { type: String },
   sliderValue: { type: Number },
-  imageId: { type: Schema.Types.ObjectId, ref: "Image" },
+  filename: { type: String },
 });
 
 module.exports = mongoose.model("Card", CardSchema);
