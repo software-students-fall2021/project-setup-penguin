@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MODAL_PAGE_TYPE } from "../constants";
 import { TextInput } from "../../common";
-
 import "./SignupOrLogin.css";
 
 const SignupOrLogin = ({
@@ -14,6 +13,23 @@ const SignupOrLogin = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordInputType, setPasswordInputType] = useState("password");
+
+  const onClickShowPassword = (e) => {
+    if (e.target.checked) {
+      setPasswordInputType("text");
+    } else {
+      setPasswordInputType("password");
+    }
+  };
+
+  // clear form when switching btw login & signup pages
+  useEffect(() => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPasswordInputType("password");
+  }, [pageType]);
 
   return (
     <div className="SignupOrLogin">
@@ -34,7 +50,16 @@ const SignupOrLogin = ({
         placeholder="Password"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
+        type={passwordInputType}
       />
+      <div className="SignupOrLogin__showPassword">
+        <input
+          type="checkbox"
+          onClick={(e) => onClickShowPassword(e)}
+          checked={passwordInputType === "text"}
+        />
+        Show Password
+      </div>
       {pageType === MODAL_PAGE_TYPE.SIGNUP ? (
         <i className="SignupOrLogin__altLink">
           Already have an account? Log in{" "}

@@ -1,9 +1,15 @@
 import "./TextInput.css";
 
-function TextInput({ isLarge = false, placeholder, value, onChange }) {
+function TextInput({
+  isLarge = false,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+}) {
   return (
     <input
-      type="text"
+      type={type}
       placeholder={placeholder}
       className={"TextInput " + (isLarge && "TextInput__Large")}
       value={value}

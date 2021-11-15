@@ -46,3 +46,11 @@
 .TextInput + .TextInput {
   margin-top: 1.5em;
 }
+
+.SignupOrLogin__showPassword {
+  margin-top: 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}
