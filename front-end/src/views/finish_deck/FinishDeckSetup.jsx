@@ -7,7 +7,7 @@ import {
 } from "../../common/constants";
 import axios from "axios";
 import { DeckEditor, AccountPromptModal, Button } from "../../common";
-import * as Icon from "react-bootstrap-icons";
+import { ArrowRight } from "react-bootstrap-icons";
 import "./FinishDeckSetup.css";
 
 function FinishDeckSetup() {
@@ -119,7 +119,7 @@ function FinishDeckSetup() {
         onClick={() => {
           setShowModal(true);
         }}
-        icon={<Icon.ArrowRight />}
+        icon={<ArrowRight />}
       />
     </div>
   );

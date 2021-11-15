@@ -2,7 +2,7 @@ import { Redirect } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button, TextInput, ErrorMessage } from "../common";
 import axios from "axios";
-import * as Icon from "react-bootstrap-icons";
+import { ArrowRight } from "react-bootstrap-icons";
 
 function FindDeck() {
   const [maybeAccessCode, setMaybeAccessCode] = useState("");
@@ -69,7 +69,7 @@ function FindDeck() {
       <Button
         btnText="Find my deck"
         onClick={onContinue}
-        icon={<Icon.ArrowRight />}
+        icon={<ArrowRight />}
       />
     </div>
   );

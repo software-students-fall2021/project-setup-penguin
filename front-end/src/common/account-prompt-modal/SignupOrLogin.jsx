@@ -64,7 +64,7 @@ const SignupOrLogin = ({
         <i className="SignupOrLogin__altLink">
           Already have an account? Log in{" "}
           <a
-            className="SignupOrLogin__link"
+            className="link inline-link"
             onClick={() => {
               setPageType(MODAL_PAGE_TYPE.LOGIN);
             }}
@@ -76,7 +76,7 @@ const SignupOrLogin = ({
         <i className="SignupOrLogin__altLink">
           Need to make an account? Sign up{" "}
           <a
-            className="SignupOrLogin__link"
+            className="link inline-link"
             onClick={() => {
               setPageType(MODAL_PAGE_TYPE.SIGNUP);
             }}
@@ -87,10 +87,7 @@ const SignupOrLogin = ({
       )}
       <div className="SignupOrLogin__footer">
         {onContinueAsGuest ? (
-          <a
-            className="SignupOrLogin__link nakedLink"
-            onClick={onContinueAsGuest}
-          >
+          <a className="link" onClick={onContinueAsGuest}>
             Continue as guest
           </a>
         ) : (

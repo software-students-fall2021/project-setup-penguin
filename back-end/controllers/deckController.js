@@ -57,7 +57,6 @@ const getDeck = (req, res, next) => {
 
 const createDeck = async (req, res, next) => {
   const { userId, deckName, deckDescription, cardText } = req.body;
-  const { filename } = req.file;
 
   const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
@@ -84,7 +83,7 @@ const createDeck = async (req, res, next) => {
     const card = await new Card({
       userId,
       deckId,
-      filename,
+      filename: req.file?.filename,
       ...cardTemplate,
     })
       .save()
