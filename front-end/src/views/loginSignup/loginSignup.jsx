@@ -23,7 +23,7 @@ function LoginSignup({ pageType }) {
         method:'post',
         url:'http://localhost:8000/user',
         data:{
-          username: email,
+          email: email,
           password: password,
           name: name,
         }
