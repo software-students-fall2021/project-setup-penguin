@@ -6,6 +6,7 @@ import { TEST_CARDS_ARRAY } from "../../common/constants";
 import axios from "axios";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
+import { Redirect } from "react-router-dom";
 
 function AccountPage({ token }) {
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
@@ -146,7 +147,7 @@ function AccountPage({ token }) {
     pageContent = joinedContent;
   }
 
-  return !isDeckLoaded ? (
+  const page = !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
     <div className="container">
@@ -171,6 +172,8 @@ function AccountPage({ token }) {
       <div className="deck-list">{pageContent}</div>
     </div>
   );
+
+  return !token ? <Redirect to="/login" /> : page;
 }
 
 export default AccountPage;

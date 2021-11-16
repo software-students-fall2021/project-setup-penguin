@@ -54,16 +54,28 @@ function Navigation({ token }) {
               </NavLink>
             </Nav.Link>
             {token ? (
-              <Nav.Link>
-                <NavLink
-                  eventKey="3"
-                  className="Navigation__link"
-                  activeClassName="Navigation__active"
-                  to="/logout"
-                >
-                  LOG OUT
-                </NavLink>
-              </Nav.Link>
+              <>
+                <Nav.Link>
+                  <NavLink
+                    eventKey="3"
+                    className="Navigation__link"
+                    activeClassName="Navigation__active"
+                    to="/accountpage"
+                  >
+                    ACCOUNT
+                  </NavLink>
+                </Nav.Link>
+                <Nav.Link>
+                  <NavLink
+                    eventKey="4"
+                    className="Navigation__link"
+                    activeClassName="Navigation__active"
+                    to="/logout"
+                  >
+                    LOG OUT
+                  </NavLink>
+                </Nav.Link>
+              </>
             ) : (
               <>
                 <Nav.Link>
