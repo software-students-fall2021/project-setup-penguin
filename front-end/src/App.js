@@ -61,7 +61,7 @@ function App() {
               <FindDeck />
             </Route>
             <Route path="/finishdeck">
-              <FinishDeckSetup />
+              <FinishDeckSetup token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/edit">
               <UpdateDeck />
@@ -70,7 +70,7 @@ function App() {
               <DeckView />
             </Route>
             <Route path="/deck/:deckId/add">
-              <CreateCard />
+              <CreateCard token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/card/:cardId/edit">
               <UpdateCard />

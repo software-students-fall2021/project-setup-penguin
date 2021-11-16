@@ -11,7 +11,7 @@ import {
 import { ArrowRight } from "react-bootstrap-icons";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 
-function CreateCard() {
+function CreateCard({ token, setToken }) {
   const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
@@ -35,7 +35,7 @@ function CreateCard() {
     return <Redirect to={`/deck/${deckId}`} />;
   }
 
-  const saveCard = (userId) => {
+  const saveCard = (token) => {
     const formData = new FormData();
     formData.append("deckId", deckId);
 
@@ -43,8 +43,8 @@ function CreateCard() {
     const { image, ...textData } = form;
     formData.append("cardText", JSON.stringify(textData));
 
-    if (userId) {
-      formData.append("userId", userId);
+    if (token) {
+      formData.append("token", token);
     }
 
     if (form.image) {
@@ -74,37 +74,65 @@ function CreateCard() {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       axios
         .post("http://localhost:8000/user", {
-          name,
-          username: email,
+          email,
           password,
+          name,
         })
         .then((res) => {
-          saveCard(res.data.username);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveCard(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     } else {
       axios
         .post("http://localhost:8000/user/login", {
-          userId: email,
+          email,
           password,
         })
         .then((res) => {
-          saveCard(res.data.userId);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveCard(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   };
 
   const prompt = (
-    <p>
-      Help your teammates get to know you by populating the template card with
-      information about yourself!
-    </p>
+    <>
+      <p>
+        Help your teammates get to know you by populating the template card with
+        information about yourself!
+      </p>
+      <p>
+        Need a little more guidance? Launch a guided creation tour{" "}
+        <a
+          className="link inline-link"
+          onClick={() => {
+            setShouldRunTour(true);
+          }}
+        >
+          here
+        </a>
+        !
+      </p>
+    </>
   );
 
   const btn = (
     <Button
       btnText="Save card to deck"
       onClick={() => {
-        setShowModal(true);
+        if (token) {
+          saveCard(token);
+        } else {
+          setShowModal(true);
+        }
       }}
       icon={<ArrowRight />}
     />

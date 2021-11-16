@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const shortid = require("shortid");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
 const db = require("../db.js");
 const User = require("../models/user");
@@ -66,11 +67,16 @@ const createDeck = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { userId, deckName, deckDescription, cardText } = req.body;
+  const { token, deckName, deckDescription, cardText } = req.body;
 
   const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
   let deckId;
+  let userId;
+
+  if (token) {
+    userId = jwt.decode(token).id;
+  }
 
   const session = await db.startSession();
   await session.withTransaction(async () => {

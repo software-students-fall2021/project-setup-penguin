@@ -3,13 +3,19 @@ const Deck = require("../models/deck");
 const User = require("../models/user");
 const fs = require("fs").promises;
 const db = require("../db.js");
+const jwt = require("jsonwebtoken");
 
 const createCard = async (req, res, next) => {
-  const { deckId, userId, cardText } = req.body;
+  const { deckId, token, cardText } = req.body;
   const { filename } = req.file;
 
   const newCard = JSON.parse(cardText);
   let cardId;
+  let userId;
+
+  if (token) {
+    userId = jwt.decode(token).id;
+  }
 
   const session = await db.startSession();
   await session.withTransaction(async () => {
