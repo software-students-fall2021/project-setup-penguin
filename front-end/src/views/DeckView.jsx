@@ -31,10 +31,8 @@ function DeckView() {
       .delete(`http://localhost:8000/deck/${id}`)
       .then(() => {
         //After deleting, redirect user back to homepage.
-        console.log("hi!");
         alert("You've just deleted a deck!");
         window.location.href = "http://localhost:3000"
-        console.log("hoo!");
       })
       .catch((err) => {
         console.log("!!", err);
