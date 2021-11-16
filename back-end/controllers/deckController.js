@@ -153,15 +153,18 @@ const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
   let cardIds = [];
 
+  // Find deck to delete by deckId
   await Deck.find({ _id: deckId }
     ).then((result) => {
       cardIds = result.cards;
       console.log("cardIds", cardIds);
 
+      // Delete deck
       Deck.deleteOne({ _id: deckId }
         ).catch((err) => {
           next(err);
         })
+      // Delete cards that were in the deck
       Card.deleteMany({ _id: cardIds }
         ).catch((err) => {
           next(err);
