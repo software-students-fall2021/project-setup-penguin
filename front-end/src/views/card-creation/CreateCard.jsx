@@ -9,20 +9,21 @@ import {
   TEST_TEMPLATE_DATA,
 } from "../../common/constants";
 import { ArrowRight } from "react-bootstrap-icons";
+import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 
 function CreateCard() {
   const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
-  const [templateData, setTemplateData] = useState({});
+  const [templateData, setTemplateData] = useState();
   const [redirect, setRedirect] = useState(false);
   const [shouldRunTour, setShouldRunTour] = useState(false);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
-      .then((response) => {
-        setTemplateData(response.data);
+      .then((res) => {
+        setTemplateData(res.data.cardTemplate);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -35,11 +36,26 @@ function CreateCard() {
   }
 
   const saveCard = (userId) => {
+    const formData = new FormData();
+    formData.append("deckId", deckId);
+
+    // set textData = all entries from form except for image
+    const { image, ...textData } = form;
+    formData.append("cardText", JSON.stringify(textData));
+
+    if (userId) {
+      formData.append("userId", userId);
+    }
+
+    if (form.image) {
+      formData.append("cardImage", form.image, "profile");
+    }
+
     axios
-      .post(`http://localhost:8000/card`, {
-        newCard: form,
-        userId,
-        deckId,
+      .post(`http://localhost:8000/card`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then(() => {
         setShowModal(false);
@@ -78,24 +94,10 @@ function CreateCard() {
   };
 
   const prompt = (
-    <>
-      <p>
-        Help your teammates get to know you by populating the template card with
-        information about yourself!
-      </p>
-      <p>
-        Need a little more guidance? Launch a guided creation tour{" "}
-        <a
-          className="link inline-link"
-          onClick={() => {
-            setShouldRunTour(true);
-          }}
-        >
-          here
-        </a>
-        !
-      </p>
-    </>
+    <p>
+      Help your teammates get to know you by populating the template card with
+      information about yourself!
+    </p>
   );
 
   const btn = (
@@ -108,7 +110,9 @@ function CreateCard() {
     />
   );
 
-  return (
+  return !templateData ? (
+    <LoadingSpinner />
+  ) : (
     <>
       <CreateBody
         header="Create Your Card"
