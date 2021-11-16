@@ -12,14 +12,14 @@ router.get("/:deckId", deckController.getDeck);
 
 router.post(
   "/",
-  body("deckName", "Deck name is required").notEmpty(),
+  // body("deckName", "Deck name is required").notEmpty(),
   upload.single("cardImage"),
   deckController.createDeck
 );
 
 router.patch(
   "/:deckId",
-  body("deckName", "Deck name is required").notEmpty(),
+  // body("deckName", "Deck name is required").notEmpty(),
   deckController.updateDeck
 );
 
