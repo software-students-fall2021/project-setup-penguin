@@ -28,19 +28,23 @@ function AccountPage() {
     const [joinedDeckNamesArray, setJoinedDeckNameData] = useState([]);
     const [joinedDeckIdsArray, setJoinedDeckIdData] = useState([]);
     const [joinedCardsArray, setJoinedCardsData] = useState([]); //user cards in joined decks
+    const [ownedTemplateArray, setOwnedTemplateData] = useState([]);
+    const [joinedTemplateArray, setJoinedTemplateData] = useState([]);
 
     useEffect(() => {
       axios
-        .get(`http://localhost:8000/user/${id}`)
+        .get(`http://localhost:8000/user/618bfafc04c45ff64af7c794`)
         .then((response) => {
           setIsDeckLoaded(true);
           let userCards = response.data;
 
           //creating arrays to make html elements
           let ownedTitles = [];
+          let ownedTemplates = [];
           let ownedCards = [];
           let ownedIds = [];
           let joinedCards = [];
+          let joinedTemplates = [];
           let joinedTitles = [];
           let joinedIds = [];
 
@@ -50,11 +54,13 @@ function AccountPage() {
               ownedTitles.push(userCards[id].deckName);
               ownedCards.push(userCards[id].cardData);
               ownedIds.push(userCards[id].cardData.deckId);
+              ownedTemplates.push(userCards[id].cardTemplate);
             }
             else{
               joinedTitles.push(userCards[id].deckName);
               joinedCards.push(userCards[id].cardData);
               joinedIds.push(userCards[id].cardData.deckId);
+              joinedTemplates.push(userCards[id].cardTemplate);
             }
           }
 
@@ -64,6 +70,8 @@ function AccountPage() {
           setJoinedDeckNameData(joinedTitles);
           setJoinedDeckIdData(joinedIds);
           setJoinedCardsData(joinedCards);
+          setOwnedTemplateData(ownedTemplates);
+          setJoinedTemplateData(joinedTemplates);
         })
         .catch((err) => {
           console.log("!!", err);
@@ -90,25 +98,24 @@ function AccountPage() {
         setDeckActive(1);
     }
 
-    //<DisplayCard tempArray={ownedCardsArray[i]}></DisplayCard>
-//defines page content (either cards or decks)
+//defines page content (either joined or owned)
 
     const ownedContent = [];
     const joinedContent = [];
 
     for(let i = 0; i < ownedDeckNamesArray.length; i++){
-      pageElement = <><div className="deck"><NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="title">{ownedDeckNamesArray[i]}</NavLink>
-      <DisplayCard tempArray={ownedCardsArray[i]}></DisplayCard>
+      pageElement = <div key={i}><div className="deck"><div className="title"><NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">{ownedDeckNamesArray[i]}</NavLink></div>
+      <DisplayCard card={ownedCardsArray[i]} template={ownedTemplateArray[i]}></DisplayCard>
       </div>
-      </>;
+      </div>;
       ownedContent.push(pageElement);
     }
 
     for(let i = 0; i < joinedDeckNamesArray.length; i++){
-      pageElement = <><div className="deck"><NavLink to={`deck/${joinedDeckIdsArray[i]}`} className="title">{joinedDeckNamesArray[i]}</NavLink>
-      <DisplayCard tempArray={joinedCardsArray[i]}></DisplayCard>
+      pageElement = <div key={i}><div className="deck"><div className="title"><NavLink to={`deck/${joinedDeckIdsArray[i]}` } className="deckLink">{joinedDeckNamesArray[i]}</NavLink></div>
+      <DisplayCard card={joinedCardsArray[i]} template={joinedTemplateArray[i]}></DisplayCard>
       </div>
-      </>;
+      </div>;
       joinedContent.push(pageElement);
     }
     
