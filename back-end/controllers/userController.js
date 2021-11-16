@@ -1,42 +1,39 @@
-const User = require("../models/user");
-const Card = require("../models/card");
-const Deck = require("../models/deck");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const fs = require("fs").promises;
 const db = require("../db.js");
 
-const createUser = (req, res, next) => {
-  const { username, password, name } = req.body;
+const User = require("../models/user");
+const Card = require("../models/card");
+const Deck = require("../models/deck");
 
-  const userData = {
-    username,
-    password,
-    name,
-    card: [],
-    deck: [],
-  };
+const { jwtOptions } = require("../jwt-config");
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+const createUser = async (req, res, next) => {
+  const { email, password, name } = req.body;
 
-        // update user document
-        if (username in jsonData.users) {
-          throw "User already exists";
-        }
+  const existingUser = await User.findOne({ email: email });
+  if (existingUser) {
+    res.status(401).json({ success: false, message: `email already taken` });
+  }
 
-        // save username
-        jsonData.users[username] = userData;
+  const hash = await bcrypt.hash(password, 10).catch((err) => {
+    next(err);
+  });
+  const user = await new User({
+    name: name,
+    email: email,
+    password: hash,
+    cards: [],
+  })
+    .save()
+    .catch((err) => {
+      next(err);
+    });
 
-        const jsonString = JSON.stringify(jsonData, null, 2);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ username, name }))
-          .catch((err) => next(err));
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, jwtOptions.secretOrKey);
+  res.json({ success: true, email: user.email, token: token });
 };
 
 const deleteUser = (req, res, next) => {
@@ -81,7 +78,7 @@ const deleteUser = (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const userId = req.params.userId;
+  const userId = req.user._id;
 
   // query DB for user data and extract array of cardIds
   const userData = await User.findOne({ _id: userId });
@@ -97,14 +94,14 @@ const getUser = async (req, res, next) => {
   // query DB for whether user owns the deck
   const userCardsWithDeckData = await Promise.all(
     userCards.map(async (userCard) => {
-      console.log("userCard:", typeof userCard);
       const deckData = await Deck.findOne({
         _id: userCard.deckId.toString(),
       });
 
       return {
-        isOwned: deckData.ownerId === userId,
+        isOwned: deckData.ownerId.equals(userId),
         deckName: deckData.deckName,
+        cardTemplate: deckData.cardTemplate,
         cardData: {
           ...userCard.toObject(),
           _id: userCard._id.toString(),
@@ -117,65 +114,53 @@ const getUser = async (req, res, next) => {
   res.send(userCardsWithDeckData);
 };
 
-const updateUser = (req, res, next) => {
+const updateUser = async (req, res, next) => {
   const userId = req.params.userId;
-  const { username, password, name } = req.body;
+  const { email, password, name } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  // check if User already exists
+  User.countDocuments({ _id: userId }, function (err, count) {
+    if (count == 0) {
+      throw "User does not exist";
+    }
+  });
 
-        // update user document
-        if (userId in jsonData.users) {
-          if (username != userId) {
-            delete Object.assign(jsonData.users, {
-              [username]: jsonData.users[userId],
-            })[userId];
-          }
-
-          jsonData.users[username].email = username;
-          jsonData.users[username].password = password;
-          jsonData.users[username].name = name;
-
-          const jsonString = JSON.stringify(jsonData, null, 2);
-          fs.writeFile("database.json", jsonString)
-            .then(() => {
-              console.log(jsonData.users[username]);
-              res.json(jsonData.users[username]);
-            })
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find user in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  await User.findOneAndUpdate({ _id: userId }, { name, email, password }).catch(
+    (err) => {
+      next(err);
+    }
+  );
+  res.json({ userId });
 };
 
-const loginUser = (req, res, next) => {
-  const { userId, password } = req.body;
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  if (!email || !password) {
+    res
+      .status(401)
+      .json({ success: false, message: `no email or password provided` });
+  }
 
-        if (
-          userId in jsonData.users &&
-          jsonData.users[userId].password === password
-        ) {
-          res.json({ userId });
-        } else {
-          throw "Invalid Login";
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    res
+      .status(401)
+      .json({ success: false, message: `user not found: ${email}.` });
+  }
+  const match = await bcrypt.compare(password, user.password).catch((err) => {
+    next(err);
+  });
+
+  if (match) {
+    const payload = { id: user._id };
+    const token = jwt.sign(payload, jwtOptions.secretOrKey);
+    res.json({ success: true, email: user.email, token: token });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: `passwords did not match` });
+  }
 };
 
 module.exports = {

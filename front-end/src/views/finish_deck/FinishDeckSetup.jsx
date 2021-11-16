@@ -10,7 +10,7 @@ import { DeckEditor, AccountPromptModal, Button } from "../../common";
 import { ArrowRight } from "react-bootstrap-icons";
 import "./FinishDeckSetup.css";
 
-function FinishDeckSetup() {
+function FinishDeckSetup({ token, setToken }) {
   const data = useLocation();
   const templateData = data?.state?.templateData;
 
@@ -23,7 +23,7 @@ function FinishDeckSetup() {
     return <Redirect to={redirectLink} />;
   }
 
-  const saveDeck = (userId) => {
+  const saveDeck = (token) => {
     let deckId;
 
     // user-entered template data would be contained in data.state.templateData
@@ -34,15 +34,16 @@ function FinishDeckSetup() {
       }
     });
 
-    // set textData = all entries from templateData except for image
-    const { image, ...textData } = templateData;
     const formData = new FormData();
     formData.append("deckName", deckName);
     formData.append("deckDescription", deckDescription);
+
+    // set textData = all entries from templateData except for image
+    const { image, ...textData } = templateData;
     formData.append("cardText", JSON.stringify(textData));
 
-    if (userId) {
-      formData.append("userId", userId);
+    if (token) {
+      formData.append("token", token);
     }
 
     if (templateData.image) {
@@ -74,21 +75,31 @@ function FinishDeckSetup() {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       axios
         .post("http://localhost:8000/user", {
-          name,
-          username: email,
+          email,
           password,
+          name,
         })
         .then((res) => {
-          saveDeck(res.data.username);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveDeck(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     } else {
       axios
         .post("http://localhost:8000/user/login", {
-          userId: email,
+          email,
           password,
         })
         .then((res) => {
-          saveDeck(res.data.userId);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveDeck(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   };
@@ -104,7 +115,11 @@ function FinishDeckSetup() {
         setDeckDescription={setDeckDescription}
         onSubmit={(evt) => {
           evt.preventDefault();
-          setShowModal(true);
+          if (token) {
+            saveDeck(token);
+          } else {
+            setShowModal(true);
+          }
         }}
       />
       <AccountPromptModal
@@ -117,7 +132,11 @@ function FinishDeckSetup() {
       <Button
         btnText="Create deck"
         onClick={() => {
-          setShowModal(true);
+          if (token) {
+            saveDeck(token);
+          } else {
+            setShowModal(true);
+          }
         }}
         icon={<ArrowRight />}
       />

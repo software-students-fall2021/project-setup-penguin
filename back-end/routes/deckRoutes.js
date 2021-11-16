@@ -4,22 +4,24 @@ const deckController = require("../controllers/deckController");
 const upload = require("../multerConfig");
 const { body } = require("express-validator");
 
-router.get("/accessCodes", deckController.getaccessCodes);
+router.get("/accessCodes", deckController.getAccessCodes);
 
 router.get("/deckTemplate/:deckId", deckController.getDeckTemplate);
+
+router.get("/deckDetails/:deckId", deckController.getDeckDetails);
 
 router.get("/:deckId", deckController.getDeck);
 
 router.post(
   "/",
-  // body("deckName", "Deck name is required").notEmpty(),
   upload.single("cardImage"),
+  body("deckName", "Deck name is required").notEmpty(),
   deckController.createDeck
 );
 
 router.patch(
   "/:deckId",
-  // body("deckName", "Deck name is required").notEmpty(),
+  body("deckName", "Deck name is required").notEmpty(),
   deckController.updateDeck
 );
 

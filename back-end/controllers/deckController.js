@@ -1,36 +1,40 @@
 const fs = require("fs").promises;
 const shortid = require("shortid");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
 const db = require("../db.js");
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
 
-const getaccessCodes = async (req, res, next) => {
-  const decks = await Deck.find({}).select("accessCode");
-  // console.log(decks);
+const getAccessCodes = async (req, res, next) => {
+  const decks = await Deck.find({})
+    .select("accessCode")
+    .catch((err) => {
+      next(err);
+    });
   res.json(decks);
 };
 
-const getDeckTemplate = (req, res, next) => {
-  const deckId = req.params.deckId;
+// get cardTemplate from deck
+const getDeckTemplate = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("cardTemplate")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
+};
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        if (deckId in jsonData.decks) {
-          res.json(jsonData.decks[deckId].cardTemplate);
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+// get deckName and deckDescription from deck
+const getDeckDetails = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("deckName deckDescription")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
 };
 
 const getDeck = async (req, res, next) => {
@@ -66,11 +70,16 @@ const createDeck = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { userId, deckName, deckDescription, cardText } = req.body;
+  const { token, deckName, deckDescription, cardText } = req.body;
 
   const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
   let deckId;
+  let userId;
+
+  if (token) {
+    userId = jwt.decode(token).id;
+  }
 
   const session = await db.startSession();
   await session.withTransaction(async () => {
@@ -163,7 +172,8 @@ const deleteDeck = async (req, res, next) => {
 };
 
 module.exports = {
-  getaccessCodes,
+  getDeckDetails,
+  getAccessCodes,
   getDeckTemplate,
   getDeck,
   createDeck,

@@ -14,7 +14,7 @@ function UpdateDeck() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/${deckId}`)
+      .get(`http://localhost:8000/deck/deckDetails/${deckId}`)
       .then((res) => {
         setIsDeckLoaded(true);
         setDeckName(res.data.deckName);
