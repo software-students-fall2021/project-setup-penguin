@@ -3,40 +3,35 @@ const Card = require("../models/card");
 const Deck = require("../models/deck");
 const fs = require("fs").promises;
 const db = require("../db.js");
+const e = require("cors");
 
-const createUser = (req, res, next) => {
-  const { username, password, name } = req.body;
+const createUser = async (req, res, next) => {
+  const { email, password, name } = req.body;
 
-  const userData = {
-    username,
-    password,
-    name,
-    card: [],
-    deck: [],
-  };
-
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        // update user document
-        if (username in jsonData.users) {
-          throw "User already exists";
-        }
-
-        // save username
-        jsonData.users[username] = userData;
-
-        const jsonString = JSON.stringify(jsonData, null, 2);
-        fs.writeFile("database.json", jsonString)
-          .then(() => res.json({ username, name }))
-          .catch((err) => next(err));
-      } catch (err) {
-        next(err);
+  const session = await db.startSession();
+  await session.withTransaction(async () => {
+    // check if User already exists
+    User.countDocuments({ email: email }, function (err, count) {
+      if (count > 0) {
+        throw "User already exists";
       }
+    });
+    
+    // create & save new User document
+    const user = await new User({
+      name: name,
+      email: email,
+      password: password,
+      cards: []
     })
-    .catch((err) => next(err));
+      .save()
+      .catch((err) => {
+        next(err);
+      });
+  });
+
+  session.endSession();
+  res.json({ email });
 };
 
 const deleteUser = (req, res, next) => {
@@ -117,42 +112,24 @@ const getUser = async (req, res, next) => {
   res.send(userCardsWithDeckData);
 };
 
-const updateUser = (req, res, next) => {
+const updateUser = async (req, res, next) => {
   const userId = req.params.userId;
-  const { username, password, name } = req.body;
+  const { email, password, name } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  // check if User already exists
+  User.countDocuments({ _id: userId }, function (err, count) {
+    if (count == 0) {
+      throw "User does not exist";
+    }
+  });
 
-        // update user document
-        if (userId in jsonData.users) {
-          if (username != userId) {
-            delete Object.assign(jsonData.users, {
-              [username]: jsonData.users[userId],
-            })[userId];
-          }
-
-          jsonData.users[username].email = username;
-          jsonData.users[username].password = password;
-          jsonData.users[username].name = name;
-
-          const jsonString = JSON.stringify(jsonData, null, 2);
-          fs.writeFile("database.json", jsonString)
-            .then(() => {
-              console.log(jsonData.users[username]);
-              res.json(jsonData.users[username]);
-            })
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find user in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  await User.findOneAndUpdate(
+    { _id: userId },
+    { name, email, password }
+  ).catch((err) => {
+    next(err);
+  });
+  res.json({ userId });
 };
 
 const loginUser = (req, res, next) => {

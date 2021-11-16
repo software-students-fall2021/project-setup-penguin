@@ -20,10 +20,10 @@ function LoginSignup({ pageType }) {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       // TODO: create & save account – get id of newly created account
       axios({
-        method: "post",
-        url: "http://localhost:8000/user",
-        data: {
-          username: email,
+        method:'post',
+        url:'http://localhost:8000/user',
+        data:{
+          email: email,
           password: password,
           name: name,
         },
