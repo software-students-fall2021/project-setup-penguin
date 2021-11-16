@@ -3,7 +3,8 @@ const Card = require("../models/card");
 const Deck = require("../models/deck");
 const fs = require("fs").promises;
 const db = require("../db.js");
-const e = require("cors");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
@@ -11,23 +12,24 @@ const createUser = async (req, res, next) => {
   const session = await db.startSession();
   await session.withTransaction(async () => {
     // check if User already exists
-    User.countDocuments({ email: email }, function (err, count) {
-      if (count > 0) {
-        throw "User already exists";
-      }
+    const count = await User.countDocuments({ email: email });
+    if (count > 0) {
+      throw "User already exists";
+    }
+
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
+      // create & save new User document
+      const user = await new User({
+        name: name,
+        email: email,
+        password: hash,
+        cards: [],
+      })
+        .save()
+        .catch((err) => {
+          next(err);
+        });
     });
-    
-    // create & save new User document
-    const user = await new User({
-      name: name,
-      email: email,
-      password: password,
-      cards: []
-    })
-      .save()
-      .catch((err) => {
-        next(err);
-      });
   });
 
   session.endSession();
@@ -116,19 +118,34 @@ const updateUser = async (req, res, next) => {
   const userId = req.params.userId;
   const { email, password, name } = req.body;
 
-  // check if User already exists
-  User.countDocuments({ _id: userId }, function (err, count) {
-    if (count == 0) {
-      throw "User does not exist";
-    }
+  //check if User does not exists
+  const count = await User.countDocuments({ _id: userId });
+  if (count === 0) {
+    throw "User does not exist";
+  }
+
+  //find relevant info - don't allow updates if conflicting email present
+  const prevInfo = await User.find({ _id: userId }).select({
+    _id: 0,
+    email: 1,
   });
 
-  await User.findOneAndUpdate(
-    { _id: userId },
-    { name, email, password }
-  ).catch((err) => {
-    next(err);
+  if (prevInfo[0].email !== email) {
+    const conflict = await User.countDocuments({ email: email });
+    console.log(conflict)
+    if (conflict >= 1) {
+      throw "User email conflict";
+    }
+  }
+
+  bcrypt.hash(password, saltRounds, async function (err, hash) {
+    await User.findOneAndUpdate({ _id: userId }, { name, email, hash })
+      .exec()
+      .catch((err) => {
+        next(err);
+      });
   });
+
   res.json({ userId });
 };
 
