@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 
 const createCard = async (req, res, next) => {
   const { deckId, token, cardText } = req.body;
-  const { filename } = req.file;
 
   const newCard = JSON.parse(cardText);
   let cardId;
@@ -24,7 +23,7 @@ const createCard = async (req, res, next) => {
       deckId,
       userId,
       ...newCard,
-      filename,
+      filename: req.file?.filename,
     })
       .save()
       .catch((err) => {
@@ -102,13 +101,10 @@ const updateCard = async (req, res, next) => {
   const { cardId } = req.params;
   const { newCard } = req.body;
 
-  await Card.findOneAndUpdate(
-    { _id: cardId },
-    newCard
-  ).catch((err) => {
+  await Card.findOneAndUpdate({ _id: cardId }, newCard).catch((err) => {
     next(err);
   });
-  
+
   res.json({ cardId });
 };
 
