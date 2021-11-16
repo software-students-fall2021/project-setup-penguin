@@ -15,18 +15,6 @@
   padding-top: 4em;
 }
 
-.nakedLink {
-  text-decoration: none;
-}
-
-.SignupOrLogin__link {
-  color: black;
-}
-.SignupOrLogin__link:hover {
-  cursor: pointer;
-  color: #396bba;
-}
-
 .SignupOrLogin__cta {
   background-color: #396bba;
   padding: 0.25em 1em;
@@ -45,4 +33,12 @@
 
 .TextInput + .TextInput {
   margin-top: 1.5em;
+}
+
+.SignupOrLogin__showPassword {
+  margin-top: 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
 }

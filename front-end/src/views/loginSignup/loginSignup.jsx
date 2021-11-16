@@ -26,13 +26,15 @@ function LoginSignup({ pageType }) {
           email: email,
           password: password,
           name: name,
-        }
-      }).then(res=>{
-        if(res.status === 200) history.push("/accountpage");
-        console.log(res)
-      }).catch(err=>{
-        console.log(err)
+        },
       })
+        .then((res) => {
+          if (res.status === 200) history.push("/accountpage");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       // log user in – get id of existing account
       axios
@@ -40,12 +42,13 @@ function LoginSignup({ pageType }) {
           userId: email,
           password,
         })
-        .then(res=>{
-          if(res.status === 200) history.push("/accountpage");
-          console.log(res)
-        }).catch(err=>{
-          console.log(err)
+        .then((res) => {
+          if (res.status === 200) history.push("/accountpage");
+          console.log(res);
         })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

@@ -4,14 +4,13 @@ import { CreateBody, Button } from "../../common";
 import { useParams, Redirect } from "react-router-dom";
 import { EMPTY_TEMPLATE, TEST_TEMPLATE_DATA } from "../../common/constants";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
-import * as Icon from "react-bootstrap-icons";
+import { ArrowRight } from "react-bootstrap-icons";
 
 function UpdateCard() {
   const { cardId, deckId } = useParams();
   const [form, setForm] = useState(EMPTY_TEMPLATE);
   const [isCardLoaded, setIsCardLoaded] = useState(false);
   const [redirect, setRedirect] = useState(false);
-
 
   useEffect(() => {
     axios
@@ -48,32 +47,28 @@ function UpdateCard() {
 
   //extract 'templateData' to pass to cardEditorProps so that deck specific fields aren't editable
   const templateData = {
-    "sectionLabel0": form["sectionLabel0"],
-    "sectionLabel1": form["sectionLabel1"],
-    "sectionLabel2": form["sectionLabel2"],
-    "sliderLabelMin": form["sliderLabelMin"],
-    "sliderLabelMax": form["sliderLabelMax"]
+    sectionLabel0: form["sectionLabel0"],
+    sectionLabel1: form["sectionLabel1"],
+    sectionLabel2: form["sectionLabel2"],
+    sliderLabelMin: form["sliderLabelMin"],
+    sliderLabelMax: form["sliderLabelMax"],
   };
 
   const prompt = (
     <p>
-      Edit your card so your teammates can get the best information
-      about you!
+      Edit your card so your teammates can get the best information about you!
     </p>
   );
 
   const btn = (
-      <Button
-        btnText="Save card changes to deck"
-        onClick={() => {
-          saveCard();      
-        }}
-        icon={<Icon.ArrowRight />}
-      />
-    
+    <Button
+      btnText="Save card changes to deck"
+      onClick={() => {
+        saveCard();
+      }}
+      icon={<ArrowRight />}
+    />
   );
-
-  const shouldDisableTour = true;
 
   return !isCardLoaded ? (
     <LoadingSpinner />
@@ -82,7 +77,7 @@ function UpdateCard() {
       header="Update Your Card"
       prompt={prompt}
       btn={btn}
-      cardEditorProps={{ shouldDisableTour, templateData, form, setForm }}
+      cardEditorProps={{ templateData, form, setForm }}
     />
   );
 }

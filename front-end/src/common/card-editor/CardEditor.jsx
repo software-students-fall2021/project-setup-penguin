@@ -16,12 +16,14 @@ const sectionIds = [0, 1, 2];
 
 const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
-function CardEditor({ form = {}, setForm, templateData, shouldDisableTour }) {
+function CardEditor({
+  form = {},
+  setForm,
+  templateData,
+  shouldRunTour = false,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [finalCrop, setFinalCrop] = useState();
-  if(shouldDisableTour === undefined){
-    shouldDisableTour = false;
-  }
 
   const imgRef = useRef(null);
   const previewCanvasRef = useRef(null);
@@ -36,6 +38,7 @@ function CardEditor({ form = {}, setForm, templateData, shouldDisableTour }) {
   );
 
   useEffect(() => {
+    // TODO: if current user is new, setShouldRunTour(true)
     maybeRenderImage(finalCrop, imgRef, previewCanvasRef, setForm);
   }, [finalCrop]);
 
@@ -227,7 +230,7 @@ function CardEditor({ form = {}, setForm, templateData, shouldDisableTour }) {
       <Joyride
         // run={false} don't run if user has created template card / regular card before
         steps={isPopulatingTemplate ? REGULAR_STEPS : TEMPLATE_STEPS}
-        run={!shouldDisableTour}
+        run={shouldRunTour}
         showProgress={true}
         continuous={true}
         showSkipButton={true}
