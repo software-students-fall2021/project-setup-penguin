@@ -153,11 +153,13 @@ const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
   let cardIds = [];
 
+  const doesDeckExist = await Deck.exists({ _id: deckId });
+
+  if (doesDeckExist){
   // Find deck to delete by deckId
   await Deck.find({ _id: deckId }
     ).then((result) => {
-      cardIds = result.cards;
-      console.log("cardIds", cardIds);
+      cardIds = result[0].cards;
 
       // Delete deck
       Deck.deleteOne({ _id: deckId }
@@ -169,9 +171,11 @@ const deleteDeck = async (req, res, next) => {
         ).catch((err) => {
           next(err);
         })
+      res.send({ deckId })
     }).catch((err) => {
       next(err);
     });
+  }
 };
 
 module.exports = {

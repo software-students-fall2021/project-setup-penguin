@@ -19,7 +19,6 @@ function DeckView() {
         console.log("res", res.data);
         setIsDeckLoaded(true);
         setDeck(res.data);
-        console.log("deck", deck);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -32,7 +31,10 @@ function DeckView() {
       .delete(`http://localhost:8000/deck/${id}`)
       .then(() => {
         //After deleting, redirect user back to homepage.
-        window.location.href = "http://localhost:3000";
+        console.log("hi!");
+        alert("You've just deleted a deck!");
+        window.location.href = "http://localhost:3000"
+        console.log("hoo!");
       })
       .catch((err) => {
         console.log("!!", err);
