@@ -8,7 +8,7 @@ const Deck = require("../models/deck");
 
 const getaccessCodes = async (req, res, next) => {
   const decks = await Deck.find({}).select("accessCode");
-  console.log(decks);
+  // console.log(decks);
   res.json(decks);
 };
 
@@ -32,27 +32,31 @@ const getDeckTemplate = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-const getDeck = (req, res, next) => {
+const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
+  // Deck object to return and send (modified with populated cardObj)
+  let deckObj = {};
+  // Temporary array to hold the card objects (and later push into deckObj)
+  let cardsObj = [];
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  // Find deck by deckId
+  await Deck.find({ _id: deckId }
+    ).then((result) => {
+      deckObj = result[0];
+      cardsObj = result[0].cards;
 
-        if (deckId in jsonData.decks) {
-          const cardObjs = jsonData.decks[deckId].cards.map(
-            (cardId) => jsonData.cards[cardId]
-          );
-          res.json({ ...jsonData.decks[deckId], cards: cardObjs });
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
+      // Find cards based off of cardIds in cardsObj
+      Card.find({ _id:{$in: cardsObj }})
+        .then(result => {
+          // Fill deckObj with the card documents found by the cardIds in cardsObj
+          deckObj.cards = result;
+          // Send final deckObj
+          res.send(deckObj);
+        })
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const createDeck = async (req, res, next) => {

@@ -10,14 +10,16 @@ import share from "../assets/share.png";
 function DeckView() {
   let { id } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
-  const [deck, setDeck] = useState({ cards: [], deckName: "untitled" });
+  const [deck, setDeck] = useState({deckName: "Untitled", deckDescription: "", cards: []});
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/${id}`)
       .then((res) => {
+        console.log("res", res.data);
         setIsDeckLoaded(true);
         setDeck(res.data);
+        console.log("deck", deck);
       })
       .catch((err) => {
         console.log("!!", err);
