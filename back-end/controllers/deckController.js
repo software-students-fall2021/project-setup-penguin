@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const shortid = require("shortid");
+const { validationResult } = require("express-validator");
 
 const db = require("../db.js");
 const User = require("../models/user");
@@ -60,8 +61,12 @@ const getDeck = async (req, res, next) => {
 };
 
 const createDeck = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { userId, deckName, deckDescription, cardText } = req.body;
-  const { filename } = req.file;
 
   const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
@@ -88,7 +93,7 @@ const createDeck = async (req, res, next) => {
     const card = await new Card({
       userId,
       deckId,
-      filename,
+      filename: req.file?.filename,
       ...cardTemplate,
     })
       .save()
@@ -117,6 +122,11 @@ const createDeck = async (req, res, next) => {
 };
 
 const updateDeck = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;
 

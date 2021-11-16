@@ -1,20 +1,30 @@
 import { useState } from "react";
 import { Button, CreateBody } from "../../common";
 import { EMPTY_TEMPLATE } from "../../common/constants";
-import * as Icon from "react-bootstrap-icons";
+import { ArrowRight } from "react-bootstrap-icons";
 
 function CreateDeck() {
   const [form, setForm] = useState(EMPTY_TEMPLATE);
+  const [shouldRunTour, setShouldRunTour] = useState(false);
 
   const prompt = (
     <>
       <p>
-        Start off the deck with your own card! Your info will be used as
-        placeholders in the template card for your teammates.
+        Start off the deck with your own card! Your info will be used to
+        populate the template card for your teammates (anything left blank will
+        be filled with the placeholders shown).
       </p>
       <p>
-        Don't worry if you don't feel like changing much! We'll fill any empty
-        fields with the placeholders presented.
+        Need a little more guidance? Launch a guided creation tour{" "}
+        <a
+          className="link inline-link"
+          onClick={() => {
+            setShouldRunTour(true);
+          }}
+        >
+          here
+        </a>
+        !
       </p>
     </>
   );
@@ -26,7 +36,7 @@ function CreateDeck() {
         pathname: "/finishdeck",
         state: { templateData: form }, // passing template data over to the next page
       }}
-      icon={<Icon.ArrowRight />}
+      icon={<ArrowRight />}
     />
   );
   return (
@@ -34,7 +44,7 @@ function CreateDeck() {
       header="Create a New Deck"
       prompt={prompt}
       btn={btn}
-      cardEditorProps={{ form, setForm }}
+      cardEditorProps={{ form, setForm, shouldRunTour }}
     />
   );
 }
