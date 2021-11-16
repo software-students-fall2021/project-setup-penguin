@@ -140,48 +140,26 @@ const updateDeck = async (req, res, next) => {
   res.json({ deckId });
 };
 
-const deleteDeck = (req, res, next) => {
+const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
-  const usersInDeck = [];
+  let cardIds = [];
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-        if (deckId in jsonData.decks) {
-          let cardIDArray = jsonData.decks[deckId].cards;
-          // delete deck
-          delete jsonData.decks[deckId];
+  await Deck.find({ _id: deckId }
+    ).then((result) => {
+      cardIds = result.cards;
+      console.log("cardIds", cardIds);
 
-          // delete all cards from deck
-          for (let i = 0; i < cardIDArray.length; i++) {
-            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
-
-            delete jsonData.cards[cardIDArray[i]];
-          }
-
-          // remove cardIDs from ALL users in deck
-          for (let x = 0; x < usersInDeck.length; x++) {
-            let currCards = jsonData.users[usersInDeck[x]].cards;
-            for (let j = 0; j < currCards.length; j++) {
-              if (cardIDArray.includes(currCards[j])) {
-                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-              }
-            }
-          }
-
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => res.json({ deckId }))
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+      Deck.deleteOne({ _id: deckId }
+        ).catch((err) => {
+          next(err);
+        })
+      Card.deleteMany({ _id: cardIds }
+        ).catch((err) => {
+          next(err);
+        })
+    }).catch((err) => {
+      next(err);
+    });
 };
 
 module.exports = {
