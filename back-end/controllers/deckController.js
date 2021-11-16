@@ -167,7 +167,7 @@ const deleteDeck = async (req, res, next) => {
           next(err);
         })
       // Delete cards that were in the deck
-      Card.deleteMany({ _id: cardIds }
+      Card.remove({ _id: { $in: cardIds} }
         ).catch((err) => {
           next(err);
         })
