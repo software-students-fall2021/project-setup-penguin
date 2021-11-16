@@ -6,7 +6,7 @@ import "./Navigation.css";
 import pokedek from "../assets/pokedek.png";
 
 // TODO: explore hamburger menu that slides from side
-function Navigation() {
+function Navigation({ token }) {
   const [activeKey, setActiveKey] = useState("");
   const handleSelect = (eventKey) => {
     console.log({ eventKey });
@@ -53,26 +53,41 @@ function Navigation() {
                 FIND DECK
               </NavLink>
             </Nav.Link>
-            <Nav.Link>
-              <NavLink
-                eventKey="3"
-                className="Navigation__link"
-                activeClassName="Navigation__active"
-                to="/login"
-              >
-                LOG IN
-              </NavLink>
-            </Nav.Link>
-            <Nav.Link>
-              <NavLink
-                eventKey="4"
-                className="Navigation__link"
-                activeClassName="Navigation__active"
-                to="/signup"
-              >
-                SIGN UP
-              </NavLink>
-            </Nav.Link>
+            {token ? (
+              <Nav.Link>
+                <NavLink
+                  eventKey="3"
+                  className="Navigation__link"
+                  activeClassName="Navigation__active"
+                  to="/logout"
+                >
+                  LOG OUT
+                </NavLink>
+              </Nav.Link>
+            ) : (
+              <>
+                <Nav.Link>
+                  <NavLink
+                    eventKey="3"
+                    className="Navigation__link"
+                    activeClassName="Navigation__active"
+                    to="/login"
+                  >
+                    LOG IN
+                  </NavLink>
+                </Nav.Link>
+                <Nav.Link>
+                  <NavLink
+                    eventKey="4"
+                    className="Navigation__link"
+                    activeClassName="Navigation__active"
+                    to="/signup"
+                  >
+                    SIGN UP
+                  </NavLink>
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

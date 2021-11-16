@@ -1,37 +1,39 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const fs = require("fs").promises;
+const db = require("../db.js");
+
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
-const fs = require("fs").promises;
-const db = require("../db.js");
-const e = require("cors");
+
+const { jwtOptions } = require("../jwt-config");
 
 const createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
 
-  const session = await db.startSession();
-  await session.withTransaction(async () => {
-    // check if User already exists
-    User.countDocuments({ email: email }, function (err, count) {
-      if (count > 0) {
-        throw "User already exists";
-      }
-    });
-    
-    // create & save new User document
-    const user = await new User({
-      name: name,
-      email: email,
-      password: password,
-      cards: []
-    })
-      .save()
-      .catch((err) => {
-        next(err);
-      });
-  });
+  const existingUser = await User.findOne({ email: email });
+  if (existingUser) {
+    res.status(401).json({ success: false, message: `email already taken` });
+  }
 
-  session.endSession();
-  res.json({ email });
+  const hash = await bcrypt.hash(password, 10).catch((err) => {
+    next(err);
+  });
+  const user = await new User({
+    name: name,
+    email: email,
+    password: hash,
+    cards: [],
+  })
+    .save()
+    .catch((err) => {
+      next(err);
+    });
+
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, jwtOptions.secretOrKey);
+  res.json({ success: true, email: user.email, token: token });
 };
 
 const deleteUser = (req, res, next) => {
@@ -76,7 +78,7 @@ const deleteUser = (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const userId = req.params.userId;
+  const userId = req.user._id;
 
   // query DB for user data and extract array of cardIds
   const userData = await User.findOne({ _id: userId });
@@ -124,36 +126,42 @@ const updateUser = async (req, res, next) => {
     }
   });
 
-  await User.findOneAndUpdate(
-    { _id: userId },
-    { name, email, password }
-  ).catch((err) => {
-    next(err);
-  });
+  await User.findOneAndUpdate({ _id: userId }, { name, email, password }).catch(
+    (err) => {
+      next(err);
+    }
+  );
   res.json({ userId });
 };
 
-const loginUser = (req, res, next) => {
-  const { userId, password } = req.body;
+const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  if (!email || !password) {
+    res
+      .status(401)
+      .json({ success: false, message: `no email or password provided` });
+  }
 
-        if (
-          userId in jsonData.users &&
-          jsonData.users[userId].password === password
-        ) {
-          res.json({ userId });
-        } else {
-          throw "Invalid Login";
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    res
+      .status(401)
+      .json({ success: false, message: `user not found: ${email}.` });
+  }
+  const match = await bcrypt.compare(password, user.password).catch((err) => {
+    next(err);
+  });
+
+  if (match) {
+    const payload = { id: user._id };
+    const token = jwt.sign(payload, jwtOptions.secretOrKey);
+    res.json({ success: true, email: user.email, token: token });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: `passwords did not match` });
+  }
 };
 
 module.exports = {

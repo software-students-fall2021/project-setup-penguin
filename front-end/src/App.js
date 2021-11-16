@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { MODAL_PAGE_TYPE } from "./common/constants";
 import "./App.css";
 import { Navigation, ViewportProvider } from "./common";
-
+import { useState } from "react";
 import {
   Home,
   LoginSignup,
@@ -17,13 +17,17 @@ import {
   HowItWorks,
   GetStarted,
   FindDeck,
+  Logout,
 } from "./views";
 
 function App() {
+  const jwtToken = localStorage.getItem("token");
+  const [token, setToken] = useState(jwtToken);
+
   return (
     <ViewportProvider>
       <Router>
-        <Navigation />
+        <Navigation token={token} />
         <Container className="customContainer">
           <Switch>
             <Route exact path="/">
@@ -36,10 +40,19 @@ function App() {
               <GetStarted />
             </Route>
             <Route path="/login">
-              <LoginSignup pageType={MODAL_PAGE_TYPE.LOGIN} />
+              <LoginSignup
+                pageType={MODAL_PAGE_TYPE.LOGIN}
+                setToken={setToken}
+              />
             </Route>
             <Route path="/signup">
-              <LoginSignup pageType={MODAL_PAGE_TYPE.SIGNUP} />
+              <LoginSignup
+                pageType={MODAL_PAGE_TYPE.SIGNUP}
+                setToken={setToken}
+              />
+            </Route>
+            <Route path="/logout">
+              <Logout setToken={setToken} />
             </Route>
             <Route path="/createdeck">
               <CreateDeck />
@@ -63,7 +76,7 @@ function App() {
               <UpdateCard />
             </Route>
             <Route path="/accountpage">
-              <AccountPage />
+              <AccountPage token={token} />
             </Route>
           </Switch>
         </Container>

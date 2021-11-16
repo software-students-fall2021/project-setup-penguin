@@ -5,7 +5,7 @@ import { MODAL_PAGE_TYPE } from "../../common/constants";
 
 import "./loginSignup.css";
 
-function LoginSignup({ pageType }) {
+function LoginSignup({ pageType, setToken }) {
   const history = useHistory();
   const handleRedirect = (page) => {
     if (page === MODAL_PAGE_TYPE.LOGIN) {
@@ -20,17 +20,18 @@ function LoginSignup({ pageType }) {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       // TODO: create & save account – get id of newly created account
       axios({
-        method:'post',
-        url:'http://localhost:8000/user',
-        data:{
-          email: email,
-          password: password,
-          name: name,
+        method: "post",
+        url: "http://localhost:8000/user",
+        data: {
+          email,
+          password,
+          name,
         },
       })
         .then((res) => {
-          if (res.status === 200) history.push("/accountpage");
-          console.log(res);
+          localStorage.setItem("token", res.data.token);
+          setToken(res.data.token);
+          history.push("/accountpage");
         })
         .catch((err) => {
           console.log(err);
@@ -39,12 +40,13 @@ function LoginSignup({ pageType }) {
       // log user in – get id of existing account
       axios
         .post("http://localhost:8000/user/login", {
-          userId: email,
+          email,
           password,
         })
         .then((res) => {
-          if (res.status === 200) history.push("/accountpage");
-          console.log(res);
+          localStorage.setItem("token", res.data.token);
+          setToken(res.data.token);
+          history.push("/accountpage");
         })
         .catch((err) => {
           console.log(err);
