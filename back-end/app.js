@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const passport = require("passport");
 
 const userRouter = require("./routes/userRoutes");
 const cardRouter = require("./routes/cardRoutes");
@@ -13,6 +14,10 @@ require("./db.js");
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()); // prevents requests from being blocked by CORS
 app.use(express.static("uploads"));
+app.use(passport.initialize());
+
+const { jwtStrategy } = require("./jwt-config.js");
+passport.use(jwtStrategy);
 
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json({ limit: "50mb" }));

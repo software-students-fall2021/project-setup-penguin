@@ -1,4 +1,5 @@
 import LoginSignup from "./loginSignup/loginSignup";
+import Logout from "./loginSignup/Logout";
 import Home from "./onboarding/Home";
 import HowItWorks from "./onboarding/HowItWorks";
 import GetStarted from "./onboarding/GetStarted";
@@ -12,6 +13,7 @@ import UpdateCard from "./update_card/UpdateCard";
 import FindDeck from "./FindDeck";
 
 export {
+  Logout,
   Home,
   HowItWorks,
   GetStarted,
