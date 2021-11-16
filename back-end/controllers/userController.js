@@ -94,13 +94,12 @@ const getUser = async (req, res, next) => {
   // query DB for whether user owns the deck
   const userCardsWithDeckData = await Promise.all(
     userCards.map(async (userCard) => {
-      console.log("userCard:", typeof userCard);
       const deckData = await Deck.findOne({
         _id: userCard.deckId.toString(),
       });
 
       return {
-        isOwned: deckData.ownerId === userId,
+        isOwned: deckData.ownerId.equals(userId),
         deckName: deckData.deckName,
         cardTemplate: deckData.cardTemplate,
         cardData: {
