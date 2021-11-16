@@ -34,67 +34,39 @@ function AccountPage() {
         .get(`http://localhost:8000/user/${id}`)
         .then((response) => {
           setIsDeckLoaded(true);
-          let userDecks = response.data.users.decks;
-          let userCards = response.data.users.cards;
+          let userCards = response.data;
 
+          //creating arrays to make html elements
           let ownedTitles = [];
-
-          //finds all users owned decks
-          for (const id in userDecks) {
-            ownedTitles.push(response.data.decks[userDecks[id]].deckName);
-          }
-
           let ownedCards = [];
-
-          for (const id in userDecks) {
-            //checks for matching cards to have corresponding cards and decks in same position of arrays for display
-            let cardNum = 0;
-            while (response.data.cards[userCards[cardNum]].deckId !== userDecks[id]){
-              cardNum++;
-            }
-            ownedCards.push(response.data.cards[userCards[cardNum]]);
-          }
-
+          let ownedIds = [];
           let joinedCards = [];
+          let joinedTitles = [];
+          let joinedIds = [];
 
+          //separates owned content from joined content
           for (const id in userCards) {
-            //checks if card is already included in ownedCards
-            let isOwned = false;
-            for (const count in ownedCards) {
-              if (userCards[id] === ownedCards[count]) {
-                isOwned = true;
-                break;
-              }
+            if(userCards[id].isOwned){
+              ownedTitles.push(userCards[id].deckName);
+              ownedCards.push(userCards[id].cardData);
+              ownedIds.push(userCards[id].cardData.deckId);
             }
-            if (!isOwned){
-              joinedCards.push(response.data.cards[userCards[id]]);
+            else{
+              joinedTitles.push(userCards[id].deckName);
+              joinedCards.push(userCards[id].cardData);
+              joinedIds.push(userCards[id].cardData.deckId);
             }
           }
-
-        let joinedDecks = [];
-        let joinedIds = [];
-
-        for (const id in joinedCards) {
-          //finds corresponding deck names for owned cards that aren't in owned decks
-          joinedDecks.push(response.data.decks[joinedCards[id].deckId].deckName);
-          joinedIds.push(joinedCards[id].deckId);
-        }
 
           setOwnedDeckNameData(ownedTitles);
-          setOwnedDeckIdData(userDecks);
+          setOwnedDeckIdData(ownedIds);
           setOwnedCardsData(ownedCards);
-          setJoinedDeckNameData(joinedDecks);
+          setJoinedDeckNameData(joinedTitles);
           setJoinedDeckIdData(joinedIds);
           setJoinedCardsData(joinedCards);
         })
         .catch((err) => {
           console.log("!!", err);
-          setOwnedDeckNameData(["Painters", "Pokemon", "Pop Stars", "Rich People", "Missing"]);
-          setOwnedDeckIdData(["123", "123", "123", "123", "123"]);
-          setOwnedCardsData(TEST_CARDS_ARRAY);
-          setJoinedDeckNameData(["Nice Guys", "Nintendo Mascots", "The Voice", "University Presidents", "Unknowns"]);
-          setJoinedDeckIdData(["123", "123", "123", "123", "123"]);
-          setJoinedCardsData(TEST_CARDS_ARRAY);
           setIsDeckLoaded(true);
         });
         //Cleanup function to avoid warning/errors.

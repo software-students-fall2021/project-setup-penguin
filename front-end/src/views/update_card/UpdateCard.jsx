@@ -17,7 +17,7 @@ function UpdateCard() {
     axios
       .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
-        setForm(response.data);
+        setForm(response.data.card);
         setIsCardLoaded(true);
       })
       .catch((err) => {
