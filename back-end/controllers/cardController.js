@@ -79,53 +79,31 @@ const deleteCard = async (req, res, next) => {
   }
 };
 
-const getCard = (req, res, next) => {
+const getCard = async (req, res, next) => {
   const { cardId } = req.params;
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
 
-        //check if card exists
-        if (cardId in jsonData.cards) {
-          res.json(jsonData.cards[cardId]);
-        } else {
-          next({ message: "Cannot find card in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  const doesCardExist = await Card.exists({ _id: cardId });
+
+  if (doesCardExist) {
+    const card = await Card.findById(cardId);
+    res.send({ card });
+  } else {
+    throw "Error: cardId does not exist";
+  }
 };
 
-const updateCard = (req, res, next) => {
+const updateCard = async (req, res, next) => {
   const { cardId } = req.params;
   const { newCard } = req.body;
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        // update card data
-        if (cardId in jsonData.cards) {
-          jsonData.cards[cardId] = newCard;
-
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => {
-              res.json(jsonData.cards[cardId]);
-            })
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find card in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+  await Card.findOneAndUpdate(
+    { _id: cardId },
+    newCard
+  ).catch((err) => {
+    next(err);
+  });
+  
+  res.json({ cardId });
 };
 
 module.exports = { createCard, deleteCard, getCard, updateCard };

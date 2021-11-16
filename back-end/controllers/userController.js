@@ -100,6 +100,7 @@ const getUser = async (req, res, next) => {
       return {
         isOwned: deckData.ownerId === userId,
         deckName: deckData.deckName,
+        cardTemplate: deckData.cardTemplate,
         cardData: {
           ...userCard.toObject(),
           _id: userCard._id.toString(),

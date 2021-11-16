@@ -28,73 +28,53 @@ function AccountPage() {
     const [joinedDeckNamesArray, setJoinedDeckNameData] = useState([]);
     const [joinedDeckIdsArray, setJoinedDeckIdData] = useState([]);
     const [joinedCardsArray, setJoinedCardsData] = useState([]); //user cards in joined decks
+    const [ownedTemplateArray, setOwnedTemplateData] = useState([]);
+    const [joinedTemplateArray, setJoinedTemplateData] = useState([]);
 
     useEffect(() => {
       axios
-        .get(`http://localhost:8000/user/${id}`)
+        .get(`http://localhost:8000/user/618bfafc04c45ff64af7c794`)
         .then((response) => {
           setIsDeckLoaded(true);
-          let userDecks = response.data.users.decks;
-          let userCards = response.data.users.cards;
+          let userCards = response.data;
 
+          //creating arrays to make html elements
           let ownedTitles = [];
-
-          //finds all users owned decks
-          for (const id in userDecks) {
-            ownedTitles.push(response.data.decks[userDecks[id]].deckName);
-          }
-
+          let ownedTemplates = [];
           let ownedCards = [];
-
-          for (const id in userDecks) {
-            //checks for matching cards to have corresponding cards and decks in same position of arrays for display
-            let cardNum = 0;
-            while (response.data.cards[userCards[cardNum]].deckId !== userDecks[id]){
-              cardNum++;
-            }
-            ownedCards.push(response.data.cards[userCards[cardNum]]);
-          }
-
+          let ownedIds = [];
           let joinedCards = [];
+          let joinedTemplates = [];
+          let joinedTitles = [];
+          let joinedIds = [];
 
+          //separates owned content from joined content
           for (const id in userCards) {
-            //checks if card is already included in ownedCards
-            let isOwned = false;
-            for (const count in ownedCards) {
-              if (userCards[id] === ownedCards[count]) {
-                isOwned = true;
-                break;
-              }
+            if(userCards[id].isOwned){
+              ownedTitles.push(userCards[id].deckName);
+              ownedCards.push(userCards[id].cardData);
+              ownedIds.push(userCards[id].cardData.deckId);
+              ownedTemplates.push(userCards[id].cardTemplate);
             }
-            if (!isOwned){
-              joinedCards.push(response.data.cards[userCards[id]]);
+            else{
+              joinedTitles.push(userCards[id].deckName);
+              joinedCards.push(userCards[id].cardData);
+              joinedIds.push(userCards[id].cardData.deckId);
+              joinedTemplates.push(userCards[id].cardTemplate);
             }
           }
-
-        let joinedDecks = [];
-        let joinedIds = [];
-
-        for (const id in joinedCards) {
-          //finds corresponding deck names for owned cards that aren't in owned decks
-          joinedDecks.push(response.data.decks[joinedCards[id].deckId].deckName);
-          joinedIds.push(joinedCards[id].deckId);
-        }
 
           setOwnedDeckNameData(ownedTitles);
-          setOwnedDeckIdData(userDecks);
+          setOwnedDeckIdData(ownedIds);
           setOwnedCardsData(ownedCards);
-          setJoinedDeckNameData(joinedDecks);
+          setJoinedDeckNameData(joinedTitles);
           setJoinedDeckIdData(joinedIds);
           setJoinedCardsData(joinedCards);
+          setOwnedTemplateData(ownedTemplates);
+          setJoinedTemplateData(joinedTemplates);
         })
         .catch((err) => {
           console.log("!!", err);
-          setOwnedDeckNameData(["Painters", "Pokemon", "Pop Stars", "Rich People", "Missing"]);
-          setOwnedDeckIdData(["123", "123", "123", "123", "123"]);
-          setOwnedCardsData(TEST_CARDS_ARRAY);
-          setJoinedDeckNameData(["Nice Guys", "Nintendo Mascots", "The Voice", "University Presidents", "Unknowns"]);
-          setJoinedDeckIdData(["123", "123", "123", "123", "123"]);
-          setJoinedCardsData(TEST_CARDS_ARRAY);
           setIsDeckLoaded(true);
         });
         //Cleanup function to avoid warning/errors.
@@ -118,25 +98,24 @@ function AccountPage() {
         setDeckActive(1);
     }
 
-    //<DisplayCard tempArray={ownedCardsArray[i]}></DisplayCard>
-//defines page content (either cards or decks)
+//defines page content (either joined or owned)
 
     const ownedContent = [];
     const joinedContent = [];
 
     for(let i = 0; i < ownedDeckNamesArray.length; i++){
-      pageElement = <><div className="deck"><NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="title">{ownedDeckNamesArray[i]}</NavLink>
-      <DisplayCard tempArray={ownedCardsArray[i]}></DisplayCard>
+      pageElement = <div key={i}><div className="deck"><div className="title"><NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">{ownedDeckNamesArray[i]}</NavLink></div>
+      <DisplayCard card={ownedCardsArray[i]} template={ownedTemplateArray[i]}></DisplayCard>
       </div>
-      </>;
+      </div>;
       ownedContent.push(pageElement);
     }
 
     for(let i = 0; i < joinedDeckNamesArray.length; i++){
-      pageElement = <><div className="deck"><NavLink to={`deck/${joinedDeckIdsArray[i]}`} className="title">{joinedDeckNamesArray[i]}</NavLink>
-      <DisplayCard tempArray={joinedCardsArray[i]}></DisplayCard>
+      pageElement = <div key={i}><div className="deck"><div className="title"><NavLink to={`deck/${joinedDeckIdsArray[i]}` } className="deckLink">{joinedDeckNamesArray[i]}</NavLink></div>
+      <DisplayCard card={joinedCardsArray[i]} template={joinedTemplateArray[i]}></DisplayCard>
       </div>
-      </>;
+      </div>;
       joinedContent.push(pageElement);
     }
     
