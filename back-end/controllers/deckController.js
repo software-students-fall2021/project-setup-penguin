@@ -45,7 +45,7 @@ const getDeck = async (req, res, next) => {
   let cardsObj = [];
 
   // Find deck by deckId
-  await Deck.find({ _id: deckId }
+    Deck.find({ _id: deckId }
     ).then((result) => {
       deckObj = result[0];
       cardsObj = result[0].cards;
@@ -157,7 +157,7 @@ const deleteDeck = async (req, res, next) => {
 
   if (doesDeckExist){
   // Find deck to delete by deckId
-  await Deck.find({ _id: deckId }
+    Deck.find({ _id: deckId }
     ).then((result) => {
       cardIds = result[0].cards;
 
