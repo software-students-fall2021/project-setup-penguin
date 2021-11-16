@@ -8,7 +8,7 @@ import {
   MODAL_PAGE_TYPE,
   TEST_TEMPLATE_DATA,
 } from "../../common/constants";
-import * as Icon from "react-bootstrap-icons";
+import { ArrowRight } from "react-bootstrap-icons";
 
 function CreateCard() {
   const { deckId } = useParams();
@@ -16,6 +16,7 @@ function CreateCard() {
   const [form, setForm] = useState(EMPTY_CARD);
   const [templateData, setTemplateData] = useState({});
   const [redirect, setRedirect] = useState(false);
+  const [shouldRunTour, setShouldRunTour] = useState(false);
 
   useEffect(() => {
     axios
@@ -77,10 +78,24 @@ function CreateCard() {
   };
 
   const prompt = (
-    <p>
-      Help your {deckId} teammates get to know you by populating the template
-      card with information about yourself!
-    </p>
+    <>
+      <p>
+        Help your teammates get to know you by populating the template card with
+        information about yourself!
+      </p>
+      <p>
+        Need a little more guidance? Launch a guided creation tour{" "}
+        <a
+          className="link inline-link"
+          onClick={() => {
+            setShouldRunTour(true);
+          }}
+        >
+          here
+        </a>
+        !
+      </p>
+    </>
   );
 
   const btn = (
@@ -89,7 +104,7 @@ function CreateCard() {
       onClick={() => {
         setShowModal(true);
       }}
-      icon={<Icon.ArrowRight />}
+      icon={<ArrowRight />}
     />
   );
 
@@ -99,7 +114,7 @@ function CreateCard() {
         header="Create Your Card"
         prompt={prompt}
         btn={btn}
-        cardEditorProps={{ templateData, form, setForm }}
+        cardEditorProps={{ templateData, form, setForm, shouldRunTour }}
       />
       <AccountPromptModal
         onCloseModal={() => setShowModal(false)}

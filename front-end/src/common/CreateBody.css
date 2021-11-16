@@ -14,10 +14,16 @@
 
 .CreateBody__desktop {
   display: flex;
+  text-align: justify;
 }
 
-.CreateBody__btnContainer {
+.CreateBody__mobileBtnContainer {
   display: flex;
   justify-content: center;
   padding: 2em;
+}
+
+.CreateBody__desktopBtnContainer {
+  margin-top: 15vh;
+  float: right;
 }

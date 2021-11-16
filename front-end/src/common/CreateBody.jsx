@@ -14,11 +14,11 @@ function CreateBody({ btn, cardEditorProps, prompt, header }) {
           <CardEditor {...cardEditorProps} />
         </div>
         {isMobile ? (
-          <div className="CreateBody__btnContainer">{btn}</div>
+          <div className="CreateBody__mobileBtnContainer">{btn}</div>
         ) : (
           <div className="col">
             {prompt}
-            {btn}
+            <div className="CreateBody__desktopBtnContainer">{btn}</div>
           </div>
         )}
       </div>

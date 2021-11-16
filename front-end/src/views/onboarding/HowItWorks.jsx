@@ -1,39 +1,36 @@
-import pokedex from '../../assets/pokedex.gif';
-import team from '../../assets/team.png';
-import card from '../../assets/card.png';
-import { Button } from '../../common';
-import * as Icon from 'react-bootstrap-icons';
-import './HowItWorks.css';
+import { Button } from "../../common";
+import { ArrowRight } from "react-bootstrap-icons";
+import "./HowItWorks.css";
 
 const howToSteps = [
   {
-    header: 'CREATE',
-    subHeader: 'A DECK',
+    header: "CREATE",
+    subHeader: "A DECK",
     content:
-      'Set up a template card for your team. Decide the qualities you want to share and learn about your teammates!',
+      "Set up a template card for your team. Decide the qualities you want to share and learn about your teammates!",
     button: {
-      text: '',
-      link: '',
+      text: "",
+      link: "",
     },
   },
   {
-    header: 'SHARE',
-    subHeader: 'YOUR DECK',
+    header: "SHARE",
+    subHeader: "YOUR DECK",
     content:
-      'Share a link with your teammates so that they can add their own cards to your deck.',
+      "Share a link with your teammates so that they can add their own cards to your deck.",
     button: {
-      text: '',
-      link: '',
+      text: "",
+      link: "",
     },
   },
   {
-    header: 'MEET',
-    subHeader: 'THE TEAM',
+    header: "MEET",
+    subHeader: "THE TEAM",
     content:
-      "Look through a deck to find our more about your teammates. You can edit your card, or even edit and delete deck details. Get to know e'm all!",
+      "Look through a deck to find our more about your teammates. You can edit your card, or even edit and delete deck details. Get to know 'em all!",
     button: {
-      text: '',
-      link: '',
+      text: "",
+      link: "",
     },
   },
 ];
@@ -46,7 +43,7 @@ function HowItWorks() {
         <Button
           btnText="Get started"
           linkTo="/getstarted"
-          icon={<Icon.ArrowRight />}
+          icon={<ArrowRight />}
         />
       </div>
       <div className="HowItWorks__body">

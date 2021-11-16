@@ -19,7 +19,7 @@ function GetStarted() {
         </div>
 
         <div className="GetStarted__card">
-          <Link to="/joindeck" className="GetStarted__button">
+          <Link to="/finddeck" className="GetStarted__button">
             <img src={pokeball} className="GetStarted__img" />
             <p className="GetStarted__label">Find an existing deck</p>
             <p className="GetStarted__text">
