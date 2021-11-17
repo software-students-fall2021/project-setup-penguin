@@ -11,6 +11,7 @@ import AccountPage from "./account_page/AccountPage";
 import UpdateDeck from "./UpdateDeck";
 import UpdateCard from "./update_card/UpdateCard";
 import FindDeck from "./FindDeck";
+import EditAccountPage from "./edit_account/editAccount";
 
 export {
   Logout,
@@ -26,4 +27,5 @@ export {
   UpdateDeck,
   UpdateCard,
   FindDeck,
+  EditAccountPage
 };

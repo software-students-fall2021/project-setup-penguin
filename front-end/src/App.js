@@ -18,6 +18,7 @@ import {
   GetStarted,
   FindDeck,
   Logout,
+  EditAccountPage,
 } from "./views";
 
 function App() {
@@ -74,6 +75,9 @@ function App() {
             </Route>
             <Route path="/deck/:deckId/card/:cardId/edit">
               <UpdateCard />
+            </Route>
+            <Route path="/accountpage/editUser">
+              <EditAccountPage token={token} />
             </Route>
             <Route path="/accountpage">
               <AccountPage token={token} />
