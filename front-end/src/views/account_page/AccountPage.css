@@ -1,49 +1,52 @@
-.toggles{
-    width: 100px;
-    border: none;
+.toggles {
+  width: 100px;
+  border: none;
 }
 
-#myDeckView, #joinedDeckView{
-    height: 50px;
-    width: 200px;
+#myDeckView,
+#joinedDeckView {
+  height: 50px;
+  width: 200px;
 }
 
-.Active{
-    background-color: #396bba;
-    color: white;
-    border: none;
-    font-size: 30px;
+.Active {
+  background-color: #396bba;
+  color: white;
+  border: none;
+  font-size: 30px;
 }
 
-.inactive{
-    background-color: white;
-    color: #396bba;
-    border: 1px solid;
-    border-color: #396bba;
-    font-size: 30px;
+.inactive {
+  background-color: white;
+  color: #396bba;
+  border: 1px solid;
+  border-color: #396bba;
+  font-size: 30px;
 }
 
-.title {
-    font-size: 35px;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-  }
+.deckLink {
+  font-size: 35px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
 
-  .subtitle {
-    font-size: 20px;
-    font-weight: bold;
-  }
+.subtitle {
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .deck-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .toggle-switch {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin-bottom: 3em;
 }
 
 #myDeckView {
@@ -60,6 +63,6 @@
   border-radius: 0px 20px 20px 0px;
 }
 
-.deck {
+.title {
   text-align: center;
 }

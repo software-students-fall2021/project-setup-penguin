@@ -9,20 +9,21 @@ import {
   TEST_TEMPLATE_DATA,
 } from "../../common/constants";
 import { ArrowRight } from "react-bootstrap-icons";
+import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 
-function CreateCard() {
+function CreateCard({ token, setToken }) {
   const { deckId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(EMPTY_CARD);
-  const [templateData, setTemplateData] = useState({});
+  const [templateData, setTemplateData] = useState();
   const [redirect, setRedirect] = useState(false);
   const [shouldRunTour, setShouldRunTour] = useState(false);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
-      .then((response) => {
-        setTemplateData(response.data);
+      .then((res) => {
+        setTemplateData(res.data.cardTemplate);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -34,12 +35,27 @@ function CreateCard() {
     return <Redirect to={`/deck/${deckId}`} />;
   }
 
-  const saveCard = (userId) => {
+  const saveCard = (token) => {
+    const formData = new FormData();
+    formData.append("deckId", deckId);
+
+    // set textData = all entries from form except for image
+    const { image, ...textData } = form;
+    formData.append("cardText", JSON.stringify(textData));
+
+    if (token) {
+      formData.append("token", token);
+    }
+
+    if (form.image) {
+      formData.append("cardImage", form.image, "profile");
+    }
+
     axios
-      .post(`http://localhost:8000/card`, {
-        newCard: form,
-        userId,
-        deckId,
+      .post(`http://localhost:8000/card`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then(() => {
         setShowModal(false);
@@ -58,21 +74,31 @@ function CreateCard() {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       axios
         .post("http://localhost:8000/user", {
-          name,
-          username: email,
+          email,
           password,
+          name,
         })
         .then((res) => {
-          saveCard(res.data.username);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveCard(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     } else {
       axios
         .post("http://localhost:8000/user/login", {
-          userId: email,
+          email,
           password,
         })
         .then((res) => {
-          saveCard(res.data.userId);
+          setToken(res.data.token);
+          localStorage.setItem("token", res.data.token);
+          saveCard(res.data.token);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   };
@@ -102,13 +128,19 @@ function CreateCard() {
     <Button
       btnText="Save card to deck"
       onClick={() => {
-        setShowModal(true);
+        if (token) {
+          saveCard(token);
+        } else {
+          setShowModal(true);
+        }
       }}
       icon={<ArrowRight />}
     />
   );
 
-  return (
+  return !templateData ? (
+    <LoadingSpinner />
+  ) : (
     <>
       <CreateBody
         header="Create Your Card"

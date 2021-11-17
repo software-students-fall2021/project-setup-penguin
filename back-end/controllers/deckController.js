@@ -1,59 +1,67 @@
 const fs = require("fs").promises;
 const shortid = require("shortid");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 
 const db = require("../db.js");
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
 
-const getaccessCodes = async (req, res, next) => {
-  const decks = await Deck.find({}).select("accessCode");
-  console.log(decks);
+const getAccessCodes = async (req, res, next) => {
+  const decks = await Deck.find({})
+    .select("accessCode")
+    .catch((err) => {
+      next(err);
+    });
   res.json(decks);
 };
 
-const getDeckTemplate = (req, res, next) => {
-  const deckId = req.params.deckId;
-
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-
-        if (deckId in jsonData.decks) {
-          res.json(jsonData.decks[deckId].cardTemplate);
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+// get cardTemplate from deck
+const getDeckTemplate = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("cardTemplate")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
 };
 
-const getDeck = (req, res, next) => {
+// get deckName and deckDescription from deck
+const getDeckDetails = async (req, res, next) => {
+  const deck = await Deck.findOne({ _id: req.params.deckId })
+    .select("deckName deckDescription")
+    .catch((err) => {
+      next(err);
+    });
+  res.json(deck);
+};
+
+const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
+  // Deck object to return and send (modified with populated cardObj)
+  let deckObj = {};
+  // Temporary array to hold the card objects (and later push into deckObj)
+  let cardsObj = [];
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
+  // Find deck by deckId
+  await Deck.find({ _id: deckId }
+    ).then((result) => {
+      deckObj = result[0];
+      cardsObj = result[0].cards;
 
-        if (deckId in jsonData.decks) {
-          const cardObjs = jsonData.decks[deckId].cards.map(
-            (cardId) => jsonData.cards[cardId]
-          );
-          res.json({ ...jsonData.decks[deckId], cards: cardObjs });
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
+      // Find cards based off of cardIds in cardsObj
+      Card.find({ _id:{$in: cardsObj }})
+        .then(result => {
+          // Fill deckObj with the card documents found by the cardIds in cardsObj
+          deckObj.cards = result;
+          // Send final deckObj
+          res.send(deckObj);
+        })
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      next(err);
+    });
 };
 
 const createDeck = async (req, res, next) => {
@@ -62,11 +70,16 @@ const createDeck = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { userId, deckName, deckDescription, cardText } = req.body;
+  const { token, deckName, deckDescription, cardText } = req.body;
 
   const cardTemplate = JSON.parse(cardText);
   const accessCode = shortid.generate();
   let deckId;
+  let userId;
+
+  if (token) {
+    userId = jwt.decode(token).id;
+  }
 
   const session = await db.startSession();
   await session.withTransaction(async () => {
@@ -136,52 +149,38 @@ const updateDeck = async (req, res, next) => {
   res.json({ deckId });
 };
 
-const deleteDeck = (req, res, next) => {
+const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
-  const usersInDeck = [];
+  let cardIds = [];
 
-  fs.readFile("database.json")
-    .then((data) => {
-      try {
-        const jsonData = JSON.parse(data);
-        if (deckId in jsonData.decks) {
-          let cardIDArray = jsonData.decks[deckId].cards;
-          // delete deck
-          delete jsonData.decks[deckId];
+  const doesDeckExist = await Deck.exists({ _id: deckId });
 
-          // delete all cards from deck
-          for (let i = 0; i < cardIDArray.length; i++) {
-            usersInDeck.push(jsonData.cards[cardIDArray[i]].userId);
+  if (doesDeckExist){
+  // Find deck to delete by deckId
+  await Deck.find({ _id: deckId }
+    ).then((result) => {
+      cardIds = result[0].cards;
 
-            delete jsonData.cards[cardIDArray[i]];
-          }
-
-          // remove cardIDs from ALL users in deck
-          for (let x = 0; x < usersInDeck.length; x++) {
-            let currCards = jsonData.users[usersInDeck[x]].cards;
-            for (let j = 0; j < currCards.length; j++) {
-              if (cardIDArray.includes(currCards[j])) {
-                jsonData.users[usersInDeck[x]].cards.splice(j, 1);
-              }
-            }
-          }
-
-          const jsonString = JSON.stringify(jsonData);
-          fs.writeFile("database.json", jsonString)
-            .then(() => res.json({ deckId }))
-            .catch((err) => next(err));
-        } else {
-          next({ message: "Cannot find deck in database" });
-        }
-      } catch (err) {
-        next(err);
-      }
-    })
-    .catch((err) => next(err));
+      // Delete deck
+      Deck.deleteOne({ _id: deckId }
+        ).catch((err) => {
+          next(err);
+        })
+      // Delete cards that were in the deck
+      Card.remove({ _id: { $in: cardIds} }
+        ).catch((err) => {
+          next(err);
+        })
+      res.send({ deckId })
+    }).catch((err) => {
+      next(err);
+    });
+  }
 };
 
 module.exports = {
-  getaccessCodes,
+  getDeckDetails,
+  getAccessCodes,
   getDeckTemplate,
   getDeck,
   createDeck,

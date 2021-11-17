@@ -10,12 +10,17 @@ import share from "../assets/share.png";
 function DeckView() {
   let { id } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
-  const [deck, setDeck] = useState({ cards: [], deckName: "untitled" });
+  const [deck, setDeck] = useState({
+    deckName: "Untitled",
+    deckDescription: "",
+    cards: [],
+  });
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/${id}`)
       .then((res) => {
+        console.log("res", res.data);
         setIsDeckLoaded(true);
         setDeck(res.data);
       })
@@ -30,6 +35,7 @@ function DeckView() {
       .delete(`http://localhost:8000/deck/${id}`)
       .then(() => {
         //After deleting, redirect user back to homepage.
+        alert("You've just deleted a deck!");
         window.location.href = "http://localhost:3000";
       })
       .catch((err) => {
@@ -38,9 +44,10 @@ function DeckView() {
   }
 
   function shareDeck() {
-    // TODO: Have url copied for user when click on button!
-
-    document.getElementById("shared-text").innerHTML = "Copied share link!";
+    navigator.clipboard.writeText(deck.accessCode);
+    document.getElementById(
+      "shared-text"
+    ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
     setTimeout(function () {
       document.getElementById("shared-text").innerHTML = "";
     }, 3000);
@@ -62,10 +69,10 @@ function DeckView() {
           {/* TODO: only show button for admin */}
           <div className="deckview-buttons">
             <div className="edit">
-              <Button btnText="Edit" linkTo={`${id}/edit`} />
+              <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
             </div>
             <div className="delete">
-              <Button btnText="Delete" onClick={() => deleteDeck()} />
+              <Button btnText="Delete Deck" onClick={() => deleteDeck()} />
             </div>
             <div className="add">
               <DarkButton btnText="Add Card" linkTo={`${id}/add`} />
