@@ -43,7 +43,6 @@ function DeckView() {
         });
         // increment the page by 1
         setPage(page + 1);
-        console.log("Paginated Response:", res.data);
       });
   }
 
@@ -53,7 +52,6 @@ function DeckView() {
     axios
       .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
       .then((res) => {
-        console.log("res", res.data);
         setIsDeckLoaded(true);
         setDeck(res.data);
         setPage(page + 1);
