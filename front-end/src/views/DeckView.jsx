@@ -30,8 +30,6 @@ function DeckView() {
   }
 
   function fetchMoreCards() {
-    console.log("Fetching more cards from backend");
-    console.log("Current Deck:", deck);
     axios
       .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
       .then((res) => {
