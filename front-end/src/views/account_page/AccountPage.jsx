@@ -150,7 +150,7 @@ function AccountPage({ token }) {
   const page = !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
-    <div className="container">
+    <div>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}

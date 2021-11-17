@@ -10,7 +10,11 @@ import share from "../assets/share.png";
 function DeckView() {
   let { id } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
-  const [deck, setDeck] = useState({deckName: "Untitled", deckDescription: "", cards: []});
+  const [deck, setDeck] = useState({
+    deckName: "Untitled",
+    deckDescription: "",
+    cards: [],
+  });
 
   useEffect(() => {
     axios
@@ -32,7 +36,7 @@ function DeckView() {
       .then(() => {
         //After deleting, redirect user back to homepage.
         alert("You've just deleted a deck!");
-        window.location.href = "http://localhost:3000"
+        window.location.href = "http://localhost:3000";
       })
       .catch((err) => {
         console.log("!!", err);
@@ -42,7 +46,8 @@ function DeckView() {
   function shareDeck() {
     // TODO: Have url copied for user when click on button!
 
-    document.getElementById("shared-text").innerHTML = "Copied share link!";
+    document.getElementById("shared-text").innerHTML =
+      "Copied deck access code!";
     setTimeout(function () {
       document.getElementById("shared-text").innerHTML = "";
     }, 3000);
