@@ -44,10 +44,10 @@ function DeckView() {
   }
 
   function shareDeck() {
-    // TODO: Have url copied for user when click on button!
-
-    document.getElementById("shared-text").innerHTML =
-      "Copied deck access code!";
+    navigator.clipboard.writeText(deck.accessCode);
+    document.getElementById(
+      "shared-text"
+    ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
     setTimeout(function () {
       document.getElementById("shared-text").innerHTML = "";
     }, 3000);
