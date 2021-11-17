@@ -8,7 +8,10 @@ import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 
 function DeckView() {
+  const CARD_LIMIT = 9;
   let { id } = useParams();
+  const [page, setPage] = useState(0);
+  const [isFetchingMoreCards, setIsFetchingMoreCards] = useState(false);
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deck, setDeck] = useState({
     deckName: "Untitled",
@@ -16,19 +19,60 @@ function DeckView() {
     cards: [],
   });
 
-  useEffect(() => {
+  // detects when the user has scrolled to the bottom of the page
+  function handleScroll() {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setIsFetchingMoreCards(true);
+  }
+
+  function fetchMoreCards() {
+    console.log("Fetching more cards from backend");
+    console.log("Current Deck:", deck);
     axios
-      .get(`http://localhost:8000/deck/${id}`)
+      .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
+      .then((res) => {
+        setIsFetchingMoreCards(false);
+        // append the new cards to the deck state
+        setDeck({
+          ...deck,
+          cards: [...deck.cards, ...res.data.cards],
+        });
+        // increment the page by 1
+        setPage(page + 1);
+        console.log("Paginated Response:", res.data);
+      });
+  }
+
+  // handles the behavior when the page first loads
+  useEffect(() => {
+    // fetches the first batch of cards from the API
+    axios
+      .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
       .then((res) => {
         console.log("res", res.data);
         setIsDeckLoaded(true);
         setDeck(res.data);
+        setPage(page + 1);
       })
       .catch((err) => {
         console.log("!!", err);
         setIsDeckLoaded(true);
       });
+
+    // attaches event listener to window for when user scrolls to the bottom
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // handles the behavior when fetching more cards from API
+  useEffect(() => {
+    if (!isFetchingMoreCards) return;
+    fetchMoreCards();
+  }, [isFetchingMoreCards]);
 
   function deleteDeck() {
     axios
@@ -86,6 +130,7 @@ function DeckView() {
           <DisplayCard card={card} template={deck.cardTemplate}></DisplayCard>
         ))}
       </div>
+      {isFetchingMoreCards && "Fetching more cards..."}
     </div>
   );
 }
