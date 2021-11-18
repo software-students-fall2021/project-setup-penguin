@@ -155,7 +155,7 @@ function DeckView({ token }) {
               {/* TODO: tooltip on hover disabled to explain why disabled */}
               <DarkButton
                 btnText="Add Card"
-                linkTo={`${id}/add`}
+                linkTo={`add`}
                 disabled={!permissions.canAddCard}
               />
             </div>
