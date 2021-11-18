@@ -73,6 +73,8 @@ function DeckView({ token }) {
         .catch((err) => {
           console.log("!!", err);
         });
+    } else {
+      setIsPermissionsLoaded(true);
     }
   }, [token]);
 
