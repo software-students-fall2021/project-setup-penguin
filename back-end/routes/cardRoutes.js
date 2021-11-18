@@ -1,5 +1,5 @@
-const express = require("express");
 const passport = require("passport");
+const express = require("express");
 const router = express.Router();
 const cardController = require("../controllers/cardController");
 const upload = require("../multerConfig");
@@ -24,6 +24,11 @@ router.delete(
 
 router.get("/:cardId", cardController.getCard);
 
-router.patch("/:cardId", cardController.updateCard);
+router.patch(
+  "/:cardId",
+  upload.single("cardImage"),
+  passport.authenticate("jwt", { session: false }),
+  cardController.updateCard
+);
 
 module.exports = router;

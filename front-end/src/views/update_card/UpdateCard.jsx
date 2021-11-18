@@ -6,11 +6,24 @@ import { EMPTY_TEMPLATE, TEST_TEMPLATE_DATA } from "../../common/constants";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 import { ArrowRight } from "react-bootstrap-icons";
 
-function UpdateCard() {
+function UpdateCard({ token }) {
   const { cardId, deckId } = useParams();
   const [form, setForm] = useState(EMPTY_TEMPLATE);
+  const [templateData, setTemplateData] = useState();
   const [isCardLoaded, setIsCardLoaded] = useState(false);
   const [redirect, setRedirect] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
+      .then((res) => {
+        setTemplateData(res.data.cardTemplate);
+      })
+      .catch((err) => {
+        console.log("!!", err);
+        setTemplateData(TEST_TEMPLATE_DATA);
+      });
+  }, [deckId]);
 
   useEffect(() => {
     axios
@@ -27,10 +40,23 @@ function UpdateCard() {
   }, [cardId, deckId]);
 
   const saveCard = (userId) => {
+    const formData = new FormData();
+    formData.append("deckId", deckId);
+
+    // set textData = all entries from form except for image
+    const { image, ...textData } = form;
+    formData.append("cardText", JSON.stringify(textData));
+
+    if (form.image) {
+      formData.append("cardImage", form.image, "profile");
+    }
+
     axios
-      .patch(`http://localhost:8000/card/${cardId}`, {
-        newCard: form,
-        userId,
+      .patch(`http://localhost:8000/card/${cardId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `JWT ${token}`,
+        },
       })
       .then((res) => {
         setRedirect(true);
@@ -44,15 +70,6 @@ function UpdateCard() {
   if (redirect) {
     return <Redirect to={`/deck/${deckId}`} />;
   }
-
-  //extract 'templateData' to pass to cardEditorProps so that deck specific fields aren't editable
-  const templateData = {
-    sectionLabel0: form["sectionLabel0"],
-    sectionLabel1: form["sectionLabel1"],
-    sectionLabel2: form["sectionLabel2"],
-    sliderLabelMin: form["sliderLabelMin"],
-    sliderLabelMax: form["sliderLabelMax"],
-  };
 
   const prompt = (
     <p>
