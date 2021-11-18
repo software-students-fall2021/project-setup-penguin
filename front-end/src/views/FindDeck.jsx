@@ -17,7 +17,6 @@ function FindDeck() {
       .then((res) => {
         const accessCodes = res.data.map((deck) => deck.accessCode);
         const deckIds = res.data.map((deck) => deck._id);
-        console.log({ accessCodes });
         setAccessCodes(accessCodes);
         setDeckIds(deckIds);
       })

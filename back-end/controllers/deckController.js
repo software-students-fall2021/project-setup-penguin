@@ -39,6 +39,24 @@ const getDeckDetails = async (req, res, next) => {
   res.json(deck);
 };
 
+const getDeckPermissions = async (req, res, next) => {
+  const deck = await Deck.findById(req.params.deckId).catch((err) => {
+    next(err);
+  });
+  const isDeckOwner = req.user._id.equals(deck.ownerId);
+
+  const cardIds = deck.cards;
+  const card = await Card.findOne({
+    _id: { $in: cardIds },
+    userId: req.user._id,
+  }).catch((err) => {
+    next(err);
+  });
+  const canAddCard = card === null;
+
+  res.json({ isDeckOwner, canAddCard });
+};
+
 const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
   const page = parseInt(req.query.page);
@@ -185,6 +203,7 @@ module.exports = {
   getDeckDetails,
   getAccessCodes,
   getDeckTemplate,
+  getDeckPermissions,
   getDeck,
   createDeck,
   updateDeck,
