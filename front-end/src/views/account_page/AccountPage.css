@@ -66,3 +66,10 @@
 .title {
   text-align: center;
 }
+
+.accountPageImg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 200px;
+}
