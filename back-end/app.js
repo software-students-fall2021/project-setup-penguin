@@ -32,7 +32,7 @@ app.use("/deck", deckRouter);
 // error handling middleware
 app.use((err, req, res, next) => {
   console.error("!!", err.message);
-  res.status(500).send({ error: err });
+  res.status(500).json({ messages: [err.message] });
 });
 
 module.exports = app;

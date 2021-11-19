@@ -1,12 +1,15 @@
+import axios from "axios";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import SignupOrLogin from "../../common/account-prompt-modal/SignupOrLogin";
-import axios from "axios";
 import { MODAL_PAGE_TYPE } from "../../common/constants";
 
 import "./loginSignup.css";
 
 function LoginSignup({ pageType, setToken }) {
   const history = useHistory();
+  const [errors, setErrors] = useState([]);
+
   const handleRedirect = (page) => {
     if (page === MODAL_PAGE_TYPE.LOGIN) {
       history.push("/login");
@@ -16,7 +19,6 @@ function LoginSignup({ pageType, setToken }) {
   };
 
   const onSignupOrLogin = (pageType, name, email, password) => {
-    let userId;
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       // TODO: create & save account – get id of newly created account
       axios({
@@ -34,7 +36,7 @@ function LoginSignup({ pageType, setToken }) {
           history.push("/accountpage");
         })
         .catch((err) => {
-          console.log(err);
+          setErrors(err.response.data.messages);
         });
     } else {
       // log user in – get id of existing account
@@ -49,7 +51,7 @@ function LoginSignup({ pageType, setToken }) {
           history.push("/accountpage");
         })
         .catch((err) => {
-          console.log(err);
+          setErrors(err.response.data.messages);
         });
     }
   };
@@ -62,6 +64,8 @@ function LoginSignup({ pageType, setToken }) {
         onSignupOrLogin={onSignupOrLogin}
         onContinueAsGuest={null}
         useAsPage={true}
+        errors={errors}
+        setErrors={setErrors}
       />
     </div>
   );

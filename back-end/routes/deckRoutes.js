@@ -5,7 +5,7 @@ const deckController = require("../controllers/deckController");
 const upload = require("../multerConfig");
 const { body } = require("express-validator");
 
-router.get("/accessCodes", deckController.getAccessCodes);
+router.get("/deckId/:accessCode", deckController.getDeckIdFromAccessCode);
 
 router.get("/deckTemplate/:deckId", deckController.getDeckTemplate);
 

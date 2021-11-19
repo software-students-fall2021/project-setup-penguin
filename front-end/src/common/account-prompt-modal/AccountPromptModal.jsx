@@ -9,6 +9,8 @@ function AccountPromptModal({
   parentType,
   onContinueAsGuest,
   onSignupOrLogin,
+  errors,
+  setErrors,
 }) {
   const [pageType, setPageType] = useState(MODAL_PAGE_TYPE.SIGNUP);
 
@@ -24,6 +26,8 @@ function AccountPromptModal({
         onSignupOrLogin={onSignupOrLogin}
         pageType={pageType}
         setPageType={setPageType}
+        errors={errors}
+        setErrors={setErrors}
       />
     </CustomModal>
   );

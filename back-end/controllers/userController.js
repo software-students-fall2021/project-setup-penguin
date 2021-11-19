@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const fs = require("fs").promises;
 const db = require("../db.js");
+const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 const Card = require("../models/card");
@@ -10,11 +11,19 @@ const Deck = require("../models/deck");
 const { jwtOptions } = require("../jwt-config");
 
 const createUser = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
+  }
+
   const { email, password, name } = req.body;
 
-  const existingUser = await User.findOne({ email: email });
+  const existingUser = await User.findOne({ email: email }).catch((err) => {
+    next(err);
+  });
   if (existingUser) {
-    res.status(401).json({ success: false, message: `email already taken` });
+    res.status(401).json({ success: false, messages: [`email already taken`] });
   }
 
   const hash = await bcrypt.hash(password, 10).catch((err) => {
@@ -81,7 +90,9 @@ const getUser = async (req, res, next) => {
   const userId = req.user._id;
 
   // query DB for user data and extract array of cardIds
-  const userData = await User.findOne({ _id: userId });
+  const userData = await User.findOne({ _id: userId }).catch((err) => {
+    next(err);
+  });
   const userCardIds = userData.cards;
 
   // query DB and replace cardIds with card objects
@@ -96,6 +107,8 @@ const getUser = async (req, res, next) => {
     userCards.map(async (userCard) => {
       const deckData = await Deck.findOne({
         _id: userCard.deckId.toString(),
+      }).catch((err) => {
+        next(err);
       });
 
       return {
@@ -123,6 +136,8 @@ const updateUser = async (req, res, next) => {
     if (count == 0) {
       throw "User does not exist";
     }
+  }).catch((err) => {
+    next(err);
   });
 
   await User.findOneAndUpdate({ _id: userId }, { name, email, password }).catch(
@@ -134,19 +149,19 @@ const updateUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    res
-      .status(401)
-      .json({ success: false, message: `no email or password provided` });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
   }
+
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email: email });
   if (!user) {
     res
       .status(401)
-      .json({ success: false, message: `user not found: ${email}.` });
+      .json({ success: false, messages: [`user not found: ${email}.`] });
   }
   const match = await bcrypt.compare(password, user.password).catch((err) => {
     next(err);
@@ -159,7 +174,7 @@ const loginUser = async (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ success: false, message: `passwords did not match` });
+      .json({ success: false, messages: [`passwords did not match`] });
   }
 };
 

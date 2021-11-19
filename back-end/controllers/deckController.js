@@ -1,22 +1,20 @@
 const mongose = require("mongoose");
-const fs = require("fs").promises;
+const ObjectId = mongose.Types.ObjectId;
 const shortid = require("shortid");
-const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
 
 const db = require("../db.js");
-const ObjectId = mongose.Types.ObjectId;
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
 
-const getAccessCodes = async (req, res, next) => {
-  const decks = await Deck.find({})
-    .select("accessCode")
-    .catch((err) => {
-      next(err);
-    });
-  res.json(decks);
+const getDeckIdFromAccessCode = async (req, res, next) => {
+  const accessCode = req.params.accessCode;
+  const deck = await Deck.findOne({ accessCode }).catch((err) => {
+    next(err);
+  });
+  res.json(deck);
 };
 
 // get cardTemplate from deck
@@ -67,19 +65,25 @@ const getDeck = async (req, res, next) => {
     .match({ _id: ObjectId(deckId) })
     .project({
       numCards: { $size: "$cards" },
+    })
+    .catch((err) => {
+      next(err);
     });
   const numCards = numCardsAggregate[0].numCards;
-  console.log("numCards:", numCards);
-  console.log("currNum:", skipValues + limit);
 
-  const pageCards = await Deck.findById(deckId).populate({
-    path: "cards",
-    options: {
-      limit: limit,
-      sort: { name: 1 },
-      skip: skipValues,
-    },
-  });
+  const pageCards = await Deck.findById(deckId)
+    .populate({
+      path: "cards",
+      options: {
+        limit: limit,
+        sort: { name: 1 },
+        skip: skipValues,
+      },
+    })
+    .catch((err) => {
+      next(err);
+    });
+
   res.send({
     hasNextPage: numCards >= skipValues + limit,
     deckData: pageCards,
@@ -89,73 +93,81 @@ const getDeck = async (req, res, next) => {
 const createDeck = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
   }
 
   const { token, deckName, deckDescription, cardText } = req.body;
 
-  const cardTemplate = JSON.parse(cardText);
-  const accessCode = shortid.generate();
-  let deckId;
-  let userId;
+  try {
+    const cardTemplate = ca(cardText);
+    const accessCode = shortid.generate();
+    let deckId;
+    let userId;
 
-  if (token) {
-    userId = jwt.decode(token).id;
-  }
-
-  const session = await db.startSession();
-  await session.withTransaction(async () => {
-    // create & save new Deck document
-    const deck = await new Deck({
-      accessCode,
-      ownerId: userId,
-      deckName,
-      deckDescription,
-      cardTemplate,
-      cards: [],
-    })
-      .save()
-      .catch((err) => {
-        next(err);
-      });
-    deckId = deck._id;
-
-    // create & save new Card document
-    const card = await new Card({
-      userId,
-      deckId,
-      filename: req.file?.filename,
-      ...cardTemplate,
-    })
-      .save()
-      .catch((err) => {
-        next(err);
-      });
-
-    // update Deck document w/ id of newly added Card
-    await Deck.findOneAndUpdate({ _id: deckId }, { cards: [card._id] }).catch(
-      (err) => {
-        next(err);
-      }
-    );
-
-    // update User document w/ id of newly added Card
-    if (userId) {
-      await User.findOneAndUpdate(
-        { _id: userId },
-        { $push: { cards: card._id } }
-      );
+    if (token) {
+      userId = jwt.decode(token).id;
     }
-  });
 
-  session.endSession();
-  res.json({ deckId });
+    const session = await db.startSession();
+    await session.withTransaction(async () => {
+      // create & save new Deck document
+      const deck = await new Deck({
+        accessCode,
+        ownerId: userId,
+        deckName,
+        deckDescription,
+        cardTemplate,
+        cards: [],
+      })
+        .save()
+        .catch((err) => {
+          next(err);
+        });
+      deckId = deck._id;
+
+      // create & save new Card document
+      const card = await new Card({
+        userId,
+        deckId,
+        filename: req.file?.filename,
+        ...cardTemplate,
+      })
+        .save()
+        .catch((err) => {
+          next(err);
+        });
+
+      // update Deck document w/ id of newly added Card
+      await Deck.findOneAndUpdate({ _id: deckId }, { cards: [card._id] }).catch(
+        (err) => {
+          next(err);
+        }
+      );
+
+      // update User document w/ id of newly added Card
+      if (userId) {
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { cards: card._id } }
+        ).catch((err) => {
+          next(err);
+        });
+      }
+    });
+
+    session.endSession();
+    res.json({ deckId });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const updateDeck = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
   }
 
   const deckId = req.params.deckId;
@@ -175,7 +187,9 @@ const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
   let cardIds = [];
 
-  const doesDeckExist = await Deck.exists({ _id: deckId });
+  const doesDeckExist = await Deck.exists({ _id: deckId }).catch((err) => {
+    next(err);
+  });
 
   if (doesDeckExist) {
     // Find deck to delete by deckId
@@ -201,7 +215,7 @@ const deleteDeck = async (req, res, next) => {
 
 module.exports = {
   getDeckDetails,
-  getAccessCodes,
+  getDeckIdFromAccessCode,
   getDeckTemplate,
   getDeckPermissions,
   getDeck,

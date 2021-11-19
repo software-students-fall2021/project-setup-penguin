@@ -6,24 +6,13 @@ import { ArrowRight } from "react-bootstrap-icons";
 
 function FindDeck() {
   const [maybeAccessCode, setMaybeAccessCode] = useState("");
-  const [deckIds, setDeckIds] = useState([]);
-  const [accessCodes, setAccessCodes] = useState([]);
   const [redirectLink, setRedirectLink] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/deck/accessCodes`)
-      .then((res) => {
-        const accessCodes = res.data.map((deck) => deck.accessCode);
-        const deckIds = res.data.map((deck) => deck._id);
-        setAccessCodes(accessCodes);
-        setDeckIds(deckIds);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
+    if (maybeAccessCode) {
+    }
+  }, [maybeAccessCode]);
 
   if (redirectLink !== "") {
     return <Redirect to={redirectLink} />;
@@ -31,12 +20,20 @@ function FindDeck() {
 
   const onContinue = (evt) => {
     evt.preventDefault();
-    const maybeIdx = accessCodes.indexOf(maybeAccessCode);
-    if (maybeIdx >= 0) {
-      setRedirectLink(`/deck/${deckIds[maybeIdx]}`);
-    } else {
-      setError(`Deck with join code ${maybeAccessCode} does not exist :(`);
-    }
+    axios
+      .get(`http://localhost:8000/deck/deckId/${maybeAccessCode}`)
+      .then((res) => {
+        if (res.data) {
+          setRedirectLink(`/deck/${res.data._id}`);
+        } else {
+          setErrors([
+            `Deck with access code ${maybeAccessCode} does not exist :(`,
+          ]);
+        }
+      })
+      .catch((err) => {
+        setErrors(err.response.data.messages);
+      });
   };
 
   return (
@@ -51,10 +48,10 @@ function FindDeck() {
             value={maybeAccessCode}
             onChange={(e) => {
               setMaybeAccessCode(e.target.value);
-              setError("");
+              setErrors([]);
             }}
           />
-          {<ErrorMessage error={error} className="mt-3" />}
+          {<ErrorMessage errors={errors} className="mt-3" />}
           {/* 
           if we implement password-restrictions on decks
           <TextInput

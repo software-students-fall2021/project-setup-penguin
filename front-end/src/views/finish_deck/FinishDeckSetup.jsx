@@ -19,6 +19,9 @@ function FinishDeckSetup({ token, setToken }) {
   const [showModal, setShowModal] = useState(false);
   const [redirectLink, setRedirectLink] = useState("");
 
+  const [modalErrors, setModalErrors] = useState([]);
+  const [pageErrors, setPageErrors] = useState([]);
+
   if (redirectLink !== "") {
     return <Redirect to={redirectLink} />;
   }
@@ -62,8 +65,8 @@ function FinishDeckSetup({ token, setToken }) {
         setShowModal(false);
       })
       .catch((err) => {
-        console.log(err);
         setShowModal(false);
+        setPageErrors(err.response.data.messages);
       });
   };
 
@@ -85,7 +88,7 @@ function FinishDeckSetup({ token, setToken }) {
           saveDeck(res.data.token);
         })
         .catch((err) => {
-          console.log(err);
+          setModalErrors(err.response.data.messages);
         });
     } else {
       axios
@@ -99,7 +102,7 @@ function FinishDeckSetup({ token, setToken }) {
           saveDeck(res.data.token);
         })
         .catch((err) => {
-          console.log(err);
+          setModalErrors(err.response.data.messages);
         });
     }
   };
@@ -107,7 +110,6 @@ function FinishDeckSetup({ token, setToken }) {
   return (
     <div className="FinishDeckSetup">
       <h1>Finalize deck details</h1>
-      {/* TODO: FE validation for deckName requirement */}
       <DeckEditor
         deckName={deckName}
         setDeckName={setDeckName}
@@ -121,13 +123,20 @@ function FinishDeckSetup({ token, setToken }) {
             setShowModal(true);
           }
         }}
+        errors={pageErrors}
+        setErrors={setPageErrors}
       />
       <AccountPromptModal
-        onCloseModal={() => setShowModal(false)}
+        onCloseModal={() => {
+          setShowModal(false);
+          setModalErrors([]);
+        }}
         showModal={showModal}
         parentType={PARENT_TYPE.DECK}
         onContinueAsGuest={onContinueAsGuest}
         onSignupOrLogin={onSignupOrLogin}
+        errors={modalErrors}
+        setErrors={setModalErrors}
       />
       <Button
         btnText="Create deck"
