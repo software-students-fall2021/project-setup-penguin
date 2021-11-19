@@ -67,7 +67,7 @@ function App() {
               <UpdateDeck />
             </Route>
             <Route exact path="/deck/:id">
-              <DeckView />
+              <DeckView token={token}/>
             </Route>
             <Route path="/deck/:deckId/add">
               <CreateCard token={token} setToken={setToken} />

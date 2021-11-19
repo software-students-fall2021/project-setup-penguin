@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 
-function DeckView() {
+function DeckView({ token }) {
   let { id } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deck, setDeck] = useState({deckName: "Untitled", deckDescription: "", cards: []});
@@ -78,7 +78,7 @@ function DeckView() {
       </div>
       <div className="deck-list">
         {deck.cards.map((card) => (
-          <DisplayCard card={card} template={deck.cardTemplate}></DisplayCard>
+          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
         ))}
       </div>
     </div>
