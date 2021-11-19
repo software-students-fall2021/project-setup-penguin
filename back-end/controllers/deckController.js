@@ -1,9 +1,11 @@
+const mongose = require("mongoose");
 const fs = require("fs").promises;
 const shortid = require("shortid");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 const db = require("../db.js");
+const ObjectId = mongose.Types.ObjectId;
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
@@ -43,6 +45,15 @@ const getDeck = async (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skipValues = page * limit;
 
+  const numCardsAggregate = await Deck.aggregate()
+    .match({ _id: ObjectId(deckId) })
+    .project({
+      numCards: { $size: "$cards" },
+    });
+  const numCards = numCardsAggregate[0].numCards;
+  console.log("numCards:", numCards);
+  console.log("currNum:", skipValues + limit);
+
   const pageCards = await Deck.findById(deckId).populate({
     path: "cards",
     options: {
@@ -51,7 +62,10 @@ const getDeck = async (req, res, next) => {
       skip: skipValues,
     },
   });
-  res.send(pageCards);
+  res.send({
+    hasNextPage: numCards >= skipValues + limit,
+    deckData: pageCards,
+  });
 };
 
 const createDeck = async (req, res, next) => {

@@ -1,4 +1,4 @@
-import { useParams, NavLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DarkButton, Button, DisplayCard } from "../common";
 import "./DeckView.css";
 import axios from "axios";
@@ -11,6 +11,7 @@ function DeckView() {
   const CARD_LIMIT = 9;
   let { id } = useParams();
   const [page, setPage] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const [isFetchingMoreCards, setIsFetchingMoreCards] = useState(false);
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deck, setDeck] = useState({
@@ -30,18 +31,25 @@ function DeckView() {
   }
 
   function fetchMoreCards() {
-    axios
-      .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
-      .then((res) => {
-        setIsFetchingMoreCards(false);
-        // append the new cards to the deck state
-        setDeck({
-          ...deck,
-          cards: [...deck.cards, ...res.data.cards],
+    if (hasNextPage) {
+      axios
+        .get(
+          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`
+        )
+        .then((res) => {
+          setIsFetchingMoreCards(false);
+          // append the new cards to the deck state
+          setDeck({
+            ...deck,
+            cards: [...deck.cards, ...res.data.deckData.cards],
+          });
+          // increment the page by 1
+          setPage(page + 1);
+          setHasNextPage(res.data.hasNextPage);
         });
-        // increment the page by 1
-        setPage(page + 1);
-      });
+    } else {
+      setIsFetchingMoreCards(false);
+    }
   }
 
   // handles the behavior when the page first loads
@@ -51,8 +59,9 @@ function DeckView() {
       .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
       .then((res) => {
         setIsDeckLoaded(true);
-        setDeck(res.data);
+        setDeck(res.data.deckData);
         setPage(page + 1);
+        setHasNextPage(res.data.hasNextPage);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -126,7 +135,6 @@ function DeckView() {
           <DisplayCard card={card} template={deck.cardTemplate}></DisplayCard>
         ))}
       </div>
-      {isFetchingMoreCards && "Fetching more cards..."}
     </div>
   );
 }
