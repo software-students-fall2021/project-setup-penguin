@@ -5,7 +5,11 @@ const userController = require("../controllers/userController");
 
 router.post("/", userController.createUser);
 
-router.delete("/:userId", userController.deleteUser);
+router.delete(
+  "/:userId",
+  passport.authenticate("jwt", { session: false }),
+  userController.deleteUser
+);
 
 router.get(
   "/",
@@ -13,8 +17,11 @@ router.get(
   userController.getUser
 );
 
-// TODO: update this to align with get request (get id from req.user not req.params)
-router.patch("/:userId", userController.updateUser);
+router.patch(
+  "/:userId",
+  passport.authenticate("jwt", { session: false }),
+  userController.updateUser
+);
 
 router.post("/login", userController.loginUser);
 

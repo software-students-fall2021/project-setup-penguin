@@ -118,7 +118,7 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const userId = req.params.userId;
+  const userId = req.user._id;
   const { email, password, name } = req.body;
 
   //check if User does not exists
