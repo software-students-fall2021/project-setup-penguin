@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const router = express.Router();
 const cardController = require("../controllers/cardController");
 const upload = require("../multerConfig");
@@ -11,8 +12,12 @@ router.post(
   cardController.createCard
 );
 
-//  axios.delete('baseUrl/card', { data: {userId, deckId} })
-router.delete("/:cardId", cardController.deleteCard);
+//  axios.delete('baseUrl/card', { data: { deckId} })
+router.delete(
+  "/:cardId",
+  passport.authenticate("jwt", { session: false }),
+  cardController.deleteCard
+);
 
 router.get("/:cardId", cardController.getCard);
 

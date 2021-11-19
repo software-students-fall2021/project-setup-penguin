@@ -53,9 +53,9 @@ const createCard = async (req, res, next) => {
 };
 
 const deleteCard = async (req, res, next) => {
-  // current dummy default values since we're not calling the delete endpoint yet
   const { cardId } = req.params;
-  const { deckId, userId } = req.body;
+  const { deckId } = req.body;
+  const userId = req.user._id;
 
   const doesCardExist = await Card.exists({ _id: cardId });
   const doesDeckExist = await Deck.exists({ _id: deckId });
