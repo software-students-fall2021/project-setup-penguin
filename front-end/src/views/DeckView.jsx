@@ -7,13 +7,20 @@ import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 
-function DeckView() {
+function DeckView({ token }) {
   const CARD_LIMIT = 9;
   let { id } = useParams();
   const [page, setPage] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [isFetchingMoreCards, setIsFetchingMoreCards] = useState(false);
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
+  const [isPermissionsLoaded, setIsPermissionsLoaded] = useState(false);
+
+  const [permissions, setPermissions] = useState({
+    canAddCard: true,
+    isDeckOwner: false,
+  });
+
   const [deck, setDeck] = useState({
     deckName: "Untitled",
     deckDescription: "",
@@ -54,7 +61,24 @@ function DeckView() {
 
   // handles the behavior when the page first loads
   useEffect(() => {
-    // fetches the first batch of cards from the API
+    if (token) {
+      axios
+        .get(`http://localhost:8000/deck/deckPermissions/${id}`, {
+          headers: { Authorization: `JWT ${token}` },
+        })
+        .then((res) => {
+          setPermissions(res.data);
+          setIsPermissionsLoaded(true);
+        })
+        .catch((err) => {
+          console.log("!!", err);
+        });
+    } else {
+      setIsPermissionsLoaded(true);
+    }
+  }, [token]);
+
+  useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
       .then((res) => {
@@ -81,7 +105,9 @@ function DeckView() {
 
   function deleteDeck() {
     axios
-      .delete(`http://localhost:8000/deck/${id}`)
+      .delete(`http://localhost:8000/deck/${id}`, {
+        headers: { Authorization: `JWT ${token}` },
+      })
       .then(() => {
         //After deleting, redirect user back to homepage.
         alert("You've just deleted a deck!");
@@ -102,9 +128,7 @@ function DeckView() {
     }, 3000);
   }
 
-  return !isDeckLoaded ? (
-    <LoadingSpinner />
-  ) : (
+  return isDeckLoaded && isPermissionsLoaded ? (
     <div className="deckview-overall">
       <div className="header">
         <div className="title-container">
@@ -117,14 +141,23 @@ function DeckView() {
           </div>
           {/* TODO: only show button for admin */}
           <div className="deckview-buttons">
-            <div className="edit">
-              <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
-            </div>
-            <div className="delete">
-              <Button btnText="Delete Deck" onClick={() => deleteDeck()} />
-            </div>
+            {permissions.isDeckOwner && (
+              <>
+                <div className="edit">
+                  <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
+                </div>
+                <div className="delete">
+                  <Button btnText="Delete Deck" onClick={() => deleteDeck()} />
+                </div>
+              </>
+            )}
             <div className="add">
-              <DarkButton btnText="Add Card" linkTo={`${id}/add`} />
+              {/* TODO: tooltip on hover disabled to explain why disabled */}
+              <DarkButton
+                btnText="Add Card"
+                linkTo={`add`}
+                disabled={!permissions.canAddCard}
+              />
             </div>
           </div>
         </div>
@@ -136,6 +169,8 @@ function DeckView() {
         ))}
       </div>
     </div>
+  ) : (
+    <LoadingSpinner />
   );
 }
 export default DeckView;

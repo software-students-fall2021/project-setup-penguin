@@ -5,7 +5,7 @@ import { Redirect, useParams } from "react-router-dom";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
 // TODO: restrict page to deck owner
-function UpdateDeck() {
+function UpdateDeck({ token }) {
   const { deckId } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deckName, setDeckName] = useState();
@@ -28,10 +28,16 @@ function UpdateDeck() {
 
   const updateDeckWithRedirect = () => {
     axios
-      .patch(`http://localhost:8000/deck/${deckId}`, {
-        deckName: deckName,
-        deckDescription: deckDescription,
-      })
+      .patch(
+        `http://localhost:8000/deck/${deckId}`,
+        {
+          deckName: deckName,
+          deckDescription: deckDescription,
+        },
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      )
       .then(() => {
         setRedirect(true);
       })
