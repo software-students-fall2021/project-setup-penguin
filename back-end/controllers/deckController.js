@@ -63,6 +63,7 @@ const getDeck = async (req, res, next) => {
     })
     .catch((err) => {
       next(err);
+    });
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const skipValues = page * limit;
@@ -88,7 +89,7 @@ const getDeck = async (req, res, next) => {
     hasNextPage: numCards >= skipValues + limit,
     deckData: pageCards,
   });
-});
+}
 
 const createDeck = async (req, res, next) => {
   const errors = validationResult(req);
