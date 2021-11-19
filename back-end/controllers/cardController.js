@@ -1,5 +1,6 @@
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
 
 const Card = require("../models/card");
@@ -66,11 +67,12 @@ const createCard = async (req, res, next) => {
 };
 
 const deleteCard = async (req, res, next) => {
-  const { cardId } = req.params;
+  const cardId = mongoose.Types.ObjectId(req.params.cardId);
   const { deckId } = req.body;
   const userId = req.user._id;
   let filename;
 
+  console.log({ cardId, deckId, userId });
   const doesCardExist = await Card.exists({ _id: cardId });
   const doesDeckExist = await Deck.exists({ _id: deckId });
   const doesUserExist = await User.exists({ _id: userId });
@@ -83,17 +85,24 @@ const deleteCard = async (req, res, next) => {
 
     const session = await db.startSession();
     await session.withTransaction(async () => {
-      // delete card document
+      // delete card document\
       await Card.deleteOne({ _id: cardId }).catch((err) => next(err));
 
       // delete cardId from deck object
       const deck = await Deck.findById(deckId);
-      deck.cards = deck.cards.filter((currCardId) => currCardId != cardId);
+      console.log({ deck });
+      deck.cards = deck.cards.filter(
+        (currCardId) => !currCardId.equals(cardId)
+      );
       deck.save();
 
       // delete cardId from user object
       const user = await User.findById(userId);
-      user.cards = user.cards.filter((currCardId) => currCardId != cardId);
+      console.log({ user });
+
+      user.cards = user.cards.filter(
+        (currCardId) => !currCardId.equals(cardId)
+      );
       user.save();
     });
 
