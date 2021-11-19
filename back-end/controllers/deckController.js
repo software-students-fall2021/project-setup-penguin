@@ -1,9 +1,11 @@
+const mongose = require("mongoose");
 const fs = require("fs").promises;
 const shortid = require("shortid");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 const db = require("../db.js");
+const ObjectId = mongose.Types.ObjectId;
 const User = require("../models/user");
 const Card = require("../models/card");
 const Deck = require("../models/deck");
@@ -39,29 +41,31 @@ const getDeckDetails = async (req, res, next) => {
 
 const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
-  // Deck object to return and send (modified with populated cardObj)
-  let deckObj = {};
-  // Temporary array to hold the card objects (and later push into deckObj)
-  let cardsObj = [];
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const skipValues = page * limit;
 
-  // Find deck by deckId
-  await Deck.find({ _id: deckId }
-    ).then((result) => {
-      deckObj = result[0];
-      cardsObj = result[0].cards;
-
-      // Find cards based off of cardIds in cardsObj
-      Card.find({ _id:{$in: cardsObj }})
-        .then(result => {
-          // Fill deckObj with the card documents found by the cardIds in cardsObj
-          deckObj.cards = result;
-          // Send final deckObj
-          res.send(deckObj);
-        })
-    })
-    .catch((err) => {
-      next(err);
+  const numCardsAggregate = await Deck.aggregate()
+    .match({ _id: ObjectId(deckId) })
+    .project({
+      numCards: { $size: "$cards" },
     });
+  const numCards = numCardsAggregate[0].numCards;
+  console.log("numCards:", numCards);
+  console.log("currNum:", skipValues + limit);
+
+  const pageCards = await Deck.findById(deckId).populate({
+    path: "cards",
+    options: {
+      limit: limit,
+      sort: { name: 1 },
+      skip: skipValues,
+    },
+  });
+  res.send({
+    hasNextPage: numCards >= skipValues + limit,
+    deckData: pageCards,
+  });
 };
 
 const createDeck = async (req, res, next) => {
@@ -155,26 +159,25 @@ const deleteDeck = async (req, res, next) => {
 
   const doesDeckExist = await Deck.exists({ _id: deckId });
 
-  if (doesDeckExist){
-  // Find deck to delete by deckId
-  await Deck.find({ _id: deckId }
-    ).then((result) => {
-      cardIds = result[0].cards;
+  if (doesDeckExist) {
+    // Find deck to delete by deckId
+    await Deck.find({ _id: deckId })
+      .then((result) => {
+        cardIds = result[0].cards;
 
-      // Delete deck
-      Deck.deleteOne({ _id: deckId }
-        ).catch((err) => {
+        // Delete deck
+        Deck.deleteOne({ _id: deckId }).catch((err) => {
           next(err);
-        })
-      // Delete cards that were in the deck
-      Card.remove({ _id: { $in: cardIds} }
-        ).catch((err) => {
+        });
+        // Delete cards that were in the deck
+        Card.remove({ _id: { $in: cardIds } }).catch((err) => {
           next(err);
-        })
-      res.send({ deckId })
-    }).catch((err) => {
-      next(err);
-    });
+        });
+        res.send({ deckId });
+      })
+      .catch((err) => {
+        next(err);
+      });
   }
 };
 
