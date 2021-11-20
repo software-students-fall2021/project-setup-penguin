@@ -9,11 +9,6 @@ function FindDeck() {
   const [redirectLink, setRedirectLink] = useState("");
   const [errors, setErrors] = useState([]);
 
-  useEffect(() => {
-    if (maybeAccessCode) {
-    }
-  }, [maybeAccessCode]);
-
   if (redirectLink !== "") {
     return <Redirect to={redirectLink} />;
   }
