@@ -173,14 +173,19 @@ const updateDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
   const { deckName, deckDescription } = req.body;
 
-  await Deck.findOneAndUpdate(
+  const updatedDeck = await Deck.findOneAndUpdate(
     { _id: deckId },
-    { deckName, deckDescription }
+    { deckName, deckDescription },
+    { new: true }
   ).catch((err) => {
     next(err);
   });
 
-  res.json({ deckId });
+  if (updatedDeck) {
+    res.json(updatedDeck);
+  } else {
+    next({ message: "Error: attempted to add card to nonexistent deck" });
+  }
 };
 
 const deleteDeck = async (req, res, next) => {

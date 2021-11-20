@@ -92,7 +92,7 @@ const deleteCard = async (req, res, next) => {
 
     res.send({ cardId });
   } else {
-    throw "Error: nonexistent cardId or deckId or userId";
+    next({ message: "Error: nonexistent cardId or deckId or userId" });
   }
 };
 
@@ -105,7 +105,7 @@ const getCard = async (req, res, next) => {
     const card = await Card.findById(cardId);
     res.send({ card });
   } else {
-    throw "Error: cardId does not exist";
+    next({ message: "Error: cardId does not exist" });
   }
 };
 

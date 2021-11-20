@@ -54,7 +54,7 @@ const deleteUser = (req, res, next) => {
 
         // update user document
         if (!(userId in jsonData.users)) {
-          throw "User does not exist";
+          next({ message: "User does not exist" });
         }
 
         // delete cards associated with user
