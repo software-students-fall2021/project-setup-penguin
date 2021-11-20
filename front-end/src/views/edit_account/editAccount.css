@@ -1,1 +1,7 @@
- 
+.EditAccount__buttonSpacer {
+  display: grid;
+  margin-top: 100px;
+  column-gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  /* width: 100%; */
+}

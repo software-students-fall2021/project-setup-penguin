@@ -1,28 +1,40 @@
-import { Redirect } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import "./editAccount.css";
+import { Redirect } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { TextInput, Button, AccountPromptModal } from '../../common';
+import { ArrowRight } from 'react-bootstrap-icons';
+import axios from 'axios';
+import './editAccount.css';
 
 function EditAccount({ token }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
+  useEffect(() => {
+    console.log(token);
+    if (!token) {
+      console.log('Redirecting');
+      setRedirect('/login');
+    }
+  }, [token]);
   const submitUpdate = () => {
+    if (!name || !email || !password) {
+      return;
+    }
     axios({
-      method: "patch",
-      url: `http://localhost:8000/user/${"619449fbb75a9ff22c9211cd"}`,
+      method: 'patch',
+      url: `http://localhost:8000/user/}`,
       data: {
         email,
         password,
         name,
       },
-      headers: { Authorization: `JWT ${token}` }
+      headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("SUCCESS");
-          setRedirect(true);
+          console.log('SUCCESS');
+          setRedirect('/createdeck');
         } else {
           console.log(res);
         }
@@ -34,13 +46,13 @@ function EditAccount({ token }) {
 
   const handleDelete = () => {
     axios({
-      method: "delete",
-      url: `http://localhost:8000/user/${"619449fbb75a9ff22c9211cd"}`,
-      headers: { Authorization: `JWT ${token}` }
+      method: 'delete',
+      url: `http://localhost:8000/user/}`,
+      headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log("SUCCESS");
+          console.log('SUCCESS');
         } else {
           console.log(res);
         }
@@ -50,33 +62,47 @@ function EditAccount({ token }) {
       });
   };
   if (redirect) {
-    return <Redirect path="/createdeck" />;
+    return <Redirect path={redirect} />;
   }
   return (
     <div>
-      <input
-        placeHolder="Name"
-        value={name}
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
-      />
-      <input
-        placeHolder="Email"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-      />
-      <input
-        placeHolder="Password"
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <button onClick={submitUpdate}>UPDATE!</button>
-      <button onClick={handleDelete}>DELETE MY ACCOUNT</button>
+      <form className="EditAccount__form" onSubmit={() => {}}>
+        <h1>Update your personal Information</h1>
+        <TextInput
+          isLarge={true}
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextInput
+          isLarge={true}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextInput
+          isLarge={true}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </form>
+      <div className="EditAccount__buttonSpacer">
+        <Button
+          btnText="Update Information"
+          onClick={() => {
+            submitUpdate();
+          }}
+          icon={<ArrowRight />}
+        />
+        <Button
+          btnText="Delete Account"
+          onClick={() => {
+            handleDelete();
+          }}
+          icon={<ArrowRight />}
+        />
+      </div>
     </div>
   );
 }
