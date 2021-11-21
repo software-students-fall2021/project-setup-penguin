@@ -165,7 +165,7 @@ function DeckView({ token }) {
       </div>
       <div className="deck-list">
         {deck.cards.map((card) => (
-          <DisplayCard card={card} template={deck.cardTemplate}></DisplayCard>
+          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
         ))}
       </div>
     </div>

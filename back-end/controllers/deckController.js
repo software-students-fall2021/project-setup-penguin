@@ -88,7 +88,7 @@ const getDeck = async (req, res, next) => {
     hasNextPage: numCards >= skipValues + limit,
     deckData: pageCards,
   });
-};
+}
 
 const createDeck = async (req, res, next) => {
   const errors = validationResult(req);
@@ -196,11 +196,11 @@ const deleteDeck = async (req, res, next) => {
     next(err);
   });
 
-  if (doesDeckExist) {
-    // Find deck to delete by deckId
-    await Deck.find({ _id: deckId })
-      .then((result) => {
-        cardIds = result[0].cards;
+  if (doesDeckExist){
+  // Find deck to delete by deckId
+    Deck.find({ _id: deckId }
+    ).then((result) => {
+      cardIds = result[0].cards;
 
         // Delete deck
         Deck.deleteOne({ _id: deckId }).catch((err) => {
