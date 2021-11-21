@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const { jwtOptions } = require("../jwt-config");
 // the following token can be used to test any protected route
 const token = jwt.sign(
-  { id: "61970adbc7bd73012f626fb0" },
+  { id: "619aceba4508732901f2a751" },
   jwtOptions.secretOrKey
 );
 
@@ -19,7 +19,7 @@ const expect = chai.expect;
 
 describe("User", () => {
   describe("POST /user/login", () => {
-    it("should return error when password is incorrect", (done) => {
+    it("should return error when user doesn't exist", (done) => {
       chai
         .request(app)
         .post("/user/login")
@@ -47,7 +47,7 @@ describe("User", () => {
       chai
         .request(app)
         .post("/user")
-        .send({ userId: "random@gmail.com", password: "string", name: "me" })
+        .send({ email: "", password: "string", name: "me" })
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
@@ -107,7 +107,7 @@ describe("Decks", () => {
     it("should successfully update the deck", (done) => {
       chai
         .request(app)
-        .patch("/deck/61980be9df5ede5f64158de9")
+        .patch("/deck/619acedb4508732901f2a755")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -135,7 +135,7 @@ describe("Decks", () => {
     it("should return an error when missing the page query param", (done) => {
       chai
         .request(app)
-        .get("/deck/61980be9df5ede5f64158de9?limit=1")
+        .get("/deck/619acedb4508732901f2a755?limit=1")
         .set("Authorization", `JWT ${token}`)
         .end((err, res) => {
           expect(res).to.have.status(400);
