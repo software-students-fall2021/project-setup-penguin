@@ -56,38 +56,48 @@ const getDeckPermissions = async (req, res, next) => {
 };
 
 const getDeck = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
+  }
+
   const deckId = req.params.deckId;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const skipValues = page * limit;
 
-  const numCardsAggregate = await Deck.aggregate()
-    .match({ _id: ObjectId(deckId) })
-    .project({
-      numCards: { $size: "$cards" },
-    })
-    .catch((err) => {
-      next(err);
-    });
-  const numCards = numCardsAggregate[0].numCards;
+  try {
+    const numCardsAggregate = await Deck.aggregate()
+      .match({ _id: ObjectId(deckId) })
+      .project({
+        numCards: { $size: "$cards" },
+      })
+      .catch((err) => {
+        next(err);
+      });
+    const numCards = numCardsAggregate[0].numCards;
 
-  const pageCards = await Deck.findById(deckId)
-    .populate({
-      path: "cards",
-      options: {
-        limit: limit,
-        sort: { name: 1 },
-        skip: skipValues,
-      },
-    })
-    .catch((err) => {
-      next(err);
-    });
+    const pageCards = await Deck.findById(deckId)
+      .populate({
+        path: "cards",
+        options: {
+          limit: limit,
+          sort: { name: 1 },
+          skip: skipValues,
+        },
+      })
+      .catch((err) => {
+        next(err);
+      });
 
-  res.send({
-    hasNextPage: numCards >= skipValues + limit,
-    deckData: pageCards,
-  });
+    res.send({
+      hasNextPage: numCards >= skipValues + limit,
+      deckData: pageCards,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const createDeck = async (req, res, next) => {
