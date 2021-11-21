@@ -10,8 +10,27 @@ function UpdateCard({ token }) {
   const { cardId, deckId } = useParams();
   const [form, setForm] = useState(EMPTY_TEMPLATE);
   const [templateData, setTemplateData] = useState();
+
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
   const [isCardLoaded, setIsCardLoaded] = useState(false);
+
   const [redirect, setRedirect] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
+      .then((res) => {
+        setTemplateData(res.data.cardTemplate);
+      })
+      .catch((err) => {
+        setTemplateData(TEST_TEMPLATE_DATA);
+        setErrors(err.response.data.messages);
+      })
+      .finally(() => {
+        setIsTemplateLoaded(true);
+      });
+  }, [deckId]);
 
   useEffect(() => {
     axios
@@ -30,11 +49,12 @@ function UpdateCard({ token }) {
       .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
         setForm(response.data.card);
-        setIsCardLoaded(true);
       })
       .catch((err) => {
-        console.log("!!", err);
         setForm(TEST_TEMPLATE_DATA);
+        setErrors(err.response.data.messages);
+      })
+      .finally(() => {
         setIsCardLoaded(true);
       });
   }, [cardId, deckId]);
@@ -60,10 +80,10 @@ function UpdateCard({ token }) {
       })
       .then((res) => {
         setRedirect(true);
-        return res["data"];
       })
       .catch((err) => {
-        console.log(err);
+        console.log({ err });
+        setErrors(err.response.data.messages);
       });
   };
 
@@ -87,15 +107,17 @@ function UpdateCard({ token }) {
     />
   );
 
-  return !isCardLoaded ? (
-    <LoadingSpinner />
-  ) : (
+  return isCardLoaded && isTemplateLoaded ? (
     <CreateBody
       header="Update Your Card"
       prompt={prompt}
       btn={btn}
+      setErrors={setErrors}
+      errors={errors}
       cardEditorProps={{ templateData, form, setForm }}
     />
+  ) : (
+    <LoadingSpinner />
   );
 }
 

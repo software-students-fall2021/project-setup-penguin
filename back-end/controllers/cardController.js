@@ -8,6 +8,24 @@ const Deck = require("../models/deck");
 const User = require("../models/user");
 const db = require("../db.js");
 
+const getCardPermissions = async (req, res, next) => {
+  const { cardId } = req.params;
+
+  const doesCardExist = await Card.exists({ _id: cardId });
+
+  if (doesCardExist) {
+    const card = await Card.findById(cardId);
+
+    if (req.user._id.equals(card.userId)) {
+      res.json({ canEditDeleteCard: true });
+    } else {
+      res.json({ canEditDeleteCard: false });
+    }
+  } else {
+    next({ message: "Error: cardId does not exist" });
+  }
+};
+
 const createCard = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -129,7 +147,9 @@ const getCard = async (req, res, next) => {
   const doesCardExist = await Card.exists({ _id: cardId });
 
   if (doesCardExist) {
-    const card = await Card.findById(cardId);
+    const card = await Card.findById(cardId).catch((err) => {
+      next(err);
+    });
     res.send({ card });
   } else {
     next({ message: "Error: cardId does not exist" });
@@ -168,4 +188,10 @@ const updateCard = async (req, res, next) => {
   res.json({ cardId });
 };
 
-module.exports = { createCard, deleteCard, getCard, updateCard };
+module.exports = {
+  getCardPermissions,
+  createCard,
+  deleteCard,
+  getCard,
+  updateCard,
+};

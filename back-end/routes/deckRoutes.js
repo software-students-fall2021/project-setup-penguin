@@ -4,6 +4,7 @@ const router = express.Router();
 const deckController = require("../controllers/deckController");
 const upload = require("../multerConfig");
 const { body } = require("express-validator");
+const { authenticate } = require("../jwt-config");
 
 router.get("/deckId/:accessCode", deckController.getDeckIdFromAccessCode);
 
@@ -13,7 +14,7 @@ router.get("/deckDetails/:deckId", deckController.getDeckDetails);
 
 router.get(
   "/deckPermissions/:deckId",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   deckController.getDeckPermissions
 );
 
@@ -29,14 +30,10 @@ router.post(
 router.patch(
   "/:deckId",
   body("deckName", "Deck name is required").notEmpty(),
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   deckController.updateDeck
 );
 
-router.delete(
-  "/:deckId",
-  passport.authenticate("jwt", { session: false }),
-  deckController.deleteDeck
-);
+router.delete("/:deckId", authenticate, deckController.deleteDeck);
 
 module.exports = router;

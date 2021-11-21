@@ -1,9 +1,15 @@
-const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const cardController = require("../controllers/cardController");
 const upload = require("../multerConfig");
 const { body } = require("express-validator");
+const { authenticate } = require("../jwt-config");
+
+router.get(
+  "/cardPermissions/:cardId",
+  authenticate,
+  cardController.getCardPermissions
+);
 
 router.post(
   "/",
@@ -15,19 +21,14 @@ router.post(
   cardController.createCard
 );
 
-//  axios.delete('baseUrl/card', { data: { deckId} })
-router.delete(
-  "/:cardId",
-  passport.authenticate("jwt", { session: false }),
-  cardController.deleteCard
-);
+router.delete("/:cardId", authenticate, cardController.deleteCard);
 
 router.get("/:cardId", cardController.getCard);
 
 router.patch(
   "/:cardId",
   upload.single("cardImage"),
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   cardController.updateCard
 );
 
