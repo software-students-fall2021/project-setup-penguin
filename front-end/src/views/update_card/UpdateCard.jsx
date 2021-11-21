@@ -34,18 +34,6 @@ function UpdateCard({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
-      .then((res) => {
-        setTemplateData(res.data.cardTemplate);
-      })
-      .catch((err) => {
-        console.log("!!", err);
-        setTemplateData(TEST_TEMPLATE_DATA);
-      });
-  }, [deckId]);
-
-  useEffect(() => {
-    axios
       .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
         setForm(response.data.card);
@@ -59,7 +47,7 @@ function UpdateCard({ token }) {
       });
   }, [cardId, deckId]);
 
-  const saveCard = (userId) => {
+  const saveCard = () => {
     const formData = new FormData();
     formData.append("deckId", deckId);
 
@@ -78,11 +66,10 @@ function UpdateCard({ token }) {
           Authorization: `JWT ${token}`,
         },
       })
-      .then((res) => {
+      .then(() => {
         setRedirect(true);
       })
       .catch((err) => {
-        console.log({ err });
         setErrors(err.response.data.messages);
       });
   };

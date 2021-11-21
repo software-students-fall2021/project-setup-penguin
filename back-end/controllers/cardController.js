@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
@@ -90,7 +91,6 @@ const deleteCard = async (req, res, next) => {
   const userId = req.user._id;
   let filename;
 
-  console.log({ cardId, deckId, userId });
   const doesCardExist = await Card.exists({ _id: cardId });
   const doesDeckExist = await Deck.exists({ _id: deckId });
   const doesUserExist = await User.exists({ _id: userId });
@@ -108,7 +108,6 @@ const deleteCard = async (req, res, next) => {
 
       // delete cardId from deck object
       const deck = await Deck.findById(deckId);
-      console.log({ deck });
       deck.cards = deck.cards.filter(
         (currCardId) => !currCardId.equals(cardId)
       );
@@ -116,7 +115,6 @@ const deleteCard = async (req, res, next) => {
 
       // delete cardId from user object
       const user = await User.findById(userId);
-      console.log({ user });
 
       user.cards = user.cards.filter(
         (currCardId) => !currCardId.equals(cardId)
@@ -143,7 +141,6 @@ const deleteCard = async (req, res, next) => {
 
 const getCard = async (req, res, next) => {
   const { cardId } = req.params;
-
   const doesCardExist = await Card.exists({ _id: cardId });
 
   if (doesCardExist) {
