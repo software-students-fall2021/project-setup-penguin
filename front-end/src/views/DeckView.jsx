@@ -174,7 +174,7 @@ function DeckView({ token }) {
         </div>
         <div className="deckview-subtitle">{deck.deckDescription}</div>
       </div>
-        <Search placeholder="Filter..." data={deck.cards} filter={filterDeck}/>
+        <Search placeholder="Filter cards..." data={deck.cards} filter={filterDeck}/>
       <div className="deck-list">
         {filteredCards.map((card) => (
           <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>

@@ -1,3 +1,13 @@
+.account-page-title{
+  font-size: 45px;
+  font-weight: bold;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: #396bba;
+  width: 100%;
+}
+
 .toggles {
   width: 100px;
   border: none;
@@ -13,7 +23,7 @@
   background-color: #396bba;
   color: white;
   border: none;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .inactive {
@@ -21,26 +31,31 @@
   color: #396bba;
   border: 1px solid;
   border-color: #396bba;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .deckLink {
-  font-size: 35px;
+  font-size: 25px;
   font-weight: bold;
   text-decoration: none;
   color: black;
 }
 
-.subtitle {
+.account-subtitle {
+  display: flex;
   font-size: 20px;
-  font-weight: bold;
+  color: #396BBA;
+  opacity: 80%;
+  justify-content: center;
+
 }
 
-.deck-list {
+.account-deck-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  justify-content: center;
 }
 
 .toggle-switch {
@@ -53,14 +68,14 @@
   grid-column-start: 1;
   grid-column-end: 2;
   justify-self: end;
-  border-radius: 20px 0px 0px 20px;
+  border-radius: 10px 0px 0px 10px;
 }
 
 #joinedDeckView {
   grid-column-start: 2;
   grid-column-end: 3;
   justify-self: start;
-  border-radius: 0px 20px 20px 0px;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .title {
@@ -72,4 +87,16 @@
   margin-left: auto;
   margin-right: auto;
   max-width: 200px;
+}
+
+.account-page-general{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.no-decks{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

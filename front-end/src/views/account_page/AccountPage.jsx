@@ -105,7 +105,7 @@ function AccountPage({ token }) {
 
   if (ownedDeckNamesArray.length === 0) {
     pageElement = (
-      <div>
+      <div className="no-decks">
         <p>Looks like you haven't created any decks yet. Click&nbsp; 
         <a><NavLink to={`createdeck`} className="clickHereLink">
           here
@@ -131,6 +131,7 @@ function AccountPage({ token }) {
                 {ownedDeckNamesArray[i]}
               </NavLink>
             </div>
+            <div className="account-subtitle">Team for SWE Project, 2021</div>
             <DisplayCard
               card={ownedCardsArray[i]}
               template={ownedTemplateArray[i]}
@@ -144,7 +145,7 @@ function AccountPage({ token }) {
 
   if (joinedDeckNamesArray.length === 0) {
     pageElement = (
-      <div>
+      <div className="no-decks">
         <p>You haven't joined any decks yet. Click&nbsp; 
           <a><NavLink to={`finddeck`} className="clickHereLink">
                 here
@@ -190,7 +191,10 @@ function AccountPage({ token }) {
   const page = !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
-    <div>
+    <div className="account-page-general">
+      <div className="account-page-title">
+        MY DECKS
+      </div>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}
@@ -198,7 +202,7 @@ function AccountPage({ token }) {
           onClick={activateMyDeckView}
           type="button"
         >
-          Owned Decks
+          Owned
         </button>
         <button
           className={states[1 - deckActive]}
@@ -206,10 +210,10 @@ function AccountPage({ token }) {
           onClick={activateJoinedDeckView}
           type="button"
         >
-          Joined Decks
+          Joined
         </button>
       </div>
-      <div className="deck-list">{pageContent}</div>
+      <div className="account-deck-list">{pageContent}</div>
     </div>
   );
 
