@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MODAL_PAGE_TYPE } from "../constants";
-import { TextInput } from "../../common";
+import { TextInput, ErrorMessage } from "../../common";
 import "./SignupOrLogin.css";
 
 const SignupOrLogin = ({
@@ -9,6 +9,8 @@ const SignupOrLogin = ({
   onContinueAsGuest,
   onSignupOrLogin,
   useAsPage = false,
+  errors,
+  setErrors,
 }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,12 +25,13 @@ const SignupOrLogin = ({
     }
   };
 
-  // clear form when switching btw login & signup pages
+  // clear form and errors when switching btw login & signup pages
   useEffect(() => {
     setName("");
     setEmail("");
     setPassword("");
     setPasswordInputType("password");
+    setErrors([]);
   }, [pageType]);
 
   return (
@@ -38,18 +41,27 @@ const SignupOrLogin = ({
         <TextInput
           placeholder="Name"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setErrors([]);
+            setName(event.target.value);
+          }}
         />
       )}
       <TextInput
         placeholder="Email"
         value={email}
-        onChange={(event) => setEmail(event.target.value)}
+        onChange={(event) => {
+          setErrors([]);
+          setEmail(event.target.value);
+        }}
       />
       <TextInput
         placeholder="Password"
         value={password}
-        onChange={(event) => setPassword(event.target.value)}
+        onChange={(event) => {
+          setErrors([]);
+          setPassword(event.target.value);
+        }}
         type={passwordInputType}
       />
       <div className="SignupOrLogin__showPassword">
@@ -60,6 +72,7 @@ const SignupOrLogin = ({
         />
         Show Password
       </div>
+      {<ErrorMessage errors={errors} className="mt-3" />}
       {pageType === MODAL_PAGE_TYPE.SIGNUP ? (
         <i className="SignupOrLogin__altLink">
           Already have an account? Log in{" "}

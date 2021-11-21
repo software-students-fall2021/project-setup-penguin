@@ -8,7 +8,10 @@ const { body } = require("express-validator");
 router.post(
   "/",
   upload.single("cardImage"),
-  body("deckId").notEmpty(),
+  [
+    body("deckId", "Unknown deck").notEmpty(),
+    body("name", "Your name is required").notEmpty(),
+  ],
   cardController.createCard
 );
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { DeckEditor, Button } from "../common";
+import { DeckEditor, Button, ErrorMessage } from "../common";
 import { Redirect, useParams } from "react-router-dom";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
@@ -12,6 +12,9 @@ function UpdateDeck({ token }) {
   const [deckDescription, setDeckDescription] = useState();
   const [redirect, setRedirect] = useState(false);
 
+  const [pageErrors, setPageErrors] = useState([]);
+  const [editorErrors, setEditorErrors] = useState([]);
+
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/deckDetails/${deckId}`)
@@ -22,7 +25,7 @@ function UpdateDeck({ token }) {
       })
       .catch((err) => {
         setIsDeckLoaded(true);
-        console.log("!!", err);
+        setPageErrors(["Error retrieving deck details"]);
       });
   }, []);
 
@@ -42,8 +45,7 @@ function UpdateDeck({ token }) {
         setRedirect(true);
       })
       .catch((err) => {
-        console.log(err);
-        setRedirect(true);
+        setEditorErrors(err.response.data.messages);
       });
   };
 
@@ -56,6 +58,7 @@ function UpdateDeck({ token }) {
   ) : (
     <div className="FinishDeckSetup">
       <h1>Update deck details</h1>
+      <ErrorMessage errors={pageErrors} />
       <div className="mb-5">
         <DeckEditor
           deckName={deckName}
@@ -66,6 +69,8 @@ function UpdateDeck({ token }) {
             evt.preventDefault();
             updateDeckWithRedirect();
           }}
+          errors={editorErrors}
+          setErrors={setEditorErrors}
         />
       </div>
       <Button btnText="Update deck" onClick={updateDeckWithRedirect} />
