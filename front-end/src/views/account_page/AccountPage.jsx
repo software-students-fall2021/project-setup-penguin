@@ -2,7 +2,7 @@ import "./AccountPage.css";
 import psyduck from "../../assets/psyduck.png";
 import DisplayCard from "../../common/DisplayCard";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
@@ -103,19 +103,17 @@ function AccountPage({ token }) {
 
   if (ownedDeckNamesArray.length === 0) {
     pageElement = (
-      <div key={i}>
-        <div className="deck">
-          <div className="title">
-            <NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">
-              {ownedDeckNamesArray[i]}
+      <div>
+        <p>
+          Looks like you haven't created any decks yet. Click&nbsp;
+          <a>
+            <NavLink to={`createdeck`} className="clickHereLink">
+              here
             </NavLink>
-          </div>
-          <DisplayCard
-            token={token}
-            card={ownedCardsArray[i]}
-            template={ownedTemplateArray[i]}
-          ></DisplayCard>
-        </div>
+          </a>
+          &nbsp;to get started!
+        </p>
+        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
       </div>
     );
     ownedContent.push(pageElement);
@@ -135,11 +133,6 @@ function AccountPage({ token }) {
               template={ownedTemplateArray[i]}
             ></DisplayCard>
           </div>
-          <DisplayCard
-            token={token}
-            card={joinedCardsArray[i]}
-            template={joinedTemplateArray[i]}
-          ></DisplayCard>
         </div>
       );
       ownedContent.push(pageElement);
