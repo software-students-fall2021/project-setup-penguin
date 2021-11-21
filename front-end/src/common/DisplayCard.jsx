@@ -3,9 +3,6 @@ import heart from "../assets/heart.png";
 import piplup from "../assets/piplup.png";
 import Slider from "rc-slider";
 import axios from "axios";
-import pencil from "../assets/pencil.png";
-import trash from "../assets/trash.png";
-import CustomModal from "../common/components/CustomModal";
 
 function DisplayCard({ card = {}, template = {}, token }) {
   console.log("card", card);
@@ -86,9 +83,6 @@ function DisplayCard({ card = {}, template = {}, token }) {
           />
         </div>
         <div className="card-options">
-            {/* Was going to use icons.. but not sure about how they look
-            <img src={pencil} width="20px" height="20px"/>
-            <img src={trash} width="20px" height="20px"/> */}
               <button className="edit-card" onClick={ () => editCard(cardId, deckId, currToken) }>Edit</button>
               <button className="delete-card" onClick={ () => deleteCard(cardId, deckId, currToken) }>Delete</button>
           </div>
