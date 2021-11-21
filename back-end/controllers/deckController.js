@@ -57,29 +57,6 @@ const getDeckPermissions = async (req, res, next) => {
 
 const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
-  // Deck object to return and send (modified with populated cardObj)
-  let deckObj = {};
-  // Temporary array to hold the card objects (and later push into deckObj)
-  let cardsObj = [];
-
-  // Find deck by deckId
-    Deck.find({ _id: deckId }
-    ).then((result) => {
-      deckObj = result[0];
-      cardsObj = result[0].cards;
-
-      // Find cards based off of cardIds in cardsObj
-      Card.find({ _id:{$in: cardsObj }})
-        .then(result => {
-          // Fill deckObj with the card documents found by the cardIds in cardsObj
-          deckObj.cards = result;
-          // Send final deckObj
-          res.send(deckObj);
-        })
-    })
-    .catch((err) => {
-      next(err);
-    });
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const skipValues = page * limit;
