@@ -100,7 +100,7 @@ const createDeck = async (req, res, next) => {
   const { token, deckName, deckDescription, cardText } = req.body;
 
   try {
-    const cardTemplate = ca(cardText);
+    const cardTemplate = JSON.parse(cardText);
     const accessCode = shortid.generate();
     let deckId;
     let userId;
