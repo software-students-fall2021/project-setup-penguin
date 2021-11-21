@@ -77,7 +77,7 @@ function CardEditor({
                   ...prevState,
                   name: event.target.value,
                 }));
-                setErrors([]);
+                setErrors?.([]);
               }}
             />
             <div style={{ display: "flex", alignItems: "center" }}>
