@@ -64,10 +64,10 @@ function App() {
               <FinishDeckSetup token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/edit">
-              <UpdateDeck />
+              <UpdateDeck token={token} />
             </Route>
             <Route exact path="/deck/:id">
-              <DeckView token={token}/>
+              <DeckView token={token} />
             </Route>
             <Route path="/deck/:deckId/add">
               <CreateCard token={token} setToken={setToken} />

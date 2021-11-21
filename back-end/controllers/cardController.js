@@ -1,55 +1,67 @@
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
+
 const Card = require("../models/card");
 const Deck = require("../models/deck");
 const User = require("../models/user");
-const fs = require("fs").promises;
 const db = require("../db.js");
-const jwt = require("jsonwebtoken");
 
 const createCard = async (req, res, next) => {
-  const { deckId, token, cardText } = req.body;
-
-  const newCard = JSON.parse(cardText);
-  let cardId;
-  let userId;
-
-  if (token) {
-    userId = jwt.decode(token).id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
   }
 
-  const session = await db.startSession();
-  await session.withTransaction(async () => {
-    // create & save new Card document
-    const card = await new Card({
-      deckId,
-      userId,
-      ...newCard,
-      filename: req.file?.filename,
-    })
-      .save()
-      .catch((err) => {
+  const { deckId, token, cardText, name } = req.body;
+
+  try {
+    const newCard = JSON.parse(cardText);
+    let cardId;
+    let userId;
+
+    if (token) {
+      userId = jwt.decode(token).id;
+    }
+
+    const session = await db.startSession();
+    await session.withTransaction(async () => {
+      // create & save new Card document
+      const card = await new Card({
+        deckId,
+        userId,
+        name,
+        ...newCard,
+        filename: req.file?.filename,
+      })
+        .save()
+        .catch((err) => {
+          next(err);
+        });
+      cardId = card._id;
+
+      // update Deck document w/ id of newly added Card
+      await Deck.findOneAndUpdate(
+        { _id: deckId },
+        { $push: { cards: cardId } }
+      ).catch((err) => {
         next(err);
       });
-    cardId = card._id;
 
-    // update Deck document w/ id of newly added Card
-    await Deck.findOneAndUpdate(
-      { _id: deckId },
-      { $push: { cards: cardId } }
-    ).catch((err) => {
-      next(err);
+      // update User document w/ id of newly added Card
+      if (userId) {
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { cards: cardId } }
+        );
+      }
     });
 
-    // update User document w/ id of newly added Card
-    if (userId) {
-      await User.findOneAndUpdate(
-        { _id: userId },
-        { $push: { cards: cardId } }
-      );
-    }
-  });
-
-  session.endSession();
-  res.json({ cardId });
+    session.endSession();
+    res.json({ cardId });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const deleteCard = async (req, res, next) => {
@@ -80,7 +92,7 @@ const deleteCard = async (req, res, next) => {
 
     res.send({ cardId });
   } else {
-    throw "Error: nonexistent cardId or deckId or userId";
+    next({ message: "Error: nonexistent cardId or deckId or userId" });
   }
 };
 
@@ -93,7 +105,7 @@ const getCard = async (req, res, next) => {
     const card = await Card.findById(cardId);
     res.send({ card });
   } else {
-    throw "Error: cardId does not exist";
+    next({ message: "Error: cardId does not exist" });
   }
 };
 

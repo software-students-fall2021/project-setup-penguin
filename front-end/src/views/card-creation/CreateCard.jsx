@@ -6,7 +6,6 @@ import {
   EMPTY_CARD,
   PARENT_TYPE,
   MODAL_PAGE_TYPE,
-  TEST_TEMPLATE_DATA,
 } from "../../common/constants";
 import { ArrowRight } from "react-bootstrap-icons";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
@@ -19,6 +18,9 @@ function CreateCard({ token, setToken }) {
   const [redirect, setRedirect] = useState(false);
   const [shouldRunTour, setShouldRunTour] = useState(false);
 
+  const [modalErrors, setModalErrors] = useState([]);
+  const [pageErrors, setPageErrors] = useState([]);
+
   useEffect(() => {
     axios
       .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
@@ -26,8 +28,7 @@ function CreateCard({ token, setToken }) {
         setTemplateData(res.data.cardTemplate);
       })
       .catch((err) => {
-        console.log("!!", err);
-        setTemplateData(TEST_TEMPLATE_DATA);
+        setPageErrors(err.response.data.messages);
       });
   }, [deckId]);
 
@@ -39,9 +40,11 @@ function CreateCard({ token, setToken }) {
     const formData = new FormData();
     formData.append("deckId", deckId);
 
-    // set textData = all entries from form except for image
-    const { image, ...textData } = form;
+    // set textData = all entries from form except for image and name
+    // this is to enable multer image upload and express-validator body validation on name
+    const { image, name, ...textData } = form;
     formData.append("cardText", JSON.stringify(textData));
+    formData.append("name", name);
 
     if (token) {
       formData.append("token", token);
@@ -62,7 +65,8 @@ function CreateCard({ token, setToken }) {
         setRedirect(true);
       })
       .catch((err) => {
-        console.log(err);
+        setShowModal(false);
+        setPageErrors(err.response.data.messages);
       });
   };
 
@@ -84,7 +88,7 @@ function CreateCard({ token, setToken }) {
           saveCard(res.data.token);
         })
         .catch((err) => {
-          console.log(err);
+          setModalErrors(err.response.data.messages);
         });
     } else {
       axios
@@ -98,7 +102,7 @@ function CreateCard({ token, setToken }) {
           saveCard(res.data.token);
         })
         .catch((err) => {
-          console.log(err);
+          setModalErrors(err.response.data.messages);
         });
     }
   };
@@ -146,6 +150,8 @@ function CreateCard({ token, setToken }) {
         header="Create Your Card"
         prompt={prompt}
         btn={btn}
+        errors={pageErrors}
+        setErrors={setPageErrors}
         cardEditorProps={{ templateData, form, setForm, shouldRunTour }}
       />
       <AccountPromptModal
@@ -155,6 +161,8 @@ function CreateCard({ token, setToken }) {
         onCloseModal={() => setShowModal(false)}
         onContinueAsGuest={onContinueAsGuest}
         onSignupOrLogin={onSignupOrLogin}
+        errors={modalErrors}
+        setErrors={setModalErrors}
       />
     </>
   );

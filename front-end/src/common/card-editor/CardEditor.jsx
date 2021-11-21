@@ -21,6 +21,7 @@ function CardEditor({
   setForm,
   templateData,
   shouldRunTour = false,
+  setErrors,
 }) {
   const [showModal, setShowModal] = useState(false);
   const [finalCrop, setFinalCrop] = useState();
@@ -76,6 +77,7 @@ function CardEditor({
                   ...prevState,
                   name: event.target.value,
                 }));
+                setErrors([]);
               }}
             />
             <div style={{ display: "flex", alignItems: "center" }}>

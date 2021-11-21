@@ -1,4 +1,4 @@
-import { TextInput, TextArea } from "../../common";
+import { TextInput, TextArea, ErrorMessage } from "../../common";
 import "./DeckEditor.css";
 
 function DeckEditor({
@@ -7,6 +7,8 @@ function DeckEditor({
   deckDescription,
   setDeckDescription,
   onSubmit,
+  errors,
+  setErrors,
 }) {
   return (
     <div className="DeckEditor">
@@ -15,8 +17,12 @@ function DeckEditor({
           isLarge={true}
           placeholder="Name your deck"
           value={deckName}
-          onChange={(e) => setDeckName(e.target.value)}
+          onChange={(e) => {
+            setErrors([]);
+            setDeckName(e.target.value);
+          }}
         />
+        {<ErrorMessage errors={errors} className="mt-3" />}
         <div className="DeckEditor__descriptionHeader">
           What's your deck for?
         </div>

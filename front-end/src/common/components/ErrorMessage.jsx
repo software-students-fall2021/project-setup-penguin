@@ -1,5 +1,6 @@
 import "./ErrorMessage.css";
 
-export default function ErrorMessage({ error, className }) {
-  return <p className={`ErrorMessage  ${className}`}>{error}</p>;
+// errors should be an array
+export default function ErrorMessage({ errors = [], className }) {
+  return <p className={`ErrorMessage  ${className}`}>{errors.join(", ")}</p>;
 }

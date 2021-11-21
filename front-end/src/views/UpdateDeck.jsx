@@ -1,16 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { DeckEditor, Button } from "../common";
+import { DeckEditor, Button, ErrorMessage } from "../common";
 import { Redirect, useParams } from "react-router-dom";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 
 // TODO: restrict page to deck owner
-function UpdateDeck() {
+function UpdateDeck({ token }) {
   const { deckId } = useParams();
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [deckName, setDeckName] = useState();
   const [deckDescription, setDeckDescription] = useState();
   const [redirect, setRedirect] = useState(false);
+
+  const [pageErrors, setPageErrors] = useState([]);
+  const [editorErrors, setEditorErrors] = useState([]);
 
   useEffect(() => {
     axios
@@ -22,22 +25,27 @@ function UpdateDeck() {
       })
       .catch((err) => {
         setIsDeckLoaded(true);
-        console.log("!!", err);
+        setPageErrors(["Error retrieving deck details"]);
       });
   }, []);
 
   const updateDeckWithRedirect = () => {
     axios
-      .patch(`http://localhost:8000/deck/${deckId}`, {
-        deckName: deckName,
-        deckDescription: deckDescription,
-      })
+      .patch(
+        `http://localhost:8000/deck/${deckId}`,
+        {
+          deckName: deckName,
+          deckDescription: deckDescription,
+        },
+        {
+          headers: { Authorization: `JWT ${token}` },
+        }
+      )
       .then(() => {
         setRedirect(true);
       })
       .catch((err) => {
-        console.log(err);
-        setRedirect(true);
+        setEditorErrors(err.response.data.messages);
       });
   };
 
@@ -50,6 +58,7 @@ function UpdateDeck() {
   ) : (
     <div className="FinishDeckSetup">
       <h1>Update deck details</h1>
+      <ErrorMessage errors={pageErrors} />
       <div className="mb-5">
         <DeckEditor
           deckName={deckName}
@@ -60,6 +69,8 @@ function UpdateDeck() {
             evt.preventDefault();
             updateDeckWithRedirect();
           }}
+          errors={editorErrors}
+          setErrors={setEditorErrors}
         />
       </div>
       <Button btnText="Update deck" onClick={updateDeckWithRedirect} />
