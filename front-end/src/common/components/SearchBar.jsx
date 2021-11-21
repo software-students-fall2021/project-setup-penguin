@@ -4,8 +4,6 @@ import "./SearchBar.css";
 import searchicon from "../../assets/searchicon.png";
 
 function Search({ placeholder, data, filter}){
-    //filteredData based off of search word
-    const [filteredData, setFilteredData] = useState([]);
     //search word
     const [wordEntered, setWordEntered] = useState("");
 
@@ -15,25 +13,20 @@ function Search({ placeholder, data, filter}){
       const searchWord = event.target.value;
       setWordEntered(searchWord);
       const newFilter = data.filter((value) => {
-          console.log("value.name", value.name.toLowerCase());
         return value.name.toLowerCase().includes(searchWord.toLowerCase());
       });
 
       //If empty searchbar, then set filteredData to empty array
       if (searchWord === "") {
-        setFilteredData([]);
         filter(data);
       } else {
         //Otherwise, setFilteredData based off of newFilter return
-        console.log('newFilter', newFilter);
-        setFilteredData(newFilter);
         filter(newFilter);
       }
     };
 
     const clearInput = () => {
-      setFilteredData([]);
-      filter([]);
+      filter(data);
       setWordEntered("");
     };
 
