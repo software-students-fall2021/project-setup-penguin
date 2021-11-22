@@ -65,22 +65,14 @@ const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
+  const filter = req.query.filter;
   const skipValues = page * limit;
 
   try {
-    const numCardsAggregate = await Deck.aggregate()
-      .match({ _id: ObjectId(deckId) })
-      .project({
-        numCards: { $size: "$cards" },
-      })
-      .catch((err) => {
-        next(err);
-      });
-    const numCards = numCardsAggregate[0].numCards;
-
     const pageCards = await Deck.findById(deckId)
       .populate({
         path: "cards",
+        match: { name: { $regex: `^${filter}` } },
         options: {
           limit: limit,
           sort: { name: 1 },
@@ -92,7 +84,7 @@ const getDeck = async (req, res, next) => {
       });
 
     res.send({
-      hasNextPage: numCards >= skipValues + limit,
+      hasNextPage: !(pageCards.cards.length < limit),
       deckData: pageCards,
     });
   } catch (err) {

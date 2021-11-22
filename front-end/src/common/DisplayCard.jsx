@@ -9,6 +9,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
   const cardId = card._id;
   const deckId = card.deckId;
   const currToken = token;
+  
   const [shouldRenderButtons, setShouldRenderButtons] = useState(false);
   const sectionIds = [0, 1, 2];
   const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
