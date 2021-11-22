@@ -72,7 +72,7 @@ const getDeck = async (req, res, next) => {
     const pageCards = await Deck.findById(deckId)
       .populate({
         path: "cards",
-        match: { name: { $regex: `^${filter}` } },
+        match: { name: { $regex: `(?i)^${filter}` } },
         options: {
           limit: limit,
           sort: { name: 1 },
