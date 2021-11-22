@@ -68,8 +68,6 @@ const getDeck = async (req, res, next) => {
   const filter = req.query.filter;
   const skipValues = page * limit;
 
-  console.log({ page, limit, filter });
-
   try {
     const pageCards = await Deck.findById(deckId)
       .populate({
@@ -84,8 +82,6 @@ const getDeck = async (req, res, next) => {
       .catch((err) => {
         next(err);
       });
-
-    console.log(pageCards.cards);
 
     res.send({
       hasNextPage: !(pageCards.cards.length < limit),

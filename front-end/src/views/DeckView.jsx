@@ -2,11 +2,12 @@ import { useParams } from "react-router-dom";
 import { DarkButton, Button, DisplayCard } from "../common";
 import "./DeckView.css";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 import Search from "../common/components/SearchBar";
+import debounce from "lodash.debounce";
 
 function DeckView({ token }) {
   const CARD_LIMIT = 9;
@@ -47,7 +48,6 @@ function DeckView({ token }) {
           `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
         )
         .then((res) => {
-          console.log("filterTextRes:", res);
           setIsFetchingMoreCards(false);
           // append the new cards to the deck state
           setDeck({
@@ -63,10 +63,8 @@ function DeckView({ token }) {
     }
   }
 
-  // call the backend when filterText changes
-  useEffect(() => {
+  const filterResultsHelper = (filterText) => {
     setDeck({ ...deck, cards: [] });
-    console.log("filterText:", filterText);
     axios
       .get(
         `http://localhost:8000/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
@@ -76,6 +74,16 @@ function DeckView({ token }) {
         setDeck(res.data.deckData);
         setHasNextPage(res.data.hasNextPage);
       });
+  };
+
+  const debounceFilterResults = useMemo(
+    () => debounce(filterResultsHelper, 300),
+    []
+  );
+
+  // call the backend when filterText changes
+  useEffect(() => {
+    debounceFilterResults(filterText);
   }, [filterText]);
 
   // handles the behavior when the page first loads
