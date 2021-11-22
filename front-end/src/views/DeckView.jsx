@@ -8,7 +8,6 @@ import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 import Search from "../common/components/SearchBar";
 
-
 function DeckView({ token }) {
   const CARD_LIMIT = 9;
   let { id } = useParams();
@@ -130,12 +129,15 @@ function DeckView({ token }) {
       "shared-text"
     ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
     setTimeout(function () {
-      document.getElementById("shared-text").innerHTML = "";
+      const text = document.getElementById("shared-text");
+      if (text) {
+        text.innerHTML = "";
+      }
     }, 3000);
   }
 
   // Update filteredCards based on Search
-  function filterDeck(filteredData){
+  function filterDeck(filteredData) {
     setFilteredCards(filteredData);
   }
 
@@ -174,10 +176,14 @@ function DeckView({ token }) {
         </div>
         <div className="deckview-subtitle">{deck.deckDescription}</div>
       </div>
-        <Search placeholder="Filter..." data={deck.cards} filter={filterDeck}/>
+      <Search placeholder="Filter..." data={deck.cards} filter={filterDeck} />
       <div className="deck-list">
         {filteredCards.map((card) => (
-          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
+          <DisplayCard
+            card={card}
+            template={deck.cardTemplate}
+            token={token}
+          ></DisplayCard>
         ))}
       </div>
     </div>
