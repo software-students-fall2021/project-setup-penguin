@@ -1,13 +1,13 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const fs = require("fs").promises;
-const db = require("../db.js");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const fs = require('fs').promises;
+const db = require('../db.js');
 
-const User = require("../models/user");
-const Card = require("../models/card");
-const Deck = require("../models/deck");
+const User = require('../models/user');
+const Card = require('../models/card');
+const Deck = require('../models/deck');
 
-const { jwtOptions } = require("../jwt-config");
+const { jwtOptions } = require('../jwt-config');
 
 const createUser = async (req, res, next) => {
   const { email, password, name } = req.body;
@@ -38,14 +38,14 @@ const createUser = async (req, res, next) => {
 
 const deleteUser = (req, res, next) => {
   const userId = req.params.userId;
-  fs.readFile("database.json")
+  fs.readFile('database.json')
     .then((data) => {
       try {
         const jsonData = JSON.parse(data);
 
         // update user document
         if (!(userId in jsonData.users)) {
-          throw "User does not exist";
+          throw 'User does not exist';
         }
 
         // delete cards associated with user
@@ -67,7 +67,7 @@ const deleteUser = (req, res, next) => {
         delete jsonData.users[userId];
 
         const jsonString = JSON.stringify(jsonData, null, 2);
-        fs.writeFile("database.json", jsonString)
+        fs.writeFile('database.json', jsonString)
           .then(() => res.json({ userId }))
           .catch((err) => next(err));
       } catch (err) {
@@ -114,6 +114,20 @@ const getUser = async (req, res, next) => {
   res.send(userCardsWithDeckData);
 };
 
+const getUserAccount = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+
+    const userData = await User.findOne({ _id: userId });
+
+    console.log(userData);
+    res.status(200);
+    res.json({ name: userData.name, email: userData.email });
+  } catch (error) {
+    res.status(200);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   const userId = req.params.userId;
   const { email, password, name } = req.body;
@@ -121,7 +135,7 @@ const updateUser = async (req, res, next) => {
   // check if User already exists
   User.countDocuments({ _id: userId }, function (err, count) {
     if (count == 0) {
-      throw "User does not exist";
+      throw 'User does not exist';
     }
   });
 
@@ -169,4 +183,5 @@ module.exports = {
   deleteUser,
   updateUser,
   loginUser,
+  getUserAccount,
 };
