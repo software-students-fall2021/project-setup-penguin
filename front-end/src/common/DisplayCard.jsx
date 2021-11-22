@@ -3,14 +3,31 @@ import heart from "../assets/heart.png";
 import piplup from "../assets/piplup.png";
 import Slider from "rc-slider";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 function DisplayCard({ card = {}, template = {}, token }) {
   const cardId = card._id;
   const deckId = card.deckId;
   const currToken = token;
-
+  
+  const [shouldRenderButtons, setShouldRenderButtons] = useState(false);
   const sectionIds = [0, 1, 2];
   const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
+
+  useEffect(() => {
+    if (token && cardId) {
+      axios
+        .get(`http://localhost:8000/card/cardPermissions/${cardId}`, {
+          headers: { Authorization: `JWT ${token}` },
+        })
+        .then((res) => {
+          setShouldRenderButtons(res.data.canEditDeleteCard);
+        })
+        .catch((err) => {
+          console.log("!!", err);
+        });
+    }
+  }, [token, cardId]);
 
   function editCard(cardId, deckId) {
     const relocateString =
@@ -81,20 +98,22 @@ function DisplayCard({ card = {}, template = {}, token }) {
             disabled="true"
           />
         </div>
-        <div className="card-options">
-          <button
-            className="edit-card"
-            onClick={() => editCard(cardId, deckId, currToken)}
-          >
-            Edit
-          </button>
-          <button
-            className="delete-card"
-            onClick={() => deleteCard(cardId, deckId, currToken)}
-          >
-            Delete
-          </button>
-        </div>
+        {shouldRenderButtons && (
+          <div className="card-options">
+            <button
+              className="edit-card"
+              onClick={() => editCard(cardId, deckId, currToken)}
+            >
+              Edit
+            </button>
+            <button
+              className="delete-card"
+              onClick={() => deleteCard(cardId, deckId, currToken)}
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
