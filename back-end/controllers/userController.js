@@ -4,12 +4,12 @@ const fs = require("fs").promises;
 const db = require("../db.js");
 const { validationResult } = require("express-validator");
 
-const User = require('../models/user');
-const Card = require('../models/card');
-const Deck = require('../models/deck');
+const User = require("../models/user");
+const Card = require("../models/card");
+const Deck = require("../models/deck");
 const saltRounds = 10;
 
-const { jwtOptions } = require('../jwt-config');
+const { jwtOptions } = require("../jwt-config");
 
 const createUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -24,7 +24,7 @@ const createUser = async (req, res, next) => {
     next(err);
   });
   if (existingUser) {
-    res.status(401).json({ success: false, message: 'email already taken' });
+    res.status(401).json({ success: false, message: "email already taken" });
   }
 
   const hash = await bcrypt.hash(password, 10).catch((err) => {
@@ -53,31 +53,35 @@ const deleteUser = async (req, res, next) => {
 
   //remove all cards from decks
   userCardIds.forEach(async (cardId) => {
+
+    const card = await Card.findOne({_id: cardId})
+
+    const deck = await Deck.findOne({_id:card.deckId})
+
     // delete card document
     await Card.deleteOne({ _id: cardId }).catch((err) => next(err));
 
+
     // delete cardId from deck object
-    const deck = await Deck.findById(deckId);
-    deck.cards = deck.cards.filter((currCardId) => currCardId != cardId);
+    deck.cards = deck.cards.filter((currCardId) => currCardId.toString() != cardId);
     deck.save();
   });
 
-  //make all decks ownerless
+  //make all decks set to the user null
   const decks = await Deck.updateMany(
     { ownerId: userId },
-    { $set: { ownerId: 'ownerless' } }
+    { $set: { ownerId: "619bd8f22314e7c3a4e5efb6" } }
   );
 
   //Delete user
   try {
     User.deleteOne({ _id: userId }).then(() => {
       res.status(200);
-      res.json({ message: 'User successfully deleted' });
+      res.json({ message: "User successfully deleted" });
     });
   } catch (e) {
     console.log(e);
   }
-
 };
 
 const getUser = async (req, res, next) => {
@@ -142,7 +146,7 @@ const updateUser = async (req, res, next) => {
   //check if User does not exists
   const count = await User.countDocuments({ _id: userId });
   if (count === 0) {
-    throw 'User does not exist';
+    throw "User does not exist";
   }
 
   //find relevant info - don't allow updates if conflicting email present
@@ -151,13 +155,13 @@ const updateUser = async (req, res, next) => {
     email: 1,
   });
 
-  if (!email || !password || !name) throw 'Empty field';
+  if (!email || !password || !name) throw "Empty field";
 
   if (prevInfo[0].email !== email) {
     const conflict = await User.countDocuments({ email: email });
     console.log(conflict);
     if (conflict >= 1) {
-      throw 'User email conflict';
+      throw "User email conflict";
     }
   }
 
@@ -179,9 +183,6 @@ const loginUser = async (req, res, next) => {
       .status(401)
       .json({ success: false, message: 'no email or password provided' });
   }
-
-  const { email, password } = req.body;
-
   const user = await User.findOne({ email: email });
   if (!user) {
     res
@@ -199,7 +200,7 @@ const loginUser = async (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ success: false, message: 'passwords did not match' });
+      .json({ success: false, message: "passwords did not match" });
   }
 };
 
