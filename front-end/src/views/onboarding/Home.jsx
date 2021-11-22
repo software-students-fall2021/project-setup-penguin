@@ -1,4 +1,6 @@
 import card from "../../assets/card.png";
+import kevinCard from "../../assets/kevin-card.png";
+import janetCard from "../../assets/janet-card.png";
 import "./Home.css";
 import { Button, DarkButton, useViewport } from "../../common";
 
@@ -25,9 +27,14 @@ function Home() {
       </div>
       <img
         className={isMobile ? "Home__img--mobile" : "Home__img"}
-        src={card}
+        src={kevinCard}
         alt="Card"
       />
+      {/* <img
+        className={isMobile ? "Home__img--mobile" : "Home__img"}
+        src={janetCard}
+        alt="Card"
+      /> */}
     </div>
   );
 }

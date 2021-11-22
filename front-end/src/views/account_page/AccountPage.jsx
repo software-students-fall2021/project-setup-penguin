@@ -192,9 +192,9 @@ function AccountPage({ token }) {
     <LoadingSpinner />
   ) : (
     <div className="account-page-general">
-      <div className="account-page-title">
-        MY DECKS
-      </div>
+      <h1>
+        Account decks
+      </h1>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}
