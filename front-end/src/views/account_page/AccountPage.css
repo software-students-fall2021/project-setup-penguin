@@ -8,6 +8,12 @@
   width: 100%;
 }
 
+.account-page-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .toggles {
   width: 100px;
   border: none;

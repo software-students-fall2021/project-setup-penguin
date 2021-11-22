@@ -6,7 +6,9 @@ import { useParams, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
-import { Redirect } from "react-router-dom";
+import {Button} from "../../common";
+import { Redirect, useHistory } from "react-router-dom";
+import { ArrowRight } from "react-bootstrap-icons";
 
 function AccountPage({ token }) {
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
@@ -16,6 +18,7 @@ function AccountPage({ token }) {
 
   let pageContent;
   let pageElement;
+  const history = useHistory();
   const [deckActive, setDeckActive] = useState(0);
   //0 = mydeck view, 1 = joinedcard view (for easy class switching for styling and content display using states array)
 
@@ -191,9 +194,16 @@ function AccountPage({ token }) {
     <LoadingSpinner />
   ) : (
     <div className="account-page-general">
+      <div className="account-page-header">
       <h1>
         Account decks
       </h1>
+      <Button
+          btnText="Edit Account"
+          onClick={() => history.push("/accountpage/editUser")}
+          icon={<ArrowRight />}
+        />
+      </div>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}
