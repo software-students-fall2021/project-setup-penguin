@@ -30,7 +30,7 @@ h3 {
 
 .customContainer {
   margin-top: 10px;
-  border-top: 1px solid #396bba;
+  border-top: 1.5px solid #396bba;
   padding: 4.5em 0em 5em 0em;
   display: flex;
   align-items: flex-start;
