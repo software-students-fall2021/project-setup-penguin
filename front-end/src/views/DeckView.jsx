@@ -153,7 +153,10 @@ function DeckView({ token }) {
       "shared-text"
     ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
     setTimeout(function () {
-      document.getElementById("shared-text").innerHTML = "";
+      const text = document.getElementById("shared-text");
+      if (text) {
+        text.innerHTML = "";
+      }
     }, 3000);
   }
 

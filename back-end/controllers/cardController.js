@@ -115,7 +115,6 @@ const deleteCard = async (req, res, next) => {
 
       // delete cardId from user object
       const user = await User.findById(userId);
-
       user.cards = user.cards.filter(
         (currCardId) => !currCardId.equals(cardId)
       );

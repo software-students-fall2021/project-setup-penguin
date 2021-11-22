@@ -192,31 +192,59 @@ const updateDeck = async (req, res, next) => {
 
 const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
-  let cardIds = [];
 
   const doesDeckExist = await Deck.exists({ _id: deckId }).catch((err) => {
     next(err);
   });
 
   if (doesDeckExist) {
-    // Find deck to delete by deckId
-    Deck.find({ _id: deckId })
-      .then((result) => {
-        cardIds = result[0].cards;
+    const session = await db.startSession();
+    await session.withTransaction(async () => {
+      // get card ids from deck
+      const deck = await Deck.findById(deckId)
+        .select("cards")
+        .catch((err) => next(err));
+      const cardIds = deck.cards;
 
-        // Delete deck
-        Deck.deleteOne({ _id: deckId }).catch((err) => {
-          next(err);
-        });
-        // Delete cards that were in the deck
-        Card.remove({ _id: { $in: cardIds } }).catch((err) => {
-          next(err);
-        });
-        res.send({ deckId });
+      // get ids of card owners
+      const cards = await Card.find({
+        _id: {
+          $in: cardIds,
+        },
       })
-      .catch((err) => {
+        .select("userId")
+        .catch((err) => next(err));
+      const userToCardIdMappings = cards.reduce((prev, card) => {
+        if (card.userId) {
+          return { ...prev, [card.userId]: card._id };
+        } else {
+          return prev;
+        }
+      }, {});
+
+      // remove cards from each user's cards array
+      for (const userId of Object.keys(userToCardIdMappings)) {
+        const user = await User.findById(userId);
+        user.cards = user.cards.filter(
+          (currCardId) => !currCardId.equals(userToCardIdMappings[userId])
+        );
+        user.save();
+      }
+
+      // delete card documents
+      await Card.remove({ _id: { $in: cardIds } }).catch((err) => {
         next(err);
       });
+
+      // delete deck document
+      await Deck.deleteOne({ _id: deckId }).catch((err) => {
+        next(err);
+      });
+    });
+
+    res.json({ deckId });
+  } else {
+    next({ message: "Error: attempted to add delete nonexistent deck" });
   }
 };
 
