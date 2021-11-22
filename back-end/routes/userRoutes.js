@@ -1,21 +1,35 @@
-const express = require("express");
-const passport = require("passport");
+const express = require('express');
+const passport = require('passport');
 const router = express.Router();
-const userController = require("../controllers/userController");
+const userController = require('../controllers/userController');
 
-router.post("/", userController.createUser);
+router.post('/', userController.createUser);
 
-router.delete("/:userId", userController.deleteUser);
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  userController.deleteUser
+);
 
 router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
+  '/',
+  passport.authenticate('jwt', { session: false }),
   userController.getUser
 );
 
-// TODO: update this to align with get request (get id from req.user not req.params)
-router.patch("/:userId", userController.updateUser);
+router.get(
+  '/account',
+  passport.authenticate('jwt', { session: false }),
+  userController.getUserAccount
+);
 
-router.post("/login", userController.loginUser);
+// TODO: update this to align with get request (get id from req.user not req.params)
+router.patch(
+  '/:userId',
+  passport.authenticate('jwt', { session: false }),
+  userController.updateUser
+);
+
+router.post('/login', userController.loginUser);
 
 module.exports = router;
