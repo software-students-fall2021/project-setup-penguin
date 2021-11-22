@@ -9,7 +9,6 @@ import pokedek from "../assets/pokedek.png";
 function Navigation({ token }) {
   const [activeKey, setActiveKey] = useState("");
   const handleSelect = (eventKey) => {
-    console.log({ eventKey });
     setActiveKey(eventKey);
   };
 

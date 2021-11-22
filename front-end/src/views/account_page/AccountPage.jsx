@@ -14,8 +14,6 @@ function AccountPage({ token }) {
   //make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
   const states = ["Active", "inactive"]; //array for defining classes of button states
 
-  //let { id } = useParams();
-  let { id } = useParams();
   let pageContent;
   let pageElement;
   const [deckActive, setDeckActive] = useState(0);
@@ -106,22 +104,20 @@ function AccountPage({ token }) {
   if (ownedDeckNamesArray.length === 0) {
     pageElement = (
       <div>
-        <p>Looks like you haven't created any decks yet. Click&nbsp; 
-        <a><NavLink to={`createdeck`} className="clickHereLink">
-          here
-        </NavLink></a>
-        &nbsp;to get started!</p>
-      <img
-        className={"accountPageImg"}
-        src={psyduck}
-        alt="Psyduck"
-      />
+        <p>
+          Looks like you haven't created any decks yet. Click&nbsp;
+          <a>
+            <NavLink to={`createdeck`} className="clickHereLink">
+              here
+            </NavLink>
+          </a>
+          &nbsp;to get started!
+        </p>
+        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
       </div>
     );
     ownedContent.push(pageElement);
-  }
-
-  else{
+  } else {
     for (let i = 0; i < ownedDeckNamesArray.length; i++) {
       pageElement = (
         <div key={i}>
@@ -132,6 +128,7 @@ function AccountPage({ token }) {
               </NavLink>
             </div>
             <DisplayCard
+              token={token}
               card={ownedCardsArray[i]}
               template={ownedTemplateArray[i]}
             ></DisplayCard>
@@ -145,32 +142,34 @@ function AccountPage({ token }) {
   if (joinedDeckNamesArray.length === 0) {
     pageElement = (
       <div>
-        <p>You haven't joined any decks yet. Click&nbsp; 
-          <a><NavLink to={`finddeck`} className="clickHereLink">
-                here
-            </NavLink></a>
-        &nbsp;to search for a deck via access code!</p>
-      <img
-        className={"accountPageImg"}
-        src={psyduck}
-        alt="Psyduck"
-      />
+        <p>
+          You haven't joined any decks yet. Click&nbsp;
+          <a>
+            <NavLink to={`finddeck`} className="clickHereLink">
+              here
+            </NavLink>
+          </a>
+          &nbsp;to search for a deck via access code!
+        </p>
+        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
       </div>
     );
     joinedContent.push(pageElement);
-  }
-
-  else{
+  } else {
     for (let i = 0; i < joinedDeckNamesArray.length; i++) {
       pageElement = (
         <div key={i}>
           <div className="deck">
             <div className="title">
-              <NavLink to={`deck/${joinedDeckIdsArray[i]}`} className="deckLink">
+              <NavLink
+                to={`deck/${joinedDeckIdsArray[i]}`}
+                className="deckLink"
+              >
                 {joinedDeckNamesArray[i]}
               </NavLink>
             </div>
             <DisplayCard
+              token={token}
               card={joinedCardsArray[i]}
               template={joinedTemplateArray[i]}
             ></DisplayCard>
