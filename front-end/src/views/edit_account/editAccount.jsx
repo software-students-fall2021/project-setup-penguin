@@ -9,13 +9,30 @@ function EditAccount({ token }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState('');
   useEffect(() => {
-    console.log(token);
+    // Check if token exists otherwise redirect
     if (!token) {
       console.log('Redirecting');
       setRedirect('/login');
     }
+    axios({
+      method: 'get',
+      url: `http://localhost:8000/user/account`,
+      headers: { Authorization: `JWT ${token}` },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log('SUCCESS');
+          setName(res?.data?.name);
+          setEmail(res?.data?.email);
+        } else {
+          console.log(res);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [token]);
   const submitUpdate = () => {
     if (!name || !email || !password) {
@@ -62,7 +79,7 @@ function EditAccount({ token }) {
       });
   };
   if (redirect) {
-    return <Redirect path={redirect} />;
+    return <Redirect to={redirect} />;
   }
   return (
     <div>
