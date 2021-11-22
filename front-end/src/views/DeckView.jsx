@@ -64,7 +64,6 @@ function DeckView({ token }) {
   }
 
   const filterResultsHelper = (filterText) => {
-    setDeck({ ...deck, cards: [] });
     axios
       .get(
         `http://localhost:8000/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
