@@ -23,7 +23,6 @@ function EditAccount({ token }) {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log('SUCCESS');
           setName(res?.data?.name);
           setEmail(res?.data?.email);
         } else {
@@ -40,7 +39,7 @@ function EditAccount({ token }) {
     }
     axios({
       method: 'patch',
-      url: `http://localhost:8000/user/}`,
+      url: `http://localhost:8000/user/`,
       data: {
         email,
         password,
@@ -50,7 +49,6 @@ function EditAccount({ token }) {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log('SUCCESS');
           setRedirect('/createdeck');
         } else {
           console.log(res);
@@ -64,12 +62,13 @@ function EditAccount({ token }) {
   const handleDelete = () => {
     axios({
       method: 'delete',
-      url: `http://localhost:8000/user/}`,
+      url: `http://localhost:8000/user/`,
       headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
         if (res.status === 200) {
           console.log('SUCCESS');
+          setRedirect('/logout');
         } else {
           console.log(res);
         }
