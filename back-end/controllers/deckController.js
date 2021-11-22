@@ -65,22 +65,16 @@ const getDeck = async (req, res, next) => {
   const deckId = req.params.deckId;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
+  const filter = req.query.filter;
   const skipValues = page * limit;
 
-  try {
-    const numCardsAggregate = await Deck.aggregate()
-      .match({ _id: ObjectId(deckId) })
-      .project({
-        numCards: { $size: "$cards" },
-      })
-      .catch((err) => {
-        next(err);
-      });
-    const numCards = numCardsAggregate[0].numCards;
+  console.log({ page, limit, filter });
 
+  try {
     const pageCards = await Deck.findById(deckId)
       .populate({
         path: "cards",
+        match: { name: { $regex: `^${filter}` } },
         options: {
           limit: limit,
           sort: { name: 1 },
@@ -91,8 +85,10 @@ const getDeck = async (req, res, next) => {
         next(err);
       });
 
+    console.log(pageCards.cards);
+
     res.send({
-      hasNextPage: numCards >= skipValues + limit,
+      hasNextPage: !(pageCards.cards.length < limit),
       deckData: pageCards,
     });
   } catch (err) {
@@ -206,11 +202,11 @@ const deleteDeck = async (req, res, next) => {
     next(err);
   });
 
-  if (doesDeckExist){
-  // Find deck to delete by deckId
-    Deck.find({ _id: deckId }
-    ).then((result) => {
-      cardIds = result[0].cards;
+  if (doesDeckExist) {
+    // Find deck to delete by deckId
+    Deck.find({ _id: deckId })
+      .then((result) => {
+        cardIds = result[0].cards;
 
         // Delete deck
         Deck.deleteOne({ _id: deckId }).catch((err) => {

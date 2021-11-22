@@ -8,7 +8,6 @@ import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 import Search from "../common/components/SearchBar";
 
-
 function DeckView({ token }) {
   const CARD_LIMIT = 9;
   let { id } = useParams();
@@ -17,6 +16,7 @@ function DeckView({ token }) {
   const [isFetchingMoreCards, setIsFetchingMoreCards] = useState(false);
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [isPermissionsLoaded, setIsPermissionsLoaded] = useState(false);
+  const [filterText, setFilterText] = useState("");
 
   const [permissions, setPermissions] = useState({
     canAddCard: true,
@@ -29,9 +29,6 @@ function DeckView({ token }) {
     cards: [],
   });
 
-  // Holds the filteredCards (don't want to mess with the cards within deck);
-  const [filteredCards, setFilteredCards] = useState([]);
-
   // detects when the user has scrolled to the bottom of the page
   function handleScroll() {
     if (
@@ -42,13 +39,15 @@ function DeckView({ token }) {
     setIsFetchingMoreCards(true);
   }
 
+  // helper function to get more cards once the user reaches the bottom
   function fetchMoreCards() {
     if (hasNextPage) {
       axios
         .get(
-          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`
+          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
         )
         .then((res) => {
+          console.log("filterTextRes:", res);
           setIsFetchingMoreCards(false);
           // append the new cards to the deck state
           setDeck({
@@ -63,6 +62,21 @@ function DeckView({ token }) {
       setIsFetchingMoreCards(false);
     }
   }
+
+  // call the backend when filterText changes
+  useEffect(() => {
+    setDeck({ ...deck, cards: [] });
+    console.log("filterText:", filterText);
+    axios
+      .get(
+        `http://localhost:8000/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
+      )
+      .then((res) => {
+        setPage(1);
+        setDeck(res.data.deckData);
+        setHasNextPage(res.data.hasNextPage);
+      });
+  }, [filterText]);
 
   // handles the behavior when the page first loads
   useEffect(() => {
@@ -83,13 +97,15 @@ function DeckView({ token }) {
     }
   }, [token]);
 
+  // handles behavior when the page first loads
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
+      .get(
+        `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+      )
       .then((res) => {
         setIsDeckLoaded(true);
         setDeck(res.data.deckData);
-        setFilteredCards(res.data.deckData.cards);
         setPage(page + 1);
         setHasNextPage(res.data.hasNextPage);
       })
@@ -134,11 +150,6 @@ function DeckView({ token }) {
     }, 3000);
   }
 
-  // Update filteredCards based on Search
-  function filterDeck(filteredData){
-    setFilteredCards(filteredData);
-  }
-
   return isDeckLoaded && isPermissionsLoaded ? (
     <div className="deckview-overall">
       <div className="header">
@@ -174,10 +185,19 @@ function DeckView({ token }) {
         </div>
         <div className="deckview-subtitle">{deck.deckDescription}</div>
       </div>
-        <Search placeholder="Filter..." data={deck.cards} filter={filterDeck}/>
+      <Search
+        placeholder="Filter..."
+        data={deck.cards}
+        filterText={filterText}
+        setFilterText={setFilterText}
+      />
       <div className="deck-list">
-        {filteredCards.map((card) => (
-          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
+        {deck.cards.map((card) => (
+          <DisplayCard
+            card={card}
+            template={deck.cardTemplate}
+            token={token}
+          ></DisplayCard>
         ))}
       </div>
     </div>
