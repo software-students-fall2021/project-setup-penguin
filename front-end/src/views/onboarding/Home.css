@@ -32,5 +32,14 @@
 }
 
 .Home__btn + .Home__btn {
-  padding-left: 2em;
+  padding-left: 1em;
+}
+
+.Home__btn-group{
+  display: flex;
+}
+
+.Home__main-title{
+  padding-bottom: 15px;
+  font-weight: 700 !important;
 }
