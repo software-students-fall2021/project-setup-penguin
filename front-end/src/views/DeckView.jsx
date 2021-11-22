@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
+import DeleteDeckModal from "./DeleteDeckModal";
 import Search from "../common/components/SearchBar";
 
 
@@ -17,6 +18,7 @@ function DeckView({ token }) {
   const [isFetchingMoreCards, setIsFetchingMoreCards] = useState(false);
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [isPermissionsLoaded, setIsPermissionsLoaded] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const [permissions, setPermissions] = useState({
     canAddCard: true,
@@ -109,19 +111,24 @@ function DeckView({ token }) {
     fetchMoreCards();
   }, [isFetchingMoreCards]);
 
-  function deleteDeck() {
-    axios
+  function deleteDeck(confirmed) {
+    console.log("hi!", confirmed);
+    if (confirmed){
+      axios
       .delete(`http://localhost:8000/deck/${id}`, {
         headers: { Authorization: `JWT ${token}` },
       })
       .then(() => {
         //After deleting, redirect user back to homepage.
-        alert("You've just deleted a deck!");
         window.location.href = "http://localhost:3000";
       })
       .catch((err) => {
         console.log("!!", err);
       });
+    }
+    else{
+      setShowModal(false);
+    }
   }
 
   function shareDeck() {
@@ -158,7 +165,7 @@ function DeckView({ token }) {
                   <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
                 </div>
                 <div className="delete">
-                  <Button btnText="Delete Deck" onClick={() => deleteDeck()} />
+                  <Button btnText="Delete Deck" onClick={() => setShowModal(true)} />
                 </div>
               </>
             )}
@@ -180,6 +187,7 @@ function DeckView({ token }) {
           <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
         ))}
       </div>
+      <DeleteDeckModal showModal={showModal} onCloseModal={() => setShowModal(false)} deleteResponse={deleteDeck}></DeleteDeckModal>
     </div>
   ) : (
     <LoadingSpinner />
