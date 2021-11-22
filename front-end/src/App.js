@@ -73,7 +73,7 @@ function App() {
               <CreateCard token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/card/:cardId/edit">
-              <UpdateCard />
+              <UpdateCard token={token} />
             </Route>
             <Route path="/accountpage">
               <AccountPage token={token} />
