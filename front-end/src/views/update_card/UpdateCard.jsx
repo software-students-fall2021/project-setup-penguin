@@ -6,53 +6,77 @@ import { EMPTY_TEMPLATE, TEST_TEMPLATE_DATA } from "../../common/constants";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
 import { ArrowRight } from "react-bootstrap-icons";
 
-function UpdateCard() {
+function UpdateCard({ token }) {
   const { cardId, deckId } = useParams();
   const [form, setForm] = useState(EMPTY_TEMPLATE);
+  const [templateData, setTemplateData] = useState();
+
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
   const [isCardLoaded, setIsCardLoaded] = useState(false);
+
   const [redirect, setRedirect] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
+      .then((res) => {
+        setTemplateData(res.data.cardTemplate);
+      })
+      .catch((err) => {
+        setTemplateData(TEST_TEMPLATE_DATA);
+        setErrors(err.response.data.messages);
+      })
+      .finally(() => {
+        setIsTemplateLoaded(true);
+      });
+  }, [deckId]);
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/card/${cardId}`)
       .then((response) => {
         setForm(response.data.card);
-        setIsCardLoaded(true);
       })
       .catch((err) => {
-        console.log("!!", err);
         setForm(TEST_TEMPLATE_DATA);
+        setErrors(err.response.data.messages);
+      })
+      .finally(() => {
         setIsCardLoaded(true);
       });
   }, [cardId, deckId]);
 
-  const saveCard = (userId) => {
+  const saveCard = () => {
+    const formData = new FormData();
+    formData.append("deckId", deckId);
+
+    // set textData = all entries from form except for image
+    const { image, ...textData } = form;
+    formData.append("cardText", JSON.stringify(textData));
+
+    if (form.image) {
+      formData.append("cardImage", form.image, "profile");
+    }
+
     axios
-      .patch(`http://localhost:8000/card/${cardId}`, {
-        newCard: form,
-        userId,
+      .patch(`http://localhost:8000/card/${cardId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `JWT ${token}`,
+        },
       })
-      .then((res) => {
+      .then(() => {
         setRedirect(true);
-        return res["data"];
       })
       .catch((err) => {
-        console.log(err);
+        setErrors(err.response.data.messages);
       });
   };
 
   if (redirect) {
     return <Redirect to={`/deck/${deckId}`} />;
   }
-
-  //extract 'templateData' to pass to cardEditorProps so that deck specific fields aren't editable
-  const templateData = {
-    sectionLabel0: form["sectionLabel0"],
-    sectionLabel1: form["sectionLabel1"],
-    sectionLabel2: form["sectionLabel2"],
-    sliderLabelMin: form["sliderLabelMin"],
-    sliderLabelMax: form["sliderLabelMax"],
-  };
 
   const prompt = (
     <p>
@@ -70,15 +94,17 @@ function UpdateCard() {
     />
   );
 
-  return !isCardLoaded ? (
-    <LoadingSpinner />
-  ) : (
+  return isCardLoaded && isTemplateLoaded ? (
     <CreateBody
       header="Update Your Card"
       prompt={prompt}
       btn={btn}
+      setErrors={setErrors}
+      errors={errors}
       cardEditorProps={{ templateData, form, setForm }}
     />
+  ) : (
+    <LoadingSpinner />
   );
 }
 

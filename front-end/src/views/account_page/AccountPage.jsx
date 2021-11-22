@@ -14,8 +14,6 @@ function AccountPage({ token }) {
   //make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
   const states = ["Active", "inactive"]; //array for defining classes of button states
 
-  //let { id } = useParams();
-  let { id } = useParams();
   let pageContent;
   let pageElement;
   const [deckActive, setDeckActive] = useState(0);
@@ -119,9 +117,7 @@ function AccountPage({ token }) {
       </div>
     );
     ownedContent.push(pageElement);
-  }
-
-  else{
+  } else {
     for (let i = 0; i < ownedDeckNamesArray.length; i++) {
       pageElement = (
         <div key={i}>
@@ -133,6 +129,7 @@ function AccountPage({ token }) {
             </div>
             <div className="account-subtitle">Team for SWE Project, 2021</div>
             <DisplayCard
+              token={token}
               card={ownedCardsArray[i]}
               template={ownedTemplateArray[i]}
             ></DisplayCard>
@@ -159,19 +156,21 @@ function AccountPage({ token }) {
       </div>
     );
     joinedContent.push(pageElement);
-  }
-
-  else{
+  } else {
     for (let i = 0; i < joinedDeckNamesArray.length; i++) {
       pageElement = (
         <div key={i}>
           <div className="deck">
             <div className="title">
-              <NavLink to={`deck/${joinedDeckIdsArray[i]}`} className="deckLink">
+              <NavLink
+                to={`deck/${joinedDeckIdsArray[i]}`}
+                className="deckLink"
+              >
                 {joinedDeckNamesArray[i]}
               </NavLink>
             </div>
             <DisplayCard
+              token={token}
               card={joinedCardsArray[i]}
               template={joinedTemplateArray[i]}
             ></DisplayCard>

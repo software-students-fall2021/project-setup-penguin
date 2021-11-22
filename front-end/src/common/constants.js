@@ -32,7 +32,7 @@ export const EMPTY_TEMPLATE = {
   sliderLabelMin: "",
   sliderLabelMax: "",
   sliderValue: 50,
-  image: null,
+  filename: "",
 };
 
 export const EMPTY_CARD = {
@@ -44,6 +44,7 @@ export const EMPTY_CARD = {
   sectionContent1: "",
   sectionContent2: "",
   sliderValue: 50,
+  filename: "",
 };
 
 export const TEST_TEMPLATE_DATA = {

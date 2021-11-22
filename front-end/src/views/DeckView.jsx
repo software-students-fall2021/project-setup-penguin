@@ -2,13 +2,13 @@ import { useParams } from "react-router-dom";
 import { DarkButton, Button, DisplayCard } from "../common";
 import "./DeckView.css";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
 import DeleteDeckModal from "./DeleteDeckModal";
 import Search from "../common/components/SearchBar";
-
+import debounce from "lodash.debounce";
 
 function DeckView({ token }) {
   const CARD_LIMIT = 9;
@@ -19,6 +19,7 @@ function DeckView({ token }) {
   const [isDeckLoaded, setIsDeckLoaded] = useState(false);
   const [isPermissionsLoaded, setIsPermissionsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [filterText, setFilterText] = useState("");
 
   const [permissions, setPermissions] = useState({
     canAddCard: true,
@@ -31,9 +32,6 @@ function DeckView({ token }) {
     cards: [],
   });
 
-  // Holds the filteredCards (don't want to mess with the cards within deck);
-  const [filteredCards, setFilteredCards] = useState([]);
-
   // detects when the user has scrolled to the bottom of the page
   function handleScroll() {
     if (
@@ -44,11 +42,12 @@ function DeckView({ token }) {
     setIsFetchingMoreCards(true);
   }
 
+  // helper function to get more cards once the user reaches the bottom
   function fetchMoreCards() {
     if (hasNextPage) {
       axios
         .get(
-          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`
+          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
         )
         .then((res) => {
           setIsFetchingMoreCards(false);
@@ -65,6 +64,28 @@ function DeckView({ token }) {
       setIsFetchingMoreCards(false);
     }
   }
+
+  const filterResultsHelper = (filterText) => {
+    axios
+      .get(
+        `http://localhost:8000/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
+      )
+      .then((res) => {
+        setPage(1);
+        setDeck(res.data.deckData);
+        setHasNextPage(res.data.hasNextPage);
+      });
+  };
+
+  const debounceFilterResults = useMemo(
+    () => debounce(filterResultsHelper, 300),
+    []
+  );
+
+  // call the backend when filterText changes
+  useEffect(() => {
+    debounceFilterResults(filterText);
+  }, [filterText]);
 
   // handles the behavior when the page first loads
   useEffect(() => {
@@ -85,13 +106,15 @@ function DeckView({ token }) {
     }
   }, [token]);
 
+  // handles behavior when the page first loads
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}`)
+      .get(
+        `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+      )
       .then((res) => {
         setIsDeckLoaded(true);
         setDeck(res.data.deckData);
-        setFilteredCards(res.data.deckData.cards);
         setPage(page + 1);
         setHasNextPage(res.data.hasNextPage);
       })
@@ -137,13 +160,11 @@ function DeckView({ token }) {
       "shared-text"
     ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
     setTimeout(function () {
-      document.getElementById("shared-text").innerHTML = "";
+      const text = document.getElementById("shared-text");
+      if (text) {
+        text.innerHTML = "";
+      }
     }, 3000);
-  }
-
-  // Update filteredCards based on Search
-  function filterDeck(filteredData){
-    setFilteredCards(filteredData);
   }
 
   return isDeckLoaded && isPermissionsLoaded ? (
@@ -181,10 +202,19 @@ function DeckView({ token }) {
         </div>
         <div className="deckview-subtitle">{deck.deckDescription}</div>
       </div>
-        <Search placeholder="Filter cards..." data={deck.cards} filter={filterDeck}/>
+      <Search
+        placeholder="Filter..."
+        data={deck.cards}
+        filterText={filterText}
+        setFilterText={setFilterText}
+      />
       <div className="deck-list">
-        {filteredCards.map((card) => (
-          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
+        {deck.cards.map((card) => (
+          <DisplayCard
+            card={card}
+            template={deck.cardTemplate}
+            token={token}
+          ></DisplayCard>
         ))}
       </div>
       <DeleteDeckModal showModal={showModal} onCloseModal={() => setShowModal(false)} deleteResponse={deleteDeck}></DeleteDeckModal>

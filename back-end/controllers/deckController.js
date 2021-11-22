@@ -56,39 +56,41 @@ const getDeckPermissions = async (req, res, next) => {
 };
 
 const getDeck = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
+  }
+
   const deckId = req.params.deckId;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
+  const filter = req.query.filter;
   const skipValues = page * limit;
 
-  const numCardsAggregate = await Deck.aggregate()
-    .match({ _id: ObjectId(deckId) })
-    .project({
-      numCards: { $size: "$cards" },
-    })
-    .catch((err) => {
-      next(err);
-    });
-  const numCards = numCardsAggregate[0].numCards;
+  try {
+    const pageCards = await Deck.findById(deckId)
+      .populate({
+        path: "cards",
+        match: { name: { $regex: `^${filter}` } },
+        options: {
+          limit: limit,
+          sort: { name: 1 },
+          skip: skipValues,
+        },
+      })
+      .catch((err) => {
+        next(err);
+      });
 
-  const pageCards = await Deck.findById(deckId)
-    .populate({
-      path: "cards",
-      options: {
-        limit: limit,
-        sort: { name: 1 },
-        skip: skipValues,
-      },
-    })
-    .catch((err) => {
-      next(err);
+    res.send({
+      hasNextPage: !(pageCards.cards.length < limit),
+      deckData: pageCards,
     });
-
-  res.send({
-    hasNextPage: numCards >= skipValues + limit,
-    deckData: pageCards,
-  });
-}
+  } catch (err) {
+    next(err);
+  }
+};
 
 const createDeck = async (req, res, next) => {
   const errors = validationResult(req);
@@ -190,31 +192,59 @@ const updateDeck = async (req, res, next) => {
 
 const deleteDeck = async (req, res, next) => {
   const { deckId } = req.params;
-  let cardIds = [];
 
   const doesDeckExist = await Deck.exists({ _id: deckId }).catch((err) => {
     next(err);
   });
 
-  if (doesDeckExist){
-  // Find deck to delete by deckId
-    Deck.find({ _id: deckId }
-    ).then((result) => {
-      cardIds = result[0].cards;
+  if (doesDeckExist) {
+    const session = await db.startSession();
+    await session.withTransaction(async () => {
+      // get card ids from deck
+      const deck = await Deck.findById(deckId)
+        .select("cards")
+        .catch((err) => next(err));
+      const cardIds = deck.cards;
 
-        // Delete deck
-        Deck.deleteOne({ _id: deckId }).catch((err) => {
-          next(err);
-        });
-        // Delete cards that were in the deck
-        Card.remove({ _id: { $in: cardIds } }).catch((err) => {
-          next(err);
-        });
-        res.send({ deckId });
+      // get ids of card owners
+      const cards = await Card.find({
+        _id: {
+          $in: cardIds,
+        },
       })
-      .catch((err) => {
+        .select("userId")
+        .catch((err) => next(err));
+      const userToCardIdMappings = cards.reduce((prev, card) => {
+        if (card.userId) {
+          return { ...prev, [card.userId]: card._id };
+        } else {
+          return prev;
+        }
+      }, {});
+
+      // remove cards from each user's cards array
+      for (const userId of Object.keys(userToCardIdMappings)) {
+        const user = await User.findById(userId);
+        user.cards = user.cards.filter(
+          (currCardId) => !currCardId.equals(userToCardIdMappings[userId])
+        );
+        user.save();
+      }
+
+      // delete card documents
+      await Card.remove({ _id: { $in: cardIds } }).catch((err) => {
         next(err);
       });
+
+      // delete deck document
+      await Deck.deleteOne({ _id: deckId }).catch((err) => {
+        next(err);
+      });
+    });
+
+    res.json({ deckId });
+  } else {
+    next({ message: "Error: attempted to add delete nonexistent deck" });
   }
 };
 
