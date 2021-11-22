@@ -76,7 +76,7 @@ const deleteUser = async (req, res, next) => {
   try {
     User.deleteOne({ _id: userId }).then(() => {
       res.status(200);
-      res.json({ message: "User successfully deleted" });
+      res.json({ messages: ["User successfully deleted"] });
     });
   } catch (e) {
     console.log(e);
@@ -180,7 +180,7 @@ const loginUser = async (req, res, next) => {
   if (!email || !password) {
     res
       .status(401)
-      .json({ success: false, message: "no email or password provided" });
+      .json({ success: false, messages: ["no email or password provided"] });
   }
   const user = await User.findOne({ email: email });
   if (!user) {
@@ -198,7 +198,7 @@ const loginUser = async (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ success: false, message: "passwords did not match" });
+      .json({ success: false, messages: ["passwords did not match"] });
   }
 };
 
