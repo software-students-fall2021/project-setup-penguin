@@ -1,3 +1,4 @@
+
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
@@ -17,13 +18,13 @@ router.get(
   userController.getUser
 );
 
+
 router.get(
   '/account',
   passport.authenticate('jwt', { session: false }),
   userController.getUserAccount
 );
 
-// TODO: update this to align with get request (get id from req.user not req.params)
 router.patch(
   '/',
   passport.authenticate('jwt', { session: false }),

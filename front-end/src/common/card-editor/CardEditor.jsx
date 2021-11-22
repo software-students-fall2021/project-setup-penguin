@@ -21,6 +21,7 @@ function CardEditor({
   setForm,
   templateData,
   shouldRunTour = false,
+  setErrors,
 }) {
   const [showModal, setShowModal] = useState(false);
   const [finalCrop, setFinalCrop] = useState();
@@ -32,7 +33,9 @@ function CardEditor({
   const initialImg = (
     <img
       className="CardEditor__image"
-      src={form.image ?? piplupUpload}
+      src={
+        form.filename ? `http://localhost:8000/${form.filename}` : piplupUpload
+      }
       onClick={() => setShowModal(true)}
     />
   );
@@ -76,6 +79,7 @@ function CardEditor({
                   ...prevState,
                   name: event.target.value,
                 }));
+                setErrors?.([]);
               }}
             />
             <div style={{ display: "flex", alignItems: "center" }}>

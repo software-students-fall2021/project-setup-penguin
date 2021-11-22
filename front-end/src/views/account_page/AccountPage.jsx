@@ -1,8 +1,8 @@
 import "./AccountPage.css";
+import psyduck from "../../assets/psyduck.png";
 import DisplayCard from "../../common/DisplayCard";
 import React, { useState } from "react";
 import { useParams, NavLink } from "react-router-dom";
-import { TEST_CARDS_ARRAY } from "../../common/constants";
 import axios from "axios";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
@@ -14,8 +14,6 @@ function AccountPage({ token }) {
   //make states an object and the page-displayed state variable a string (with its values as the keys of the states object) for clarity later
   const states = ["Active", "inactive"]; //array for defining classes of button states
 
-  //let { id } = useParams();
-  let { id } = useParams();
   let pageContent;
   let pageElement;
   const [deckActive, setDeckActive] = useState(0);
@@ -103,42 +101,84 @@ function AccountPage({ token }) {
   const ownedContent = [];
   const joinedContent = [];
 
-  for (let i = 0; i < ownedDeckNamesArray.length; i++) {
+  if (ownedDeckNamesArray.length === 0) {
     pageElement = (
-      <div key={i}>
-        <div className="deck">
-          <div className="title">
-            <NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">
-              {ownedDeckNamesArray[i]}
-            </NavLink>
-          </div>
-          <DisplayCard
-            card={ownedCardsArray[i]}
-            template={ownedTemplateArray[i]}
-          ></DisplayCard>
-        </div>
+      <div className="no-decks">
+        <p>Looks like you haven't created any decks yet. Click&nbsp; 
+        <a><NavLink to={`createdeck`} className="clickHereLink">
+          here
+        </NavLink></a>
+        &nbsp;to get started!</p>
+      <img
+        className={"accountPageImg"}
+        src={psyduck}
+        alt="Psyduck"
+      />
       </div>
     );
     ownedContent.push(pageElement);
+  } else {
+    for (let i = 0; i < ownedDeckNamesArray.length; i++) {
+      pageElement = (
+        <div key={i}>
+          <div className="deck">
+            <div className="title">
+              <NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">
+                {ownedDeckNamesArray[i]}
+              </NavLink>
+            </div>
+            <div className="account-subtitle">Team for SWE Project, 2021</div>
+            <DisplayCard
+              token={token}
+              card={ownedCardsArray[i]}
+              template={ownedTemplateArray[i]}
+            ></DisplayCard>
+          </div>
+        </div>
+      );
+      ownedContent.push(pageElement);
+    }
   }
 
-  for (let i = 0; i < joinedDeckNamesArray.length; i++) {
+  if (joinedDeckNamesArray.length === 0) {
     pageElement = (
-      <div key={i}>
-        <div className="deck">
-          <div className="title">
-            <NavLink to={`deck/${joinedDeckIdsArray[i]}`} className="deckLink">
-              {joinedDeckNamesArray[i]}
-            </NavLink>
-          </div>
-          <DisplayCard
-            card={joinedCardsArray[i]}
-            template={joinedTemplateArray[i]}
-          ></DisplayCard>
-        </div>
+      <div className="no-decks">
+        <p>You haven't joined any decks yet. Click&nbsp; 
+          <a><NavLink to={`finddeck`} className="clickHereLink">
+                here
+            </NavLink></a>
+        &nbsp;to search for a deck via access code!</p>
+      <img
+        className={"accountPageImg"}
+        src={psyduck}
+        alt="Psyduck"
+      />
       </div>
     );
     joinedContent.push(pageElement);
+  } else {
+    for (let i = 0; i < joinedDeckNamesArray.length; i++) {
+      pageElement = (
+        <div key={i}>
+          <div className="deck">
+            <div className="title">
+              <NavLink
+                to={`deck/${joinedDeckIdsArray[i]}`}
+                className="deckLink"
+              >
+                {joinedDeckNamesArray[i]}
+              </NavLink>
+            </div>
+            <DisplayCard
+              token={token}
+              card={joinedCardsArray[i]}
+              template={joinedTemplateArray[i]}
+            ></DisplayCard>
+          </div>
+        </div>
+      );
+      joinedContent.push(pageElement);
+    }
   }
 
   if (deckActive === 0) {
@@ -150,7 +190,10 @@ function AccountPage({ token }) {
   const page = !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
-    <div>
+    <div className="account-page-general">
+      <h1>
+        Account decks
+      </h1>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}
@@ -158,7 +201,7 @@ function AccountPage({ token }) {
           onClick={activateMyDeckView}
           type="button"
         >
-          Owned Decks
+          Owned
         </button>
         <button
           className={states[1 - deckActive]}
@@ -166,10 +209,10 @@ function AccountPage({ token }) {
           onClick={activateJoinedDeckView}
           type="button"
         >
-          Joined Decks
+          Joined
         </button>
       </div>
-      <div className="deck-list">{pageContent}</div>
+      <div className="account-deck-list">{pageContent}</div>
     </div>
   );
 

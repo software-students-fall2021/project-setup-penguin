@@ -65,16 +65,16 @@ function App() {
               <FinishDeckSetup token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/edit">
-              <UpdateDeck />
+              <UpdateDeck token={token} />
             </Route>
             <Route exact path="/deck/:id">
-              <DeckView />
+              <DeckView token={token} />
             </Route>
             <Route path="/deck/:deckId/add">
               <CreateCard token={token} setToken={setToken} />
             </Route>
             <Route path="/deck/:deckId/card/:cardId/edit">
-              <UpdateCard />
+              <UpdateCard token={token} />
             </Route>
             <Route path="/accountpage/editUser">
               <EditAccountPage token={token} />
