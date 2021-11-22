@@ -41,7 +41,7 @@ function CreateDeck() {
   );
   return (
     <CreateBody
-      header="Create a New Deck"
+      header="Create a new deck"
       prompt={prompt}
       btn={btn}
       cardEditorProps={{ form, setForm, shouldRunTour }}

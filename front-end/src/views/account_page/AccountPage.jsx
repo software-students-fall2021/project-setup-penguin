@@ -103,17 +103,17 @@ function AccountPage({ token }) {
 
   if (ownedDeckNamesArray.length === 0) {
     pageElement = (
-      <div>
-        <p>
-          Looks like you haven't created any decks yet. Click&nbsp;
-          <a>
-            <NavLink to={`createdeck`} className="clickHereLink">
-              here
-            </NavLink>
-          </a>
-          &nbsp;to get started!
-        </p>
-        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
+      <div className="no-decks">
+        <p>Looks like you haven't created any decks yet. Click&nbsp; 
+        <a><NavLink to={`createdeck`} className="clickHereLink">
+          here
+        </NavLink></a>
+        &nbsp;to get started!</p>
+      <img
+        className={"accountPageImg"}
+        src={psyduck}
+        alt="Psyduck"
+      />
       </div>
     );
     ownedContent.push(pageElement);
@@ -127,6 +127,7 @@ function AccountPage({ token }) {
                 {ownedDeckNamesArray[i]}
               </NavLink>
             </div>
+            <div className="account-subtitle">Team for SWE Project, 2021</div>
             <DisplayCard
               token={token}
               card={ownedCardsArray[i]}
@@ -141,17 +142,17 @@ function AccountPage({ token }) {
 
   if (joinedDeckNamesArray.length === 0) {
     pageElement = (
-      <div>
-        <p>
-          You haven't joined any decks yet. Click&nbsp;
-          <a>
-            <NavLink to={`finddeck`} className="clickHereLink">
-              here
-            </NavLink>
-          </a>
-          &nbsp;to search for a deck via access code!
-        </p>
-        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
+      <div className="no-decks">
+        <p>You haven't joined any decks yet. Click&nbsp; 
+          <a><NavLink to={`finddeck`} className="clickHereLink">
+                here
+            </NavLink></a>
+        &nbsp;to search for a deck via access code!</p>
+      <img
+        className={"accountPageImg"}
+        src={psyduck}
+        alt="Psyduck"
+      />
       </div>
     );
     joinedContent.push(pageElement);
@@ -189,7 +190,10 @@ function AccountPage({ token }) {
   const page = !isDeckLoaded ? (
     <LoadingSpinner />
   ) : (
-    <div>
+    <div className="account-page-general">
+      <h1>
+        Account decks
+      </h1>
       <div className="toggle-switch">
         <button
           className={states[deckActive]}
@@ -197,7 +201,7 @@ function AccountPage({ token }) {
           onClick={activateMyDeckView}
           type="button"
         >
-          Owned Decks
+          Owned
         </button>
         <button
           className={states[1 - deckActive]}
@@ -205,10 +209,10 @@ function AccountPage({ token }) {
           onClick={activateJoinedDeckView}
           type="button"
         >
-          Joined Decks
+          Joined
         </button>
       </div>
-      <div className="deck-list">{pageContent}</div>
+      <div className="account-deck-list">{pageContent}</div>
     </div>
   );
 
