@@ -35,6 +35,7 @@ function EditAccount({ token }) {
   }, [token]);
   const submitUpdate = () => {
     if (!name || !email || !password) {
+      console.log('All information must be filled out');
       return;
     }
     axios({
@@ -106,16 +107,12 @@ function EditAccount({ token }) {
       <div className="EditAccount__buttonSpacer">
         <Button
           btnText="Update Information"
-          onClick={() => {
-            submitUpdate();
-          }}
+          onClick={submitUpdate}
           icon={<ArrowRight />}
         />
         <Button
           btnText="Delete Account"
-          onClick={() => {
-            handleDelete();
-          }}
+          onClick={handleDelete}
           icon={<ArrowRight />}
         />
       </div>

@@ -25,7 +25,7 @@ router.get(
 
 // TODO: update this to align with get request (get id from req.user not req.params)
 router.patch(
-  '/:userId',
+  '/',
   passport.authenticate('jwt', { session: false }),
   userController.updateUser
 );
