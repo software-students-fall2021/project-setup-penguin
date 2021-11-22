@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
+import Search from "../common/components/SearchBar";
+
 
 function DeckView({ token }) {
   const CARD_LIMIT = 9;
@@ -26,6 +28,9 @@ function DeckView({ token }) {
     deckDescription: "",
     cards: [],
   });
+
+  // Holds the filteredCards (don't want to mess with the cards within deck);
+  const [filteredCards, setFilteredCards] = useState([]);
 
   // detects when the user has scrolled to the bottom of the page
   function handleScroll() {
@@ -84,6 +89,7 @@ function DeckView({ token }) {
       .then((res) => {
         setIsDeckLoaded(true);
         setDeck(res.data.deckData);
+        setFilteredCards(res.data.deckData.cards);
         setPage(page + 1);
         setHasNextPage(res.data.hasNextPage);
       })
@@ -128,6 +134,11 @@ function DeckView({ token }) {
     }, 3000);
   }
 
+  // Update filteredCards based on Search
+  function filterDeck(filteredData){
+    setFilteredCards(filteredData);
+  }
+
   return isDeckLoaded && isPermissionsLoaded ? (
     <div className="deckview-overall">
       <div className="header">
@@ -163,13 +174,10 @@ function DeckView({ token }) {
         </div>
         <div className="deckview-subtitle">{deck.deckDescription}</div>
       </div>
+        <Search placeholder="Filter..." data={deck.cards} filter={filterDeck}/>
       <div className="deck-list">
-        {deck.cards.map((card) => (
-          <DisplayCard
-            card={card}
-            template={deck.cardTemplate}
-            token={token}
-          ></DisplayCard>
+        {filteredCards.map((card) => (
+          <DisplayCard card={card} template={deck.cardTemplate} token={token}></DisplayCard>
         ))}
       </div>
     </div>
