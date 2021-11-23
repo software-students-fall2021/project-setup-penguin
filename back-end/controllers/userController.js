@@ -69,7 +69,7 @@ const deleteUser = async (req, res, next) => {
   //make all decks set to the user null
   const decks = await Deck.updateMany(
     { ownerId: userId },
-    { $set: { ownerId: "619bd8f22314e7c3a4e5efb6" } }
+    { $unset: { ownerId: 1 } }
   );
 
   //Delete user
@@ -79,7 +79,7 @@ const deleteUser = async (req, res, next) => {
       res.json({ messages: ["User successfully deleted"] });
     });
   } catch (e) {
-    console.log(e);
+    next(e);
   }
 };
 
@@ -125,17 +125,15 @@ const getUser = async (req, res, next) => {
 };
 
 const getUserAccount = async (req, res, next) => {
-  try {
-    const userId = req.user._id;
+  const userId = req.user._id;
 
-    const userData = await User.findOne({ _id: userId });
+  const userData = await User.findOne({ _id: userId }).catch((err) => {
+    next(err);
+  });
 
-    console.log(userData);
-    res.status(200);
-    res.json({ name: userData.name, email: userData.email });
-  } catch (error) {
-    res.status(200);
-  }
+  console.log(userData);
+  res.status(200);
+  res.json({ name: userData.name, email: userData.email });
 };
 
 const updateUser = async (req, res, next) => {
@@ -143,7 +141,9 @@ const updateUser = async (req, res, next) => {
   const { email, password, name } = req.body;
 
   //check if User does not exists
-  const count = await User.countDocuments({ _id: userId });
+  const count = await User.exists({ _id: userId }).catch((err) => {
+    next(err);
+  });
   if (count === 0) {
     throw "User does not exist";
   }
@@ -175,13 +175,14 @@ const updateUser = async (req, res, next) => {
 };
 
 const loginUser = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const messages = errors.array().map((error) => error.msg);
+    return res.status(400).json({ messages });
+  }
+
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    res
-      .status(401)
-      .json({ success: false, messages: ["no email or password provided"] });
-  }
   const user = await User.findOne({ email: email });
   if (!user) {
     res
@@ -191,6 +192,7 @@ const loginUser = async (req, res, next) => {
   const match = await bcrypt.compare(password, user.password).catch((err) => {
     next(err);
   });
+
   if (match) {
     const payload = { id: user._id };
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
@@ -198,7 +200,7 @@ const loginUser = async (req, res, next) => {
   } else {
     res
       .status(401)
-      .json({ success: false, messages: ["passwords did not match"] });
+      .json({ success: false, messages: [`passwords did not match`] });
   }
 };
 

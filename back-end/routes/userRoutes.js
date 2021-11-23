@@ -17,19 +17,19 @@ router.post(
 
 router.delete(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   userController.deleteUser
 );
 
 router.get(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   userController.getUser
 );
 
 router.get(
   "/account",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   userController.getUserAccount
 );
 
@@ -37,7 +37,7 @@ router.get(
 // TODO: incorporate express-validator
 router.patch(
   "/",
-  passport.authenticate("jwt", { session: false }),
+  authenticate,
   userController.updateUser
 );
 
