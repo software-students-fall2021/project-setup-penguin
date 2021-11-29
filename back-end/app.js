@@ -25,9 +25,9 @@ app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
 );
 
-app.use("/card", cardRouter);
-app.use("/user", userRouter);
-app.use("/deck", deckRouter);
+app.use("/api/card", cardRouter);
+app.use("/api/user", userRouter);
+app.use("/api/deck", deckRouter);
 
 // error handling middleware
 app.use((err, req, res, next) => {

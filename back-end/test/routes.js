@@ -18,11 +18,11 @@ chai.use(chaiHttp);
 const expect = chai.expect;
 
 describe("User", () => {
-  describe("POST /user/login", () => {
+  describe("POST /api/user/login", () => {
     it("should return error when user doesn't exist", (done) => {
       chai
         .request(app)
-        .post("/user/login")
+        .post("/api/user/login")
         .send({ email: "notrandom@gmail.com", password: "notstring" })
         .end((err, res) => {
           expect(res).to.have.status(401);
@@ -32,7 +32,7 @@ describe("User", () => {
     it("should return email and token when successful", (done) => {
       chai
         .request(app)
-        .post("/user/login")
+        .post("/api/user/login")
         .send({ email: "janet@gmail.com", password: "1234" })
         .end((err, res) => {
           expect(res).to.have.status(200);
@@ -42,11 +42,11 @@ describe("User", () => {
         });
     });
   });
-  describe("POST /", () => {
+  describe("POST /api/user", () => {
     it("error when creating account", (done) => {
       chai
         .request(app)
-        .post("/user")
+        .post("/api/user")
         .send({ email: "", password: "string", name: "me" })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -57,11 +57,11 @@ describe("User", () => {
 });
 
 describe("Decks", () => {
-  describe("POST /", () => {
+  describe("POST /api/deck", () => {
     it("should return id of newly created deck", (done) => {
       chai
         .request(app)
-        .post("/deck")
+        .post("/api/deck")
         .send({
           token,
           deckName: "generated",
@@ -89,11 +89,11 @@ describe("Decks", () => {
         });
     });
   });
-  describe("PATCH /", () => {
+  describe("PATCH /api/deck", () => {
     it("should return error when updating nonexistent deck", (done) => {
       chai
         .request(app)
-        .patch("/deck/-1")
+        .patch("/api/deck/-1")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -107,7 +107,7 @@ describe("Decks", () => {
     it("should successfully update the deck", (done) => {
       chai
         .request(app)
-        .patch("/deck/619acedb4508732901f2a755")
+        .patch("/api/deck/619acedb4508732901f2a755")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -119,11 +119,11 @@ describe("Decks", () => {
         });
     });
   });
-  describe("GET /", () => {
+  describe("GET /api/deck", () => {
     it("should return an error when getting nonexistent deck", (done) => {
       chai
         .request(app)
-        .get("/deck/0?page=1&limit=1")
+        .get("/api/deck/0?page=1&limit=1")
         .set("Authorization", `JWT ${token}`)
         .end((err, res) => {
           expect(res).to.have.status(500);
@@ -131,11 +131,11 @@ describe("Decks", () => {
         });
     });
   });
-  describe("GET /", () => {
+  describe("GET /api/deck", () => {
     it("should return an error when missing the page query param", (done) => {
       chai
         .request(app)
-        .get("/deck/619acedb4508732901f2a755?limit=1")
+        .get("/api/deck/619acedb4508732901f2a755?limit=1")
         .set("Authorization", `JWT ${token}`)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -146,11 +146,11 @@ describe("Decks", () => {
 });
 
 describe("Cards", () => {
-  describe("POST /", () => {
+  describe("POST /api/card", () => {
     it("should return error when adding to nonexistent deck", (done) => {
       chai
         .request(app)
-        .post("/card")
+        .post("/api/card")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckId: 0,
@@ -179,7 +179,7 @@ describe("Cards", () => {
     it("should return id of newly created card", (done) => {
       chai
         .request(app)
-        .post("/card")
+        .post("/api/card")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckId: "61980be9df5ede5f64158de9",

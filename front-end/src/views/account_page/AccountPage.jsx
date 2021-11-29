@@ -6,7 +6,7 @@ import { useParams, NavLink } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import LoadingSpinner from "../../common/spinner/LoadingSpinner";
-import {Button} from "../../common";
+import { Button } from "../../common";
 import { Redirect, useHistory } from "react-router-dom";
 import { ArrowRight } from "react-bootstrap-icons";
 
@@ -33,7 +33,7 @@ function AccountPage({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/user`, {
+      .get(`http://localhost:8000/api/user`, {
         headers: { Authorization: `JWT ${token}` },
       })
       .then((response) => {
@@ -107,16 +107,16 @@ function AccountPage({ token }) {
   if (ownedDeckNamesArray.length === 0) {
     pageElement = (
       <div className="no-decks">
-        <p>Looks like you haven't created any decks yet. Click&nbsp; 
-        <a><NavLink to={`createdeck`} className="clickHereLink">
-          here
-        </NavLink></a>
-        &nbsp;to get started!</p>
-      <img
-        className={"accountPageImg"}
-        src={psyduck}
-        alt="Psyduck"
-      />
+        <p>
+          Looks like you haven't created any decks yet. Click&nbsp;
+          <a>
+            <NavLink to={`createdeck`} className="clickHereLink">
+              here
+            </NavLink>
+          </a>
+          &nbsp;to get started!
+        </p>
+        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
       </div>
     );
     ownedContent.push(pageElement);
@@ -146,16 +146,16 @@ function AccountPage({ token }) {
   if (joinedDeckNamesArray.length === 0) {
     pageElement = (
       <div className="no-decks">
-        <p>You haven't joined any decks yet. Click&nbsp; 
-          <a><NavLink to={`finddeck`} className="clickHereLink">
-                here
-            </NavLink></a>
-        &nbsp;to search for a deck via access code!</p>
-      <img
-        className={"accountPageImg"}
-        src={psyduck}
-        alt="Psyduck"
-      />
+        <p>
+          You haven't joined any decks yet. Click&nbsp;
+          <a>
+            <NavLink to={`finddeck`} className="clickHereLink">
+              here
+            </NavLink>
+          </a>
+          &nbsp;to search for a deck via access code!
+        </p>
+        <img className={"accountPageImg"} src={psyduck} alt="Psyduck" />
       </div>
     );
     joinedContent.push(pageElement);
@@ -195,10 +195,8 @@ function AccountPage({ token }) {
   ) : (
     <div className="account-page-general">
       <div className="account-page-header">
-      <h1>
-        Account decks
-      </h1>
-      <Button
+        <h1>Account decks</h1>
+        <Button
           btnText="Edit Account"
           onClick={() => history.push("/accountpage/editUser")}
           icon={<ArrowRight />}

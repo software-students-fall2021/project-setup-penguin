@@ -18,7 +18,7 @@ function EditAccount({ token }) {
     }
     axios({
       method: "get",
-      url: `http://localhost:8000/user/account`,
+      url: `http://localhost:8000/api/user/account`,
       headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
@@ -40,7 +40,7 @@ function EditAccount({ token }) {
     }
     axios({
       method: "patch",
-      url: `http://localhost:8000/user/`,
+      url: `http://localhost:8000/api/user/`,
       data: {
         email,
         password,
@@ -63,7 +63,7 @@ function EditAccount({ token }) {
   const handleDelete = () => {
     axios({
       method: "delete",
-      url: `http://localhost:8000/user/`,
+      url: `http://localhost:8000/api/user/`,
       headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
