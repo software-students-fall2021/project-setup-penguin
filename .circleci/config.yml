@@ -4,8 +4,6 @@ version: 2.1
 
 # Define the jobs we want to run for this project
 jobs:
-  environment:
-    CI: false
   build-and-test-express-js:
     docker:
       - image: cimg/node:16.13.0 # latest stable node at the time of writing
@@ -24,6 +22,8 @@ jobs:
           npm install # install all dependencies listed in package.json
           npx mocha test/routes.js # run all unit tests
   build-react-js:
+    environment:
+      CI: false
     docker:
       - image: cimg/node:16.13.0 # latest stable node at the time of writing
         # auth:
