@@ -16,7 +16,7 @@ function FindDeck() {
   const onContinue = (evt) => {
     evt.preventDefault();
     axios
-      .get(`http://localhost:8000/deck/deckId/${maybeAccessCode}`)
+      .get(`http://localhost:8000/api/deck/deckId/${maybeAccessCode}`)
       .then((res) => {
         if (res.data) {
           setRedirectLink(`/deck/${res.data._id}`);

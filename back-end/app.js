@@ -13,7 +13,7 @@ require("./db.js");
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()); // prevents requests from being blocked by CORS
-app.use(express.static("uploads"));
+app.use(express.static("public"));
 app.use(passport.initialize());
 
 const { jwtStrategy } = require("./jwt-config.js");
@@ -25,9 +25,9 @@ app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
 );
 
-app.use("/card", cardRouter);
-app.use("/user", userRouter);
-app.use("/deck", deckRouter);
+app.use("/api/card", cardRouter);
+app.use("/api/user", userRouter);
+app.use("/api/deck", deckRouter);
 
 // error handling middleware
 app.use((err, req, res, next) => {

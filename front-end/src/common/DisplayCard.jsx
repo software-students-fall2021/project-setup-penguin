@@ -9,7 +9,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
   const cardId = card._id;
   const deckId = card.deckId;
   const currToken = token;
-  
+
   const [shouldRenderButtons, setShouldRenderButtons] = useState(false);
   const sectionIds = [0, 1, 2];
   const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
@@ -17,7 +17,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
   useEffect(() => {
     if (token && cardId) {
       axios
-        .get(`http://localhost:8000/card/cardPermissions/${cardId}`, {
+        .get(`http://localhost:8000/api/card/cardPermissions/${cardId}`, {
           headers: { Authorization: `JWT ${token}` },
         })
         .then((res) => {
@@ -37,7 +37,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
 
   function deleteCard(cardId, deckId, currToken) {
     axios
-      .delete(`http://localhost:8000/card/${cardId}`, {
+      .delete(`http://localhost:8000/api/card/${cardId}`, {
         data: { deckId },
         headers: { Authorization: `JWT ${currToken}` },
       })
@@ -65,7 +65,9 @@ function DisplayCard({ card = {}, template = {}, token }) {
           <img
             className="CardDisplay__image"
             src={
-              card.filename ? `http://localhost:8000/${card.filename}` : piplup
+              card.filename
+                ? `http://localhost:8000/uploads/${card.filename}`
+                : piplup
             }
           />
         </div>

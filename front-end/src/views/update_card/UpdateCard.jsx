@@ -19,7 +19,7 @@ function UpdateCard({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/deckTemplate/${deckId}`)
+      .get(`http://localhost:8000/api/deck/deckTemplate/${deckId}`)
       .then((res) => {
         setTemplateData(res.data.cardTemplate);
       })
@@ -34,7 +34,7 @@ function UpdateCard({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/card/${cardId}`)
+      .get(`http://localhost:8000/api/card/${cardId}`)
       .then((response) => {
         setForm(response.data.card);
       })
@@ -60,7 +60,7 @@ function UpdateCard({ token }) {
     }
 
     axios
-      .patch(`http://localhost:8000/card/${cardId}`, formData, {
+      .patch(`http://localhost:8000/api/card/${cardId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `JWT ${token}`,

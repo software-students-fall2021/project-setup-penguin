@@ -17,7 +17,7 @@ function UpdateDeck({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/deck/deckDetails/${deckId}`)
+      .get(`http://localhost:8000/api/deck/deckDetails/${deckId}`)
       .then((res) => {
         setIsDeckLoaded(true);
         setDeckName(res.data.deckName);
@@ -32,7 +32,7 @@ function UpdateDeck({ token }) {
   const updateDeckWithRedirect = () => {
     axios
       .patch(
-        `http://localhost:8000/deck/${deckId}`,
+        `http://localhost:8000/api/deck/${deckId}`,
         {
           deckName: deckName,
           deckDescription: deckDescription,

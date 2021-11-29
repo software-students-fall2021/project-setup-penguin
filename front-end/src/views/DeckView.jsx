@@ -47,7 +47,7 @@ function DeckView({ token }) {
     if (hasNextPage) {
       axios
         .get(
-          `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+          `http://localhost:8000/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
         )
         .then((res) => {
           setIsFetchingMoreCards(false);
@@ -68,7 +68,7 @@ function DeckView({ token }) {
   const filterResultsHelper = (filterText) => {
     axios
       .get(
-        `http://localhost:8000/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
+        `http://localhost:8000/api/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
       )
       .then((res) => {
         setPage(1);
@@ -91,7 +91,7 @@ function DeckView({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://localhost:8000/deck/deckPermissions/${id}`, {
+        .get(`http://localhost:8000/api/deck/deckPermissions/${id}`, {
           headers: { Authorization: `JWT ${token}` },
         })
         .then((res) => {
@@ -110,7 +110,7 @@ function DeckView({ token }) {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+        `http://localhost:8000/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
       )
       .then((res) => {
         setIsDeckLoaded(true);
@@ -136,20 +136,19 @@ function DeckView({ token }) {
 
   function deleteDeck(confirmed) {
     console.log("hi!", confirmed);
-    if (confirmed){
+    if (confirmed) {
       axios
-      .delete(`http://localhost:8000/deck/${id}`, {
-        headers: { Authorization: `JWT ${token}` },
-      })
-      .then(() => {
-        //After deleting, redirect user back to homepage.
-        window.location.href = "http://localhost:3000";
-      })
-      .catch((err) => {
-        console.log("!!", err);
-      });
-    }
-    else{
+        .delete(`http://localhost:8000/api/deck/${id}`, {
+          headers: { Authorization: `JWT ${token}` },
+        })
+        .then(() => {
+          //After deleting, redirect user back to homepage.
+          window.location.href = "http://localhost:3000";
+        })
+        .catch((err) => {
+          console.log("!!", err);
+        });
+    } else {
       setShowModal(false);
     }
   }
@@ -186,7 +185,10 @@ function DeckView({ token }) {
                   <Button btnText="Edit Deck" linkTo={`${id}/edit`} />
                 </div>
                 <div className="delete">
-                  <Button btnText="Delete Deck" onClick={() => setShowModal(true)} />
+                  <Button
+                    btnText="Delete Deck"
+                    onClick={() => setShowModal(true)}
+                  />
                 </div>
               </>
             )}
@@ -217,7 +219,11 @@ function DeckView({ token }) {
           ></DisplayCard>
         ))}
       </div>
-      <DeleteDeckModal showModal={showModal} onCloseModal={() => setShowModal(false)} deleteResponse={deleteDeck}></DeleteDeckModal>
+      <DeleteDeckModal
+        showModal={showModal}
+        onCloseModal={() => setShowModal(false)}
+        deleteResponse={deleteDeck}
+      ></DeleteDeckModal>
     </div>
   ) : (
     <LoadingSpinner />
