@@ -47,7 +47,7 @@ function DeckView({ token }) {
     if (hasNextPage) {
       axios
         .get(
-          `http://localhost:8000/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+          `${process.env.REACT_APP_API_URL}/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
         )
         .then((res) => {
           setIsFetchingMoreCards(false);
@@ -68,7 +68,7 @@ function DeckView({ token }) {
   const filterResultsHelper = (filterText) => {
     axios
       .get(
-        `http://localhost:8000/api/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
+        `${process.env.REACT_APP_API_URL}/api/deck/${id}?page=0&limit=${CARD_LIMIT}&filter=${filterText}`
       )
       .then((res) => {
         setPage(1);
@@ -91,9 +91,12 @@ function DeckView({ token }) {
   useEffect(() => {
     if (token) {
       axios
-        .get(`http://localhost:8000/api/deck/deckPermissions/${id}`, {
-          headers: { Authorization: `JWT ${token}` },
-        })
+        .get(
+          `${process.env.REACT_APP_API_URL}/api/deck/deckPermissions/${id}`,
+          {
+            headers: { Authorization: `JWT ${token}` },
+          }
+        )
         .then((res) => {
           setPermissions(res.data);
           setIsPermissionsLoaded(true);
@@ -110,7 +113,7 @@ function DeckView({ token }) {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
+        `${process.env.REACT_APP_API_URL}/api/deck/${id}?page=${page}&limit=${CARD_LIMIT}&filter=${filterText}`
       )
       .then((res) => {
         setIsDeckLoaded(true);
@@ -138,7 +141,7 @@ function DeckView({ token }) {
     console.log("hi!", confirmed);
     if (confirmed) {
       axios
-        .delete(`http://localhost:8000/api/deck/${id}`, {
+        .delete(`${process.env.REACT_APP_API_URL}/api/deck/${id}`, {
           headers: { Authorization: `JWT ${token}` },
         })
         .then(() => {

@@ -19,7 +19,7 @@ function UpdateCard({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/deck/deckTemplate/${deckId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/deck/deckTemplate/${deckId}`)
       .then((res) => {
         setTemplateData(res.data.cardTemplate);
       })
@@ -34,7 +34,7 @@ function UpdateCard({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/card/${cardId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/card/${cardId}`)
       .then((response) => {
         setForm(response.data.card);
       })
@@ -60,7 +60,7 @@ function UpdateCard({ token }) {
     }
 
     axios
-      .patch(`http://localhost:8000/api/card/${cardId}`, formData, {
+      .patch(`${process.env.REACT_APP_API_URL}/api/card/${cardId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `JWT ${token}`,

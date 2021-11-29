@@ -23,7 +23,7 @@ function LoginSignup({ pageType, setToken }) {
       // TODO: create & save account – get id of newly created account
       axios({
         method: "post",
-        url: "http://localhost:8000/api/user",
+        url: `${process.env.REACT_APP_API_URL}/api/user`,
         data: {
           email,
           password,
@@ -41,7 +41,7 @@ function LoginSignup({ pageType, setToken }) {
     } else {
       // log user in – get id of existing account
       axios
-        .post("http://localhost:8000/api/user/login", {
+        .post(`${process.env.REACT_APP_API_URL}/api/user/login`, {
           email,
           password,
         })

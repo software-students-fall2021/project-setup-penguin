@@ -54,7 +54,7 @@ function FinishDeckSetup({ token, setToken }) {
     }
 
     axios
-      .post(`http://localhost:8000/api/deck`, formData, {
+      .post(`${process.env.REACT_APP_API_URL}/api/deck`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -77,7 +77,7 @@ function FinishDeckSetup({ token, setToken }) {
   const onSignupOrLogin = (pageType, name, email, password) => {
     if (pageType === MODAL_PAGE_TYPE.SIGNUP) {
       axios
-        .post("http://localhost:8000/api/user", {
+        .post(`${process.env.REACT_APP_API_URL}/api/user`, {
           email,
           password,
           name,
@@ -92,7 +92,7 @@ function FinishDeckSetup({ token, setToken }) {
         });
     } else {
       axios
-        .post("http://localhost:8000/api/user/login", {
+        .post(`${process.env.REACT_APP_API_URL}/api/user/login`, {
           email,
           password,
         })

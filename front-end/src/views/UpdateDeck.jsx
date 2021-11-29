@@ -17,7 +17,7 @@ function UpdateDeck({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/deck/deckDetails/${deckId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/deck/deckDetails/${deckId}`)
       .then((res) => {
         setIsDeckLoaded(true);
         setDeckName(res.data.deckName);
@@ -32,7 +32,7 @@ function UpdateDeck({ token }) {
   const updateDeckWithRedirect = () => {
     axios
       .patch(
-        `http://localhost:8000/api/deck/${deckId}`,
+        `${process.env.REACT_APP_API_URL}/api/deck/${deckId}`,
         {
           deckName: deckName,
           deckDescription: deckDescription,
