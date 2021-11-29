@@ -65,7 +65,9 @@ function DisplayCard({ card = {}, template = {}, token }) {
           <img
             className="CardDisplay__image"
             src={
-              card.filename ? `http://localhost:8000/${card.filename}` : piplup
+              card.filename
+                ? `http://localhost:8000/uploads/${card.filename}`
+                : piplup
             }
           />
         </div>

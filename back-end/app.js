@@ -13,7 +13,7 @@ require("./db.js");
 // use the morgan middleware to log all incoming http requests
 app.use(morgan("dev")); // morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()); // prevents requests from being blocked by CORS
-app.use(express.static("uploads"));
+app.use(express.static("public"));
 app.use(passport.initialize());
 
 const { jwtStrategy } = require("./jwt-config.js");
