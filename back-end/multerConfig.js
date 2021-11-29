@@ -5,7 +5,7 @@ const mime = require("mime");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // store files into a directory named 'uploads'
-    cb(null, path.join(__dirname, "./uploads/"));
+    cb(null, path.join(__dirname, "./public/uploads/"));
   },
   filename: function (req, file, cb) {
     // rename the files to include the current time and date + proper extension
