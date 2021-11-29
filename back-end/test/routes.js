@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const { jwtOptions } = require("../jwt-config");
 // the following token can be used to test any protected route
 const token = jwt.sign(
-  { id: "619aceba4508732901f2a751" },
+  { id: "61a50ad67cae2ea735701213" },
   jwtOptions.secretOrKey
 );
 
@@ -93,7 +93,7 @@ describe("Decks", () => {
     it("should return error when updating nonexistent deck", (done) => {
       chai
         .request(app)
-        .patch("/api/deck/-1")
+        .patch("/api/deck/123")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -107,7 +107,7 @@ describe("Decks", () => {
     it("should successfully update the deck", (done) => {
       chai
         .request(app)
-        .patch("/api/deck/619acedb4508732901f2a755")
+        .patch("/api/deck/61a50add7cae2ea735701218")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -182,7 +182,7 @@ describe("Cards", () => {
         .post("/api/card")
         .set("Authorization", `JWT ${token}`)
         .send({
-          deckId: "61980be9df5ede5f64158de9",
+          deckId: "61a50add7cae2ea735701218",
           name: "test card",
           cardText: JSON.stringify({
             name: "Name Here",

@@ -20,8 +20,10 @@ jobs:
       - run: |
           cd back-end
           npm install # install all dependencies listed in package.json
-          npm test # run all unit tests
+          npx mocha test/routes.js --exit # run all unit tests
   build-react-js:
+    environment:
+      CI: false
     docker:
       - image: cimg/node:16.13.0 # latest stable node at the time of writing
         # auth:
