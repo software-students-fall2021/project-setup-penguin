@@ -17,9 +17,12 @@ function DisplayCard({ card = {}, template = {}, token }) {
   useEffect(() => {
     if (token && cardId) {
       axios
-        .get(`http://localhost:8000/api/card/cardPermissions/${cardId}`, {
-          headers: { Authorization: `JWT ${token}` },
-        })
+        .get(
+          `${process.env.REACT_APP_API_URL}/api/card/cardPermissions/${cardId}`,
+          {
+            headers: { Authorization: `JWT ${token}` },
+          }
+        )
         .then((res) => {
           setShouldRenderButtons(res.data.canEditDeleteCard);
         })
@@ -37,7 +40,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
 
   function deleteCard(cardId, deckId, currToken) {
     axios
-      .delete(`http://localhost:8000/api/card/${cardId}`, {
+      .delete(`${process.env.REACT_APP_API_URL}/api/card/${cardId}`, {
         data: { deckId },
         headers: { Authorization: `JWT ${currToken}` },
       })
@@ -66,7 +69,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
             className="CardDisplay__image"
             src={
               card.filename
-                ? `http://localhost:8000/uploads/${card.filename}`
+                ? `${process.env.REACT_APP_API_URL}/uploads/${card.filename}`
                 : piplup
             }
           />

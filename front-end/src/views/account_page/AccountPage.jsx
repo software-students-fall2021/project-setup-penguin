@@ -33,7 +33,7 @@ function AccountPage({ token }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/user`, {
+      .get(`${process.env.REACT_APP_API_URL}/api/user`, {
         headers: { Authorization: `JWT ${token}` },
       })
       .then((response) => {

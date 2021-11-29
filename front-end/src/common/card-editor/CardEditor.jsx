@@ -35,7 +35,7 @@ function CardEditor({
       className="CardEditor__image"
       src={
         form.filename
-          ? `http://localhost:8000/uploads/${form.filename}`
+          ? `${process.env.REACT_APP_API_URL}/uploads/${form.filename}`
           : piplupUpload
       }
       onClick={() => setShowModal(true)}
