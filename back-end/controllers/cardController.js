@@ -123,13 +123,16 @@ const deleteCard = async (req, res, next) => {
 
     // delete photo associated w/ card
     if (filename) {
-      fs.unlink(path.join(__dirname, `../uploads/${filename}`), (err) => {
-        if (err) {
-          console.error(err);
-          return;
+      fs.unlink(
+        path.join(__dirname, `../public/uploads/${filename}`),
+        (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          console.log("removed", filename);
         }
-        console.log("removed", filename);
-      });
+      );
     }
 
     res.send({ cardId });
@@ -164,13 +167,16 @@ const updateCard = async (req, res, next) => {
     newCard["filename"] = req.file.filename;
 
     if (originalFile) {
-      fs.unlink(path.join(__dirname, `../uploads/${originalFile}`), (err) => {
-        if (err) {
-          console.error(err);
-          return;
+      fs.unlink(
+        path.join(__dirname, `../public/uploads/${originalFile}`),
+        (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          console.log("removed", originalFile);
         }
-        console.log("removed", originalFile);
-      });
+      );
     }
   }
 
