@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const { jwtOptions } = require("../jwt-config");
 // the following token can be used to test any protected route
 const token = jwt.sign(
-  { id: "619aceba4508732901f2a751" },
+  { id: "61a50ad67cae2ea735701213" },
   jwtOptions.secretOrKey
 );
 
@@ -93,7 +93,7 @@ describe("Decks", () => {
     it("should return error when updating nonexistent deck", (done) => {
       chai
         .request(app)
-        .patch("/deck/-1")
+        .patch("/deck/123")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -107,7 +107,7 @@ describe("Decks", () => {
     it("should successfully update the deck", (done) => {
       chai
         .request(app)
-        .patch("/deck/619acedb4508732901f2a755")
+        .patch("/deck/61a50add7cae2ea735701218")
         .set("Authorization", `JWT ${token}`)
         .send({
           deckName: "updated",
@@ -124,7 +124,6 @@ describe("Decks", () => {
       chai
         .request(app)
         .get("/deck/0?page=1&limit=1")
-        .set("Authorization", `JWT ${token}`)
         .end((err, res) => {
           expect(res).to.have.status(500);
           done();
@@ -135,8 +134,7 @@ describe("Decks", () => {
     it("should return an error when missing the page query param", (done) => {
       chai
         .request(app)
-        .get("/deck/619acedb4508732901f2a755?limit=1")
-        .set("Authorization", `JWT ${token}`)
+        .get("/deck/61a50add7cae2ea735701218?limit=1")
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
@@ -151,7 +149,6 @@ describe("Cards", () => {
       chai
         .request(app)
         .post("/card")
-        .set("Authorization", `JWT ${token}`)
         .send({
           deckId: 0,
           name: "test card",
@@ -180,9 +177,8 @@ describe("Cards", () => {
       chai
         .request(app)
         .post("/card")
-        .set("Authorization", `JWT ${token}`)
         .send({
-          deckId: "61980be9df5ede5f64158de9",
+          deckId: "61a50add7cae2ea735701218",
           name: "test card",
           cardText: JSON.stringify({
             name: "Name Here",
