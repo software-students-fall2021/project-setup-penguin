@@ -4,6 +4,7 @@ import piplup from "../assets/piplup.png";
 import Slider from "rc-slider";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function DisplayCard({ card = {}, template = {}, token }) {
   const cardId = card._id;
@@ -31,12 +32,6 @@ function DisplayCard({ card = {}, template = {}, token }) {
         });
     }
   }, [token, cardId]);
-
-  function editCard(cardId, deckId) {
-    const relocateString =
-      "http://localhost:3000/deck/" + deckId + "/card/" + cardId + "/edit";
-    window.location.href = relocateString;
-  }
 
   function deleteCard(cardId, deckId, currToken) {
     axios
@@ -105,12 +100,9 @@ function DisplayCard({ card = {}, template = {}, token }) {
         </div>
         {shouldRenderButtons && (
           <div className="card-options">
-            <button
-              className="edit-card"
-              onClick={() => editCard(cardId, deckId, currToken)}
-            >
-              Edit
-            </button>
+            <Link to={`/deck/${deckId}/card/${cardId}/edit`}>
+              <button className="edit-card">Edit</button>
+            </Link>
             <button
               className="delete-card"
               onClick={() => deleteCard(cardId, deckId, currToken)}
