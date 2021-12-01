@@ -1,8 +1,11 @@
 const mongose = require("mongoose");
-const ObjectId = mongose.Types.ObjectId;
 const shortid = require("shortid");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+
+shortid.characters(
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+);
 
 const db = require("../db.js");
 const User = require("../models/user");
