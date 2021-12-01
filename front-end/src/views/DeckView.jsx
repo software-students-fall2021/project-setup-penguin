@@ -159,16 +159,16 @@ function DeckView({ token }) {
   }
 
   function shareDeck() {
-    navigator.clipboard.writeText(deck.accessCode);
+    // navigator.clipboard.writeText(deck.accessCode); only works over https
     document.getElementById(
       "shared-text"
-    ).innerHTML = `Copied deck access code: ${deck.accessCode}!`;
+    ).innerHTML = `Copy and share this deck access code: ${deck.accessCode}`;
     setTimeout(function () {
       const text = document.getElementById("shared-text");
       if (text) {
         text.innerHTML = "";
       }
-    }, 3000);
+    }, 10000);
   }
 
   if (redirect) {
