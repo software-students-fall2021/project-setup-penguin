@@ -9,6 +9,7 @@ const Card = require("../models/card");
 const Deck = require("../models/deck");
 
 const { jwtOptions } = require("../jwt-config");
+const saltRounds = 10;
 
 const createUser = async (req, res, next) => {
   const errors = validationResult(req);

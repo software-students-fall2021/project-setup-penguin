@@ -50,7 +50,7 @@ function EditAccount({ token }) {
     })
       .then((res) => {
         if (res.status === 200) {
-          setRedirect("/createdeck");
+          setRedirect("/accountpage");
         } else {
           console.log(res);
         }
