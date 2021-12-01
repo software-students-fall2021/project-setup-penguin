@@ -1,3 +1,4 @@
+import { Redirect } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { DarkButton, Button, DisplayCard } from "../common";
 import "./DeckView.css";
@@ -20,6 +21,7 @@ function DeckView({ token }) {
   const [isPermissionsLoaded, setIsPermissionsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [filterText, setFilterText] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const [permissions, setPermissions] = useState({
     canAddCard: true,
@@ -146,7 +148,7 @@ function DeckView({ token }) {
         })
         .then(() => {
           //After deleting, redirect user back to homepage.
-          window.location.href = "http://localhost:3000";
+          setRedirect(true);
         })
         .catch((err) => {
           console.log("!!", err);
@@ -167,6 +169,10 @@ function DeckView({ token }) {
         text.innerHTML = "";
       }
     }, 3000);
+  }
+
+  if (redirect) {
+    return <Redirect to="/" />;
   }
 
   return isDeckLoaded && isPermissionsLoaded ? (
