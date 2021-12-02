@@ -3,7 +3,7 @@ export const MODAL_PAGE_TYPE = { SIGNUP: "Sign up", LOGIN: "Log in" };
 export const PARENT_TYPE = { DECK: "deck", CARD: "card" };
 
 export const FORM_DEFAULT_PLACEHOLDERS = {
-  name: "Name Here",
+  name: "Name Here*",
   city: "NYC",
   tagline: "~5 word tagline about yourself",
   summary: "ROLE (# YOE), working hours & time zone",

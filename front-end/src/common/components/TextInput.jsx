@@ -6,6 +6,7 @@ function TextInput({
   value,
   onChange,
   type = "text",
+  onKeyPress,
 }) {
   return (
     <input
@@ -14,6 +15,7 @@ function TextInput({
       className={"TextInput " + (isLarge && "TextInput__Large")}
       value={value}
       onChange={onChange}
+      onKeyPress={onKeyPress}
     />
   );
 }

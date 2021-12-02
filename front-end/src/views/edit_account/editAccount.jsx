@@ -78,6 +78,13 @@ function EditAccount({ token }) {
         console.log(err);
       });
   };
+
+  const handleKeypress = (e) => {
+    if (e.key === 'Enter') {
+      submitUpdate();
+   }
+  };
+
   if (redirect) {
     return <Redirect to={redirect} />;
   }
@@ -90,18 +97,21 @@ function EditAccount({ token }) {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onKeyPress={handleKeypress}
         />
         <TextInput
           isLarge={true}
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyPress={handleKeypress}
         />
         <TextInput
           isLarge={true}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyPress={handleKeypress}
         />
       </form>
       <div className="EditAccount__buttonSpacer">

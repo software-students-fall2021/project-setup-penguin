@@ -39,6 +39,11 @@
   display: flex;
 }
 
+.Home__btn-group__mobile{
+  display: flex;
+  justify-content: center;
+}
+
 .Home__main-title{
   padding-bottom: 15px;
   font-weight: 625 !important;

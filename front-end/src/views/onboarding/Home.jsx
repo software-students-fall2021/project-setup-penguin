@@ -16,7 +16,7 @@ function Home() {
           We make team-building more easy and fun through Pokémon-inspired cards
           for people.
         </p>
-        <div className="Home__btn-group">
+        <div className={isMobile ? "Home__btn-group__mobile" : "Home__btn-group"}>
           <span className="Home__btn">
             <Button btnText="How it works" linkTo="/howitworks" />
           </span>

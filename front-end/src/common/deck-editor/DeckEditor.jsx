@@ -10,18 +10,28 @@ function DeckEditor({
   errors,
   setErrors,
 }) {
+
+  const handleKeypress = (e) => {
+    if (e.key === 'Enter') {
+      console.log("enter pressed");
+      this.form.submit();
+   }
+  };
+
   return (
     <div className="DeckEditor">
       <form className="DeckEditor__form" onSubmit={onSubmit}>
         <TextInput
           isLarge={true}
-          placeholder="Name your deck"
+          placeholder="Name your deck*"
           value={deckName}
           onChange={(e) => {
             setErrors([]);
             setDeckName(e.target.value);
           }}
+          onKeyPress={handleKeypress}
         />
+        <i>* required</i>
         {<ErrorMessage errors={errors} className="mt-3" />}
         <div className="DeckEditor__descriptionHeader">
           What's your deck for?
