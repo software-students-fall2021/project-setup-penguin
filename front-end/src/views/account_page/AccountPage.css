@@ -1,4 +1,4 @@
-.account-page-title{
+.account-page-title {
   font-size: 45px;
   font-weight: bold;
   display: flex;
@@ -8,10 +8,15 @@
   width: 100%;
 }
 
-.account-page-header{
+.account-page-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.account-page-header > h1 {
+  margin: 0px;
+  padding: 0px;
 }
 
 .toggles {
@@ -50,10 +55,9 @@
 .account-subtitle {
   display: flex;
   font-size: 20px;
-  color: #396BBA;
+  color: #396bba;
   opacity: 80%;
   justify-content: center;
-
 }
 
 .account-deck-list {
@@ -95,13 +99,13 @@
   max-width: 200px;
 }
 
-.account-page-general{
+.account-page-general {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.no-decks{
+.no-decks {
   display: flex;
   flex-direction: column;
   justify-content: center;
