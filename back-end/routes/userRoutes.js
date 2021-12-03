@@ -13,9 +13,9 @@ router.post(
     body("password", "Password is required").notEmpty(),
     body(
       "password",
-      "Password requires at least one upper case letter, one lower case letter, one number and one special character"
+      "Password requires at least one upper case letter, one lower case letter, one number, one special character, and at least 4 characters long"
     ).matches(
-      /^(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
+      /^(?=.{4,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
       "i"
     ),
   ],
@@ -45,7 +45,7 @@ router.patch(
     body("newPassword", "New password is required").notEmpty(),
     body(
       "newPassword",
-      "Password requires at least one upper case letter, one lower case letter, one number and one special character"
+      "Password requires at least one upper case letter, one lower case letter, one number, one special character, and at least 4 characters long"
     ).matches(
       /^(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
       "i"
