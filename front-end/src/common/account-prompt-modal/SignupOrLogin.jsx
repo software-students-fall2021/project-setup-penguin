@@ -74,14 +74,17 @@ const SignupOrLogin = ({
         onKeyPress={handleKeypress}
       />
       <div className="SignupOrLogin__showPassword">
-        <input
-          type="checkbox"
-          onClick={(e) => onClickShowPassword(e)}
-          checked={passwordInputType === "text"}
-        />
-        Show Password
+        <div>
+          <input
+            type="checkbox"
+            onClick={(e) => onClickShowPassword(e)}
+            checked={passwordInputType === "text"}
+          />
+          Show Password
+        </div>
+        <i>{'* denotes required field'}</i>
       </div>
-      <i>{'* denotes required field'}</i>
+      
       {<ErrorMessage errors={errors} className="mt-3" />}
       {pageType === MODAL_PAGE_TYPE.SIGNUP ? (
         <i className="SignupOrLogin__altLink">
@@ -116,7 +119,6 @@ const SignupOrLogin = ({
         ) : (
           <div />
         )}
-        <form>
         <span
           type="submit"
           className="SignupOrLogin__cta"
@@ -124,7 +126,6 @@ const SignupOrLogin = ({
         >
           {pageType}
         </span>
-        </form>
       </div>
     </div>
   );
