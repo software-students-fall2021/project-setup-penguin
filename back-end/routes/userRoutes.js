@@ -11,6 +11,13 @@ router.post(
     body("name", "Name is required").notEmpty(),
     body("email", "Email is required").notEmpty(),
     body("password", "Password is required").notEmpty(),
+    body(
+      "password",
+      "Password requires at least one upper case letter, one lower case letter, one number and one special character"
+    ).matches(
+      /^(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
+      "i"
+    ),
   ],
   userController.createUser
 );
@@ -36,6 +43,13 @@ router.patch(
   [
     body("currentPassword", "Current password is required").notEmpty(),
     body("newPassword", "New password is required").notEmpty(),
+    body(
+      "newPassword",
+      "Password requires at least one upper case letter, one lower case letter, one number and one special character"
+    ).matches(
+      /^(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
+      "i"
+    ),
   ],
   authenticate,
   userController.updatePassword
