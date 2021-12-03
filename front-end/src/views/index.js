@@ -12,6 +12,7 @@ import UpdateDeck from "./UpdateDeck";
 import UpdateCard from "./update_card/UpdateCard";
 import FindDeck from "./FindDeck";
 import EditAccountPage from "./edit_account/editAccount";
+import ChangePassword from "./edit_account/ChangePassword";
 
 export {
   Logout,
@@ -28,4 +29,5 @@ export {
   UpdateCard,
   FindDeck,
   EditAccountPage,
+  ChangePassword,
 };

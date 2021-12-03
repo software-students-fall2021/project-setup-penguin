@@ -48,7 +48,7 @@ function LoginSignup({ pageType, setToken }) {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           setToken(res.data.token);
-          history.push("/accountpage");
+          history.push("/account");
         })
         .catch((err) => {
           setErrors(err.response.data.messages);

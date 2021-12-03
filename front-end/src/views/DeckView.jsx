@@ -22,6 +22,7 @@ function DeckView({ token }) {
   const [showModal, setShowModal] = useState(false);
   const [filterText, setFilterText] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const [permissions, setPermissions] = useState({
     canAddCard: true,
@@ -106,10 +107,21 @@ function DeckView({ token }) {
         .catch((err) => {
           console.log("!!", err);
         });
+
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/api/user/account`, {
+          headers: { Authorization: `JWT ${token}` },
+        })
+        .then((res) => {
+          setUserId(res.data.userId);
+        })
+        .catch((err) => {
+          console.log("!!", err);
+        });
     } else {
       setIsPermissionsLoaded(true);
     }
-  }, [token]);
+  }, [token, id]);
 
   // handles behavior when the page first loads
   useEffect(() => {
@@ -175,6 +187,10 @@ function DeckView({ token }) {
     return <Redirect to="/" />;
   }
 
+  const userCard = deck.cards.filter((card) => card.userId === userId);
+  const nonUserCards = deck.cards.filter((card) => card.userId !== userId);
+  const sortedCards = userCard.concat(nonUserCards);
+
   return isDeckLoaded && isPermissionsLoaded ? (
     <div className="deckview-overall">
       <div className="header">
@@ -220,7 +236,7 @@ function DeckView({ token }) {
         setFilterText={setFilterText}
       />
       <div className="deck-list">
-        {deck.cards.map((card) => (
+        {sortedCards.map((card) => (
           <DisplayCard
             card={card}
             template={deck.cardTemplate}

@@ -15,30 +15,30 @@ router.post(
   userController.createUser
 );
 
-router.delete(
-  "/",
-  authenticate,
-  userController.deleteUser
-);
+router.delete("/", authenticate, userController.deleteUser);
 
-router.get(
-  "/",
-  authenticate,
-  userController.getUser
-);
+router.get("/", authenticate, userController.getUser);
 
-router.get(
-  "/account",
-  authenticate,
-  userController.getUserAccount
-);
+router.get("/account", authenticate, userController.getUserAccount);
 
-// TODO: update this to align with get request (get id from req.user not req.params)
-// TODO: incorporate express-validator
 router.patch(
   "/",
+  [
+    body("name", "Name is required").notEmpty(),
+    body("email", "Email is required").notEmpty(),
+  ],
   authenticate,
   userController.updateUser
+);
+
+router.patch(
+  "/password",
+  [
+    body("currentPassword", "Current password is required").notEmpty(),
+    body("newPassword", "New password is required").notEmpty(),
+  ],
+  authenticate,
+  userController.updatePassword
 );
 
 router.post(

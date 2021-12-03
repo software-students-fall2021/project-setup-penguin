@@ -1,6 +1,6 @@
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { TextInput, Button, AccountPromptModal } from "../../common";
+import { TextInput, Button } from "../../common";
 import { ArrowRight } from "react-bootstrap-icons";
 import axios from "axios";
 import "./editAccount.css";
@@ -8,14 +8,9 @@ import "./editAccount.css";
 function EditAccount({ token }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState("");
+
   useEffect(() => {
-    // Check if token exists otherwise redirect
-    if (!token) {
-      console.log("Redirecting");
-      setRedirect("/login");
-    }
     axios({
       method: "get",
       url: `${process.env.REACT_APP_API_URL}/api/user/account`,
@@ -33,24 +28,20 @@ function EditAccount({ token }) {
         console.log(err);
       });
   }, [token]);
+
   const submitUpdate = () => {
-    if (!name || !email || !password) {
-      console.log("All information must be filled out");
-      return;
-    }
     axios({
       method: "patch",
       url: `${process.env.REACT_APP_API_URL}/api/user/`,
       data: {
         email,
-        password,
         name,
       },
       headers: { Authorization: `JWT ${token}` },
     })
       .then((res) => {
         if (res.status === 200) {
-          setRedirect("/accountpage");
+          setRedirect("/account");
         } else {
           console.log(res);
         }
@@ -88,41 +79,39 @@ function EditAccount({ token }) {
   if (redirect) {
     return <Redirect to={redirect} />;
   }
-  return (
-    <div>
-      <form className="EditAccount__form" onSubmit={() => {}}>
-        <h1>Update your personal Information</h1>
-        <TextInput
-          isLarge={true}
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          onKeyPress={handleKeypress}
-        />
-        <TextInput
-          isLarge={true}
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyPress={handleKeypress}
-        />
-        <TextInput
-          isLarge={true}
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyPress={handleKeypress}
-        />
-      </form>
-      <div className="EditAccount__buttonSpacer">
+  return !token ? (
+    <Redirect to="/login" />
+  ) : (
+    <div className="EditAccount">
+      <h1>Update your information</h1>
+      <TextInput
+        isLarge={true}
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyPress={handleKeypress}
+      />
+      <TextInput
+        isLarge={true}
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        onKeyPress={handleKeypress}
+      />
+      <div className="EditAccount__pwdLinkContainer">
+        Click{" "}
+        <Link className="inline-link" to="edit/password">
+          here
+        </Link>{" "}
+        to change your password
+      </div>
+      <div className="EditAccount__buttonContainer">
+        <a className="EditAccount__deleteLink" onClick={handleDelete}>
+          Delete Account
+        </a>
         <Button
           btnText="Update Information"
           onClick={submitUpdate}
-          icon={<ArrowRight />}
-        />
-        <Button
-          btnText="Delete Account"
-          onClick={handleDelete}
           icon={<ArrowRight />}
         />
       </div>

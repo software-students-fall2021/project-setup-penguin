@@ -134,19 +134,59 @@ const getUserAccount = async (req, res, next) => {
 
   console.log(userData);
   res.status(200);
-  res.json({ name: userData.name, email: userData.email });
+  console.log("userId", userId);
+  res.json({
+    name: userData.name,
+    email: userData.email,
+    userId: userId.toString(),
+  });
+};
+
+const updatePassword = async (req, res, next) => {
+  const userId = req.user._id;
+  const { currentPassword, newPassword } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    res.status(401).json({ success: false, messages: [`User not found`] });
+  }
+
+  const match = await bcrypt
+    .compare(currentPassword, user.password)
+    .catch((err) => {
+      next(err);
+    });
+
+  if (match) {
+    const hash = await bcrypt.hash(newPassword, 10).catch((err) => {
+      next(err);
+    });
+
+    await User.findOneAndUpdate({ _id: userId }, { password: hash })
+      .exec()
+      .catch((err) => {
+        next(err);
+      });
+
+    res.json({ userId });
+  } else {
+    res.status(401).json({
+      success: false,
+      messages: [`current password did not match existing password`],
+    });
+  }
 };
 
 const updateUser = async (req, res, next) => {
   const userId = req.user._id;
-  const { email, password, name } = req.body;
+  const { email, name } = req.body;
 
-  //check if User does not exists
-  const count = await User.exists({ _id: userId }).catch((err) => {
+  //check if user exists
+  const userExists = await User.exists({ _id: userId }).catch((err) => {
     next(err);
   });
-  if (count === 0) {
-    throw "User does not exist";
+  if (!userExists) {
+    next({ message: "User does not exist" });
   }
 
   //find relevant info - don't allow updates if conflicting email present
@@ -155,23 +195,20 @@ const updateUser = async (req, res, next) => {
     email: 1,
   });
 
-  if (!email || !password || !name) throw "Empty field";
-
   if (prevInfo[0].email !== email) {
     const conflict = await User.countDocuments({ email: email });
     console.log(conflict);
     if (conflict >= 1) {
-      throw "User email conflict";
+      next({ message: "This email is already in use" });
     }
   }
 
-  bcrypt.hash(password, saltRounds, async function (err, hash) {
-    await User.findOneAndUpdate({ _id: userId }, { name, email, hash })
-      .exec()
-      .catch((err) => {
-        next(err);
-      });
-  });
+  await User.findOneAndUpdate({ _id: userId }, { name, email })
+    .exec()
+    .catch((err) => {
+      next(err);
+    });
+
   res.json({ userId });
 };
 
@@ -212,4 +249,5 @@ module.exports = {
   updateUser,
   loginUser,
   getUserAccount,
+  updatePassword,
 };

@@ -1,7 +1,24 @@
-.EditAccount__buttonSpacer {
-  display: grid;
-  margin-top: 100px;
-  column-gap: 20px;
-  grid-template-columns: 1fr 1fr;
-  /* width: 100%; */
+.EditAccount {
+  max-width: 600px;
+  min-width: 320px;
+  width: 100%;
+}
+
+.EditAccount__buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4em;
+}
+
+.EditAccount__deleteLink {
+  color: black;
+}
+
+.EditAccount__deleteLink:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.EditAccount__pwdLinkContainer {
+  padding-top: 2em;
 }

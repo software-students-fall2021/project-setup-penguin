@@ -19,6 +19,7 @@ import {
   FindDeck,
   Logout,
   EditAccountPage,
+  ChangePassword,
 } from "./views";
 
 function App() {
@@ -76,10 +77,13 @@ function App() {
             <Route path="/deck/:deckId/card/:cardId/edit">
               <UpdateCard token={token} />
             </Route>
-            <Route path="/accountpage/editUser">
+            <Route path="/account/edit/password">
+              <ChangePassword token={token} />
+            </Route>
+            <Route path="/account/edit">
               <EditAccountPage token={token} />
             </Route>
-            <Route path="/accountpage">
+            <Route path="/account">
               <AccountPage token={token} />
             </Route>
           </Switch>
