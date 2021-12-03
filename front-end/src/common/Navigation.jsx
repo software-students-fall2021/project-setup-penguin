@@ -59,7 +59,7 @@ function Navigation({ token }) {
                     eventKey="3"
                     className="Navigation__link"
                     activeClassName="Navigation__active"
-                    to="/accountpage"
+                    to="/account"
                   >
                     ACCOUNT
                   </NavLink>

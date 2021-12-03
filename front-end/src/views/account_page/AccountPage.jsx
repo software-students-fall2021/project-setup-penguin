@@ -198,7 +198,7 @@ function AccountPage({ token }) {
         <h1>Account decks</h1>
         <Button
           btnText="Edit Account"
-          onClick={() => history.push("/accountpage/editUser")}
+          onClick={() => history.push("/account/edit")}
           icon={<ArrowRight />}
         />
       </div>
