@@ -22,14 +22,7 @@ function AccountPage({ token }) {
   const [deckActive, setDeckActive] = useState(0);
   //0 = mydeck view, 1 = joinedcard view (for easy class switching for styling and content display using states array)
 
-  const [ownedDeckNamesArray, setOwnedDeckNameData] = useState([]);
-  const [ownedDeckIdsArray, setOwnedDeckIdData] = useState([]);
-  const [ownedCardsArray, setOwnedCardsData] = useState([]); //user cards in owned decks
-  const [joinedDeckNamesArray, setJoinedDeckNameData] = useState([]);
-  const [joinedDeckIdsArray, setJoinedDeckIdData] = useState([]);
-  const [joinedCardsArray, setJoinedCardsData] = useState([]); //user cards in joined decks
-  const [ownedTemplateArray, setOwnedTemplateData] = useState([]);
-  const [joinedTemplateArray, setJoinedTemplateData] = useState([]);
+  const [userCards, setUserCards] = useState([]);
 
   useEffect(() => {
     axios
@@ -38,41 +31,7 @@ function AccountPage({ token }) {
       })
       .then((response) => {
         setIsDeckLoaded(true);
-        let userCards = response.data;
-
-        //creating arrays to make html elements
-        let ownedTitles = [];
-        let ownedTemplates = [];
-        let ownedCards = [];
-        let ownedIds = [];
-        let joinedCards = [];
-        let joinedTemplates = [];
-        let joinedTitles = [];
-        let joinedIds = [];
-
-        //separates owned content from joined content
-        for (const id in userCards) {
-          if (userCards[id].isOwned) {
-            ownedTitles.push(userCards[id].deckName);
-            ownedCards.push(userCards[id].cardData);
-            ownedIds.push(userCards[id].cardData.deckId);
-            ownedTemplates.push(userCards[id].cardTemplate);
-          } else {
-            joinedTitles.push(userCards[id].deckName);
-            joinedCards.push(userCards[id].cardData);
-            joinedIds.push(userCards[id].cardData.deckId);
-            joinedTemplates.push(userCards[id].cardTemplate);
-          }
-        }
-
-        setOwnedDeckNameData(ownedTitles);
-        setOwnedDeckIdData(ownedIds);
-        setOwnedCardsData(ownedCards);
-        setJoinedDeckNameData(joinedTitles);
-        setJoinedDeckIdData(joinedIds);
-        setJoinedCardsData(joinedCards);
-        setOwnedTemplateData(ownedTemplates);
-        setJoinedTemplateData(joinedTemplates);
+        setUserCards(response.data);
       })
       .catch((err) => {
         console.log("!!", err);
@@ -81,12 +40,7 @@ function AccountPage({ token }) {
     //Cleanup function to avoid warning/errors.
     return () => {
       setIsDeckLoaded(false);
-      setOwnedDeckNameData();
-      setOwnedDeckIdData();
-      setOwnedCardsData();
-      setJoinedDeckNameData();
-      setJoinedDeckIdData();
-      setJoinedCardsData();
+      setUserCards();
     };
   }, []);
 
@@ -104,7 +58,30 @@ function AccountPage({ token }) {
   const ownedContent = [];
   const joinedContent = [];
 
-  if (ownedDeckNamesArray.length === 0) {
+ 
+  for (let i = 0; i < userCards.length; i++) {
+    if(userCards[i].isOwned){
+      pageElement = (
+        <div key={i}>
+          <div className="deck">
+            <div className="title">
+              <NavLink to={`deck/${userCards[i].cardData.deckId}`} className="deckLink">
+                {userCards[i].deckName}
+              </NavLink>
+            </div>
+            <div className="account-subtitle">{userCards[i].deckDescription}</div>
+            <DisplayCard
+              token={token}
+              card={userCards[i].cardData}
+              template={userCards[i].cardTemplate}
+            ></DisplayCard>
+          </div>
+        </div>
+      );
+      ownedContent.push(pageElement);
+    }
+  }
+  if(ownedContent.length === 0){
     pageElement = (
       <div className="no-decks">
         <p>
@@ -120,21 +97,25 @@ function AccountPage({ token }) {
       </div>
     );
     ownedContent.push(pageElement);
-  } else {
-    for (let i = 0; i < ownedDeckNamesArray.length; i++) {
+  }
+  
+
+
+  for (let i = 0; i < userCards.length; i++) {
+    if(!userCards[i].isOwned){
       pageElement = (
         <div key={i}>
           <div className="deck">
             <div className="title">
-              <NavLink to={`deck/${ownedDeckIdsArray[i]}`} className="deckLink">
-                {ownedDeckNamesArray[i]}
+              <NavLink to={`deck/${userCards[i].cardData.deckId}`} className="deckLink">
+                {userCards[i].deckName}
               </NavLink>
             </div>
-            <div className="account-subtitle">Team for SWE Project, 2021</div>
+            <div className="account-subtitle">{userCards[i].deckDescription}</div>
             <DisplayCard
               token={token}
-              card={ownedCardsArray[i]}
-              template={ownedTemplateArray[i]}
+              card={userCards[i].cardData}
+              template={userCards[i].cardTemplate}
             ></DisplayCard>
           </div>
         </div>
@@ -142,8 +123,7 @@ function AccountPage({ token }) {
       ownedContent.push(pageElement);
     }
   }
-
-  if (joinedDeckNamesArray.length === 0) {
+  if(joinedContent.length === 0){
     pageElement = (
       <div className="no-decks">
         <p>
@@ -159,30 +139,8 @@ function AccountPage({ token }) {
       </div>
     );
     joinedContent.push(pageElement);
-  } else {
-    for (let i = 0; i < joinedDeckNamesArray.length; i++) {
-      pageElement = (
-        <div key={i}>
-          <div className="deck">
-            <div className="title">
-              <NavLink
-                to={`deck/${joinedDeckIdsArray[i]}`}
-                className="deckLink"
-              >
-                {joinedDeckNamesArray[i]}
-              </NavLink>
-            </div>
-            <DisplayCard
-              token={token}
-              card={joinedCardsArray[i]}
-              template={joinedTemplateArray[i]}
-            ></DisplayCard>
-          </div>
-        </div>
-      );
-      joinedContent.push(pageElement);
-    }
   }
+  
 
   if (deckActive === 0) {
     pageContent = ownedContent;
