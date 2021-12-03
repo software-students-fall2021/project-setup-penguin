@@ -1,4 +1,4 @@
-.deckview-overall{
+.deckview-overall {
   width: 100%;
 }
 
@@ -8,31 +8,34 @@
   flex-wrap: wrap;
 }
 
-.deckview-buttons{
+.deckview-buttons {
   display: flex;
   flex-direction: row;
 }
 
-.edit, .add, .delete{
+.edit,
+.add,
+.delete {
   margin: 0px 7px;
+  position: relative;
 }
 
-.deck-share{
+.deck-share {
   width: 70px;
   height: 70px;
 }
 
-.deck-share:hover{
+.deck-share:hover {
   cursor: pointer;
 }
 
-#shared-text{
+#shared-text {
   font-size: 14px;
   color: grey;
   font-weight: normal;
 }
 
-.fake-button{
+.fake-button {
   border: none;
   background: none;
 }
@@ -67,4 +70,7 @@
   padding: 20px 0px;
   display: flex;
   justify-content: flex-end;
+}
+
+.deckview-tooltip {
 }

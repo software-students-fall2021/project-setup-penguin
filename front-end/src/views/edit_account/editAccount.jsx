@@ -89,14 +89,20 @@ function EditAccount({ token }) {
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+<<<<<<< HEAD
         onKeyPress={handleKeypress}
+=======
+>>>>>>> 6b68f750457831fa23eaead440fbfbaf90565bc0
       />
       <TextInput
         isLarge={true}
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+<<<<<<< HEAD
         onKeyPress={handleKeypress}
+=======
+>>>>>>> 6b68f750457831fa23eaead440fbfbaf90565bc0
       />
       <div className="EditAccount__pwdLinkContainer">
         Click{" "}

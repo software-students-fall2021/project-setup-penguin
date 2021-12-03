@@ -1,6 +1,8 @@
 import { Redirect } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { DarkButton, Button, DisplayCard } from "../common";
+import Tooltip from "rc-tooltip";
+import "rc-tooltip/assets/bootstrap.css";
 import "./DeckView.css";
 import axios from "axios";
 import { useState, useMemo } from "react";
@@ -219,11 +221,31 @@ function DeckView({ token }) {
             )}
             <div className="add">
               {/* TODO: tooltip on hover disabled to explain why disabled */}
-              <DarkButton
-                btnText="Add Card"
-                linkTo={`${id}/add`}
-                disabled={!permissions.canAddCard}
-              />
+              {!permissions.canAddCard ? (
+                <Tooltip
+                  placement="bottomRight"
+                  trigger={["hover"]}
+                  overlay={
+                    <div className="deckview-tooltip">
+                      You have already added a card to this deck.
+                    </div>
+                  }
+                >
+                  <div>
+                    <DarkButton
+                      btnText="Add Card"
+                      linkTo={`${id}/add`}
+                      disabled={true}
+                    />
+                  </div>
+                </Tooltip>
+              ) : (
+                <DarkButton
+                  btnText="Add Card"
+                  linkTo={`${id}/add`}
+                  disabled={false}
+                />
+              )}
             </div>
           </div>
         </div>
