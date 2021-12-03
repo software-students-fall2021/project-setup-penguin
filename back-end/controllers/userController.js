@@ -134,7 +134,12 @@ const getUserAccount = async (req, res, next) => {
 
   console.log(userData);
   res.status(200);
-  res.json({ name: userData.name, email: userData.email });
+  console.log("userId", userId);
+  res.json({
+    name: userData.name,
+    email: userData.email,
+    userId: userId.toString(),
+  });
 };
 
 const updatePassword = async (req, res, next) => {
