@@ -210,11 +210,11 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-const getUserId = (module.exports = {
+module.exports = {
   getUser,
   createUser,
   deleteUser,
   updateUser,
   loginUser,
   getUserAccount,
-});
+};
