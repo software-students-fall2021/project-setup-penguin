@@ -112,6 +112,7 @@ const getUser = async (req, res, next) => {
       return {
         isOwned: deckData.ownerId.equals(userId),
         deckName: deckData.deckName,
+        deckDescription: deckData.deckDescription,
         cardTemplate: deckData.cardTemplate,
         cardData: {
           ...userCard.toObject(),

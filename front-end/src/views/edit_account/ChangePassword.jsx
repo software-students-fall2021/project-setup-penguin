@@ -38,6 +38,12 @@ function ChangePassword({ token }) {
     }
   };
 
+  const handleKeypress = (e) => {
+    if (e.key === 'Enter') {
+      onUpdatePassword();
+   }
+  };
+
   if (redirect) {
     return <Redirect to={redirect} />;
   }
@@ -57,6 +63,7 @@ function ChangePassword({ token }) {
         }}
         type="password"
         label="Current password"
+        onKeyPress={handleKeypress}
       />
       <TextInput
         isLarge={true}
@@ -68,6 +75,7 @@ function ChangePassword({ token }) {
         }}
         type="password"
         label="New password"
+        onKeyPress={handleKeypress}
       />
       <TextInput
         isLarge={true}
@@ -79,6 +87,7 @@ function ChangePassword({ token }) {
         }}
         type="password"
         label="Confirm new password"
+        onKeyPress={handleKeypress}
       />
       <div className="mt-4">
         <ErrorMessage errors={errors} />

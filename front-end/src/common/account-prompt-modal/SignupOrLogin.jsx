@@ -25,6 +25,12 @@ const SignupOrLogin = ({
     }
   };
 
+  const handleKeypress = (e) => {
+    if (e.key === 'Enter') {
+      onSignupOrLogin(pageType, name, email, password);
+   }
+  };
+
   // clear form and errors when switching btw login & signup pages
   useEffect(() => {
     setName("");
@@ -39,39 +45,46 @@ const SignupOrLogin = ({
       {useAsPage ? <h1>{pageType}</h1> : <h3>{pageType}</h3>}
       {pageType === MODAL_PAGE_TYPE.SIGNUP && (
         <TextInput
-          placeholder="Name"
+          placeholder="Name*"
           value={name}
           onChange={(event) => {
             setErrors([]);
             setName(event.target.value);
           }}
+          onKeyPress={handleKeypress}
         />
       )}
       <TextInput
-        placeholder="Email"
+        placeholder="Email*"
         value={email}
         onChange={(event) => {
           setErrors([]);
           setEmail(event.target.value);
         }}
+        onKeyPress={handleKeypress}
       />
       <TextInput
-        placeholder="Password"
+        placeholder="Password*"
         value={password}
         onChange={(event) => {
           setErrors([]);
           setPassword(event.target.value);
         }}
         type={passwordInputType}
+        onKeyPress={handleKeypress}
       />
       <div className="SignupOrLogin__showPassword">
-        <input
-          type="checkbox"
-          onClick={(e) => onClickShowPassword(e)}
-          checked={passwordInputType === "text"}
-        />
-        Show Password
+        <div>
+          <input
+            type="checkbox"
+            onClick={(e) => onClickShowPassword(e)}
+            checked={passwordInputType === "text"}
+          />
+          Show Password
+        </div>
+        <i>{'* denotes required field'}</i>
       </div>
+      
       {<ErrorMessage errors={errors} className="mt-3" />}
       {pageType === MODAL_PAGE_TYPE.SIGNUP ? (
         <i className="SignupOrLogin__altLink">
@@ -107,6 +120,7 @@ const SignupOrLogin = ({
           <div />
         )}
         <span
+          type="submit"
           className="SignupOrLogin__cta"
           onClick={() => onSignupOrLogin(pageType, name, email, password)}
         >

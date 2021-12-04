@@ -25,6 +25,7 @@ function CreateDeck() {
           here
         </a>
         !
+        <i><br></br><br></br>* denotes required field</i>
       </p>
     </>
   );
