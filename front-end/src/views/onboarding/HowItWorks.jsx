@@ -10,7 +10,14 @@ import chikorita from "../../assets/chikorita.png";
 function HowItWorks() {
   return (
     <div className="HowItWorks">
-      <h1>How it works</h1>
+      <div className="HowItWorks__title">
+        <h1>How it works</h1>
+        <Button 
+          btnText="Get started"
+          linkTo="/getstarted"
+          icon={<ArrowRight />}
+        />
+      </div>
       <Carousel>
         <Carousel.Item>
           <img
@@ -32,7 +39,7 @@ function HowItWorks() {
 
           <Carousel.Caption>
             <h3>SHARE YOUR DECK</h3>
-            <p>Share a link with your teammates so that they can add their own cards to your deck.</p>
+            <p>Share a link or access code with your teammates so that they can add their own cards to your deck.</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -50,41 +57,7 @@ function HowItWorks() {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-      <div className="HowItWorks__title">
-        <Button 
-          btnText="Get started"
-          linkTo="/getstarted"
-          icon={<ArrowRight />}
-        />
-      </div>
     </div>
-    // <div className="HowItWorks">
-    //   <div className="HowItWorks__title">
-    //     <h1>How it works</h1>
-    //     <Button
-    //       btnText="Get started"
-    //       linkTo="/getstarted"
-    //       icon={<ArrowRight />}
-    //     />
-    //   </div>
-      // {/* <div className="HowItWorks__body">
-      //   {howToSteps.map((item, index) => (
-      //     <div className="HowItWorks__row">
-      //       <h2 className="HowItWorks__rowIndex">{index + 1}</h2>
-      //       <div className="HowItWorks__rowHeaderContainer">
-      //         <h2 className="HowItWorks__rowHeader">{item.header}</h2>
-      //         <h4 className="HowItWorks__rowSubHeader">{item.subHeader}</h4>
-      //       </div>
-      //       <div className="HowItWorks__rowContent">{item.content}</div>
-      //       {item.button?.text && item.button.link && (
-      //         <button className="HowItWorks__rowButton">
-      //           {item.button.text}
-      //         </button>
-      //       )}
-      //     </div>
-      //   ))}
-      // </div> */}
-    // </div>
   );
 }
 
