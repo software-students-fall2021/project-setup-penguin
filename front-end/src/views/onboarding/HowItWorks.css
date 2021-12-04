@@ -3,15 +3,15 @@
   flex-direction: column;
   justify-content: center;
   min-width: 320px;
-  max-width: 1000px;
+  max-width: 1050px;
   width: 100%;
 }
 
 .HowItWorks__title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-bottom: 3em;
+  justify-content: flex-end;
+  padding-top: 3em;
   flex-direction: row;
 }
 
