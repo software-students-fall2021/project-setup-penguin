@@ -5,6 +5,7 @@ import Slider from "rc-slider";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import DeleteModal from "../views/DeleteModal";
 
 function DisplayCard({ card = {}, template = {}, token }) {
   const cardId = card._id;
@@ -12,6 +13,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
   const currToken = token;
 
   const [shouldRenderButtons, setShouldRenderButtons] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const sectionIds = [0, 1, 2];
   const HeartIcon = () => <img src={heart} width="25px" height="25px" />;
 
@@ -33,8 +35,12 @@ function DisplayCard({ card = {}, template = {}, token }) {
     }
   }, [token, cardId]);
 
-  function deleteCard(cardId, deckId, currToken) {
-    axios
+  function deleteCard(confirmed) {
+    console.log("hi", confirmed);
+    console.log("get", deckId);
+    if (confirmed){
+      console.log("here!")
+      axios
       .delete(`${process.env.REACT_APP_API_URL}/api/card/${cardId}`, {
         data: { deckId },
         headers: { Authorization: `JWT ${currToken}` },
@@ -46,6 +52,10 @@ function DisplayCard({ card = {}, template = {}, token }) {
       .catch((err) => {
         console.log("!!", err);
       });
+    }
+    else{
+      setShowModal(false);
+    }
   }
 
   return (
@@ -105,13 +115,19 @@ function DisplayCard({ card = {}, template = {}, token }) {
             </Link>
             <button
               className="delete-card"
-              onClick={() => deleteCard(cardId, deckId, currToken)}
+              onClick={() => setShowModal(true)}
             >
               Delete
             </button>
           </div>
         )}
       </div>
+      <DeleteModal
+        showModal={showModal}
+        onCloseModal={() => setShowModal(false)}
+        deleteResponse={deleteCard}
+        type="card"
+      ></DeleteModal>
     </div>
   );
 }
