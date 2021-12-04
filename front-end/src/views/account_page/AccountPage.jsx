@@ -120,7 +120,7 @@ function AccountPage({ token }) {
           </div>
         </div>
       );
-      ownedContent.push(pageElement);
+      joinedContent.push(pageElement);
     }
   }
   if(joinedContent.length === 0){
