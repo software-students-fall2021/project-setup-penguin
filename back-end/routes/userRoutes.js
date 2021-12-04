@@ -47,7 +47,7 @@ router.patch(
       "newPassword",
       "Password requires at least one upper case letter, one lower case letter, one number, one special character, and at least 4 characters long"
     ).matches(
-      /^(?=.{8,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
+      /^(?=.{4,})(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/,
       "i"
     ),
   ],
