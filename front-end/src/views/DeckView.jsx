@@ -154,7 +154,7 @@ function DeckView({ token }) {
   }, [isFetchingMoreCards]);
 
   function deleteDeck(confirmed) {
-    console.log("what", confirmed);
+    console.log("confirmed", confirmed);
     if (confirmed) {
       axios
         .delete(`${process.env.REACT_APP_API_URL}/api/deck/${id}`, {

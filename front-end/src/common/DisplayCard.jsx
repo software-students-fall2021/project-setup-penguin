@@ -36,8 +36,7 @@ function DisplayCard({ card = {}, template = {}, token }) {
   }, [token, cardId]);
 
   function deleteCard(confirmed) {
-    console.log("hi", confirmed);
-    console.log("get", deckId);
+    console.log("confirmed", confirmed);
     if (confirmed){
       console.log("here!")
       axios
