@@ -1,5 +1,7 @@
 # Pokedek [![CircleCI](https://circleci.com/gh/software-students-fall2021/your_repository_name/tree/master.svg?style=shield)](https://circleci.com/gh/software-students-fall2021/project-setup-penguin/tree/master)
 
+Deployed at http://143.198.163.107/
+
 ## Project Description
 
 Our product allows users to create fun Pokemon-inspired trading cards highlighting various salient traits about themselves such as thier superpowers, weaknessses, communication preferences and more. Each team will start with a "dek" of cards and team members will create profile cards to add to the deck. We envision that team members would be able to learn more about each other by looking at profiles in the "dek", and in turn build a strong foundation for future teamwork to grow on.
