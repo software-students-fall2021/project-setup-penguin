@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   min-width: 320px;
-  max-width: 1000px;
+  max-width: 1050px;
   width: 100%;
 }
 
@@ -11,55 +11,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 3em;
+  padding-bottom: 2em;
   flex-direction: row;
 }
 
 .HowItWorks__title > h1 {
   padding: 0;
-}
-
-.HowItWorks__row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto 1fr;
-  margin-bottom: 50px;
-}
-
-.HowItWorks__rowIndex {
-  grid-column: 1/2;
-  grid-row: 1/2;
-  min-width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #396bba;
-}
-
-.HowItWorks__rowHeaderContainer {
-  grid-column: 2/3;
-  grid-row: 1/2;
-}
-
-.HowItWorks__rowHeader {
-  font-size: 36px;
-  color: #396bba;
-}
-
-.HowItWorks__rowSubHeader {
-  font-size: 24px;
-  color: #396bba;
-  font-weight: 400;
-}
-
-.HowItWorks__rowContent {
-  grid-column: 2/4;
-  grid-row: 2/3;
-  font-size: 24px;
-}
-
-.HowItWorks__rowButton {
-  grid-column: 3/4;
 }
 
 @media screen and (max-width: 900px) {

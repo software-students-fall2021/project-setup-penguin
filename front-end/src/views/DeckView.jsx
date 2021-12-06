@@ -9,7 +9,7 @@ import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import LoadingSpinner from "../common/spinner/LoadingSpinner";
 import share from "../assets/share.png";
-import DeleteDeckModal from "./DeleteDeckModal";
+import DeleteModal from "./DeleteModal";
 import Search from "../common/components/SearchBar";
 import debounce from "lodash.debounce";
 
@@ -154,7 +154,7 @@ function DeckView({ token }) {
   }, [isFetchingMoreCards]);
 
   function deleteDeck(confirmed) {
-    console.log("hi!", confirmed);
+    console.log("confirmed", confirmed);
     if (confirmed) {
       axios
         .delete(`${process.env.REACT_APP_API_URL}/api/deck/${id}`, {
@@ -266,11 +266,12 @@ function DeckView({ token }) {
           ></DisplayCard>
         ))}
       </div>
-      <DeleteDeckModal
+      <DeleteModal
         showModal={showModal}
         onCloseModal={() => setShowModal(false)}
         deleteResponse={deleteDeck}
-      ></DeleteDeckModal>
+        type="deck"
+      ></DeleteModal>
     </div>
   ) : (
     <LoadingSpinner />

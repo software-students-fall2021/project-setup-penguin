@@ -2,6 +2,7 @@ import { Link, Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { TextInput, Button } from "../../common";
 import { ArrowRight } from "react-bootstrap-icons";
+import DeleteModal from "../DeleteModal"
 import axios from "axios";
 import "./editAccount.css";
 
@@ -9,6 +10,7 @@ function EditAccount({ token }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios({
@@ -51,23 +53,29 @@ function EditAccount({ token }) {
       });
   };
 
-  const handleDelete = () => {
-    axios({
-      method: "delete",
-      url: `${process.env.REACT_APP_API_URL}/api/user/`,
-      headers: { Authorization: `JWT ${token}` },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("SUCCESS");
-          setRedirect("/logout");
-        } else {
-          console.log(res);
-        }
+  const handleDelete = (confirmed) => {
+    console.log("confirmed", confirmed);
+    if (confirmed){
+      axios({
+        method: "delete",
+        url: `${process.env.REACT_APP_API_URL}/api/user/`,
+        headers: { Authorization: `JWT ${token}` },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("SUCCESS");
+            setRedirect("/logout");
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    else{
+      setShowModal(false);
+    }
   };
 
   const handleKeypress = (e) => {
@@ -106,7 +114,7 @@ function EditAccount({ token }) {
         to change your password
       </div>
       <div className="EditAccount__buttonContainer">
-        <a className="EditAccount__deleteLink" onClick={handleDelete}>
+        <a className="EditAccount__deleteLink" onClick={() => setShowModal(true)}>
           Delete Account
         </a>
         <Button
@@ -115,6 +123,12 @@ function EditAccount({ token }) {
           icon={<ArrowRight />}
         />
       </div>
+      <DeleteModal
+        showModal={showModal}
+        onCloseModal={() => setShowModal(false)}
+        deleteResponse={handleDelete}
+        type="account"
+      ></DeleteModal>
     </div>
   );
 }
