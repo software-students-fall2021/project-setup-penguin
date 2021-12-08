@@ -10,7 +10,6 @@ function DeckEditor({
   errors,
   setErrors,
 }) {
-
   return (
     <div className="DeckEditor">
       <form className="DeckEditor__form" onSubmit={onSubmit}>
@@ -26,7 +25,7 @@ function DeckEditor({
         <i>* required</i>
         {<ErrorMessage errors={errors} className="mt-3" />}
         <div className="DeckEditor__descriptionHeader">
-          What's your deck for?
+          Who is this deck for?
         </div>
         <TextArea
           placeholder="Engineering team for Pokédek"

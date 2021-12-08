@@ -98,7 +98,7 @@ input {
 
 .CardEditor__sliderContainer {
   width: 90%;
-  /* margin: 0.5em 0; */
+  padding: 0.5em 0;
 }
 
 .CardEditor__submit {

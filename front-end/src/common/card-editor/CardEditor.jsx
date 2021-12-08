@@ -214,7 +214,9 @@ function CardEditor({
             )}
           </div>
           <Slider
-            defaultValue={FORM_DEFAULT_PLACEHOLDERS.sliderValue}
+            defaultValue={
+              form.sliderValue ?? FORM_DEFAULT_PLACEHOLDERS.sliderValue
+            }
             handleStyle={{ borderColor: "pink" }}
             railStyle={{ backgroundColor: "pink" }}
             trackStyle={{ backgroundColor: "pink" }}

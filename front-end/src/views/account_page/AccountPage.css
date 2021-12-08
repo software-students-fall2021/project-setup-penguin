@@ -56,8 +56,8 @@
   display: flex;
   font-size: 20px;
   color: #396bba;
-  opacity: 80%;
   justify-content: center;
+  height: 1em;
 }
 
 .account-deck-list {
