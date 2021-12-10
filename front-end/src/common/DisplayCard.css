@@ -92,7 +92,7 @@
   box-sizing: border-box;
   font-size: 0.85em !important;
   line-height: 1em !important;
-  padding: 5px 0px;
+  padding: 3px 0 9px 0;
 }
 
 .DisplayCard {
@@ -108,18 +108,19 @@
 
 .slider-group {
   padding: 10px 5px;
-  padding-bottom: 20px;
   width: 100%;
 }
 
-.card-options{
+.card-options {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   width: 100%;
+  margin-top: auto;
+  padding-bottom: 10px;
 }
 
-.edit-card{
+.edit-card {
   color: #396bba;
   cursor: pointer;
   margin-right: 5px;
@@ -129,12 +130,12 @@
   padding: 0px 15px;
 }
 
-.edit-card:hover{
+.edit-card:hover {
   color: white;
-  background-color:#396bba;
+  background-color: #396bba;
 }
 
-.delete-card{
+.delete-card {
   color: #ba3944;
   cursor: pointer;
   background-color: transparent;
@@ -143,7 +144,7 @@
   padding: 0px 15px;
 }
 
-.delete-card:hover{
+.delete-card:hover {
   background-color: #ba3944;
   color: white;
 }
