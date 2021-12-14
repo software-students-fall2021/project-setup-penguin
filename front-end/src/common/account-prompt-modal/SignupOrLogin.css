@@ -1,0 +1,46 @@
+.SignupOrLogin {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1em;
+}
+
+.SignupOrLogin__altLink {
+  padding-top: 1em;
+}
+
+.SignupOrLogin__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4em;
+}
+
+.SignupOrLogin__cta {
+  background-color: #396bba;
+  padding: 0.25em 1em;
+  border-radius: 0.5em;
+  color: white;
+  cursor: pointer;
+}
+
+.SignupOrLogin__cta:hover {
+  background-color: #2e5695;
+  padding: 0.25em 1em;
+  border-radius: 0.5em;
+  color: white;
+  cursor: pointer;
+}
+
+.TextInput + .TextInput {
+  margin-top: 1.5em;
+}
+
+.SignupOrLogin__showPassword {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px;
+}

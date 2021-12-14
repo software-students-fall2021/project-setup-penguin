@@ -1,0 +1,110 @@
+input {
+  min-width: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.CardEditor__textarea {
+  background: transparent;
+  border: none;
+  resize: none !important;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.85em !important;
+  line-height: 1em !important;
+}
+
+.CardEditor__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-image: url("../../assets/card-background.png");
+  border: 2em solid #ffb4b4;
+  border-radius: 2em;
+
+  /* TODO: maybe we don't want this as a fixed size */
+  width: 28em;
+  height: 40em;
+  padding: 0.25em 1em;
+}
+
+.CardEditor__upperContent {
+  width: 90%;
+}
+.CardEditor__tagline {
+  align-self: flex-start;
+  width: 80%;
+}
+
+.CardEditor__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CardEditor__name {
+  font-size: 1.5em;
+  font-weight: bolder;
+}
+
+.CardEditor__city {
+  font-size: 1.5em;
+  font-weight: bolder;
+  color: pink;
+  text-align: right;
+  margin-right: 0.2em;
+}
+
+.CardEditor__image {
+  width: 100%;
+  height: auto;
+  outline: 1em solid #ffc8c8;
+  outline-offset: -1em;
+}
+
+.CardEditor__summary {
+  text-align: center;
+  align-self: center;
+  width: 85%;
+  border: none;
+  background-color: #ffc8c8;
+  margin: 0.75em 0em;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.CardEditor__section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.CardEditor__sectionContent {
+  margin-left: 1em;
+  width: 100%;
+}
+
+.CardEditor__label {
+  font-weight: bold;
+  width: 80%;
+  font-size: 0.9em;
+}
+
+.CardEditor__sliderLabelContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CardEditor__sliderContainer {
+  width: 90%;
+  padding: 0.5em 0;
+}
+
+.CardEditor__submit {
+  color: white;
+  background-color: black;
+  padding: 1em 3em;
+  margin: 2em;
+  border-radius: 1em;
+}

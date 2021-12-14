@@ -1,0 +1,30 @@
+.Button {
+  background-color: white;
+  padding: 0.25em 1em;
+  border: 1px solid #396bba;
+  border-radius: 0.5em;
+  color: #396bba;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.Button--disabled {
+  background-color: #98a1a9;
+  border: 1px solid #98a1a9;
+  color: white;
+}
+
+.Button:hover {
+  background-color: #396bba;
+  color: white;
+  cursor: pointer;
+}
+
+.Button--disabled:hover {
+  background-color: #98a1a9;
+  cursor: not-allowed;
+}
+
+.Button__iconContainer {
+  padding-left: 0.75em;
+}

@@ -1,0 +1,52 @@
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+h1 {
+  padding-bottom: 1em;
+  font-size: 2em !important;
+}
+
+p {
+  font-size: 1.2em;
+}
+
+h3 {
+  padding-bottom: 0.5em;
+}
+
+.customContainer {
+  margin-top: 10px;
+  border-top: 2px solid #396bba;
+  padding: 4.5em 0em 5em 0em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 75vh;
+}
+
+.inline-link {
+  text-decoration: underline !important;
+}
+
+.link:hover {
+  cursor: pointer;
+  color: #396bba;
+}
+
+.link {
+  color: black;
+}

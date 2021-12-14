@@ -1,0 +1,13 @@
+.TextInput {
+  padding: 0.5em 0;
+  border-bottom: 1px solid darkgray;
+  width: 100%;
+}
+
+.TextInput__Large {
+  font-size: 1.75em;
+}
+
+.TextInput:focus {
+  border-bottom: 1px solid #396bba;
+}

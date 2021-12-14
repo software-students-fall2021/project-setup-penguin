@@ -1,0 +1,42 @@
+.GetStarted {
+  min-width: 320px;
+  max-width: 1000px;
+}
+.GetStarted__cardsContainer {
+  padding-top: 2em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.GetStarted__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.GetStarted__button {
+  color: black;
+  width: 50%;
+}
+
+.GetStarted__button:hover {
+  color: #396bba;
+}
+
+.GetStarted__img {
+  width: 100%;
+  padding-bottom: 3em;
+}
+
+.GetStarted__label {
+  /* font-size: 1.5em; */
+  text-align: center;
+  font-weight: bold;
+}
+
+.GetStarted__text {
+  text-align: center;
+  /* font-size: 1em; */
+}

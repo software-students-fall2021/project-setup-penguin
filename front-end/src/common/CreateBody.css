@@ -1,0 +1,31 @@
+.CreateBody {
+  max-width: 1000px;
+}
+
+.CreateBody__mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+.CreateBody__cardContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.CreateBody__desktop {
+  display: flex;
+  text-align: justify;
+}
+
+.CreateBody__mobileBtnContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+}
+
+.CreateBody__desktopBtnContainer {
+  margin-top: 15vh;
+  float: right;
+}

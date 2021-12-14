@@ -1,0 +1,167 @@
+/* TODO: scale card down to meet your needs rather than setting fixed width/height */
+/* TODO: figure out how to use percentage widths and heights without touching the outer div DisplayCard... */
+.CardDisplay__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-image: url("../assets/card-background.png");
+  border: 2em solid #ffb4b4;
+  border-radius: 2em;
+
+  /* TODO: maybe we don't want this as a fixed size */
+  padding: 0.25em 1em;
+  width: 25em;
+  height: 40em;
+}
+
+.CardDisplay__upperContent {
+  width: 90%;
+}
+
+.CardDisplay__tagline {
+  align-self: flex-start;
+  width: 80%;
+}
+
+.CardDisplay__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.CardDisplay__name {
+  font-size: 1.5em;
+  font-weight: bolder;
+}
+
+.CardDisplay__city {
+  font-size: 1.5em;
+  font-weight: bolder;
+  color: pink;
+  text-align: right;
+  margin-right: 0.2em;
+}
+
+.CardDisplay__image {
+  width: 100%;
+  height: auto;
+  outline: 1em solid #ffc8c8;
+  outline-offset: -1em;
+}
+
+.CardDisplay__summary {
+  text-align: center;
+  align-self: center;
+  width: 85%;
+  border: none;
+  background-color: #ffc8c8;
+  margin: 0.75em 0em;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.CardDisplay__section {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.CardDisplay__sectionContent {
+  margin-left: 1em;
+  width: 100%;
+}
+
+.CardDisplay__label {
+  font-weight: bold;
+  width: 80%;
+  font-size: 0.9em;
+}
+
+.CardDisplay__label__right {
+  font-weight: bold;
+  width: 80%;
+  font-size: 0.9em;
+  text-align: right;
+}
+
+.CardDisplay__textarea {
+  background: transparent;
+  border: none;
+  resize: none !important;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.85em !important;
+  line-height: 1em !important;
+  padding: 3px 0 9px 0;
+}
+
+.DisplayCard {
+  margin: 16px;
+  margin-top: 30px;
+}
+
+.slider-labels {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.slider-group {
+  padding: 10px 5px;
+  width: 100%;
+}
+
+.card-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: auto;
+  padding-bottom: 10px;
+}
+
+.edit-card {
+  color: #396bba;
+  cursor: pointer;
+  margin-right: 5px;
+  background-color: transparent;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 0px 15px;
+}
+
+.edit-card:hover {
+  color: white;
+  background-color: #396bba;
+}
+
+.delete-card {
+  color: #ba3944;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 0px 15px;
+}
+
+.delete-card:hover {
+  background-color: #ba3944;
+  color: white;
+}
+
+.CardDisplay_textarea,
+.CardDisplay__name,
+.CardDisplay__tagline,
+.CardDisplay__city,
+.CardDisplay__summary,
+.CardDisplay__label {
+  cursor: default;
+}
+
+.rc-slider-handle {
+  cursor: default;
+}
+
+.rc-slider-disabled {
+  background-color: transparent !important;
+}

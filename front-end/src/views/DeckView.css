@@ -1,0 +1,76 @@
+.deckview-overall {
+  width: 100%;
+}
+
+.deck-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.deckview-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.edit,
+.add,
+.delete {
+  margin: 0px 7px;
+  position: relative;
+}
+
+.deck-share {
+  width: 70px;
+  height: 70px;
+}
+
+.deck-share:hover {
+  cursor: pointer;
+}
+
+#shared-text {
+  font-size: 14px;
+  color: grey;
+  font-weight: normal;
+}
+
+.fake-button {
+  border: none;
+  background: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.deckview-title {
+  font-size: 40px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deckview-subtitle {
+  font-size: 20px;
+  font-weight: normal;
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 20px;
+}
+
+.add-card {
+  padding: 20px 0px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.deckview-tooltip {
+}

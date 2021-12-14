@@ -1,0 +1,27 @@
+.HowItWorks {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 320px;
+  max-width: 1050px;
+  width: 100%;
+}
+
+.HowItWorks__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2em;
+  flex-direction: row;
+}
+
+.HowItWorks__title > h1 {
+  padding: 0;
+}
+
+@media screen and (max-width: 900px) {
+  .HowItWorks__title {
+    flex-direction: column;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,50 @@
+.Home {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 320px;
+  max-width: 1000px;
+}
+
+.Home__mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Home__img {
+  width: 40%;
+}
+.Home__img--mobile {
+  width: 75%;
+  padding-top: 2em;
+}
+
+.Home__section {
+  margin-right: 10em;
+  align-self: center;
+}
+
+.Home__section--mobile {
+  align-self: center;
+  text-align: center;
+}
+
+.Home__btn + .Home__btn {
+  padding-left: 1em;
+}
+
+.Home__btn-group{
+  display: flex;
+}
+
+.Home__btn-group__mobile{
+  display: flex;
+  justify-content: center;
+}
+
+.Home__main-title{
+  padding-bottom: 15px;
+  font-weight: 625 !important;
+}

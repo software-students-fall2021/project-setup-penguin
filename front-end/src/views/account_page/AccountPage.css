@@ -1,0 +1,112 @@
+.account-page-title {
+  font-size: 45px;
+  font-weight: bold;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: #396bba;
+  width: 100%;
+}
+
+.account-page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.account-page-header > h1 {
+  margin: 0px;
+  padding: 0px;
+}
+
+.toggles {
+  width: 100px;
+  border: none;
+}
+
+#myDeckView,
+#joinedDeckView {
+  height: 50px;
+  width: 200px;
+}
+
+.Active {
+  background-color: #396bba;
+  color: white;
+  border: none;
+  font-size: 25px;
+}
+
+.inactive {
+  background-color: white;
+  color: #396bba;
+  border: 1px solid;
+  border-color: #396bba;
+  font-size: 25px;
+}
+
+.deckLink {
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.account-subtitle {
+  display: flex;
+  font-size: 20px;
+  color: #396bba;
+  justify-content: center;
+  height: 1em;
+}
+
+.account-deck-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.toggle-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 3em;
+}
+
+#myDeckView {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  justify-self: end;
+  border-radius: 10px 0px 0px 10px;
+}
+
+#joinedDeckView {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  justify-self: start;
+  border-radius: 0px 10px 10px 0px;
+}
+
+.title {
+  text-align: center;
+}
+
+.accountPageImg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 200px;
+}
+
+.account-page-general {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.no-decks {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
