@@ -1,6 +1,7 @@
 # Pokedek [![CircleCI](https://circleci.com/gh/software-students-fall2021/project-setup-penguin/tree/master.svg?style=shield)](https://circleci.com/gh/software-students-fall2021/project-setup-penguin/tree/master)
 
 Deployed with DigitalOcean at http://143.198.163.107/
+Demo video at https://youtu.be/GMHNHDPGifc
 
 ## Project Description
 
